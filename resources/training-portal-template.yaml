@@ -1,3 +1,5 @@
+#@ load("@ytt:data", "data")
+---
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: TrainingPortal
 metadata:
@@ -7,7 +9,7 @@ metadata:
 spec:
   portal:
     title: Workshops for Spring developers
-    password: hello-tanzu
+    password: #@ data.values.training_portal_password
     registration:
       type: anonymous
     ingress:
