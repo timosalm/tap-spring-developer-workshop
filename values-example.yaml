@@ -4,6 +4,7 @@ container_registry:
   hostname: harbor.example.com
   username: 
   password:
+training_portal_password: 
 workshop_container_image: ghcr.io/tsalm-vmware/tap-spring-developer-workshop:main
 workshop_git:
   username: tsalm-vmware
