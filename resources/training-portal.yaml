@@ -1,0 +1,25 @@
+apiVersion: learningcenter.tanzu.vmware.com/v1beta1
+kind: TrainingPortal
+metadata:
+  name: tap-spring-developer-workshops
+  annotations:
+    kapp.k14s.io/update-strategy: always-replace
+spec:
+  portal:
+    title: Workshops for Spring developers
+    password: hello-tanzu
+    registration:
+      type: anonymous
+    ingress:
+        hostname: spring-developer-workshops
+    updates:
+      workshop: true
+    sessions:
+      maximum: 40
+    reserved: 0
+  workshops:
+    - name: tap-spring-developer-workshops
+      capacity: 40
+      reserved: 30
+      expires: 2h
+      orphaned: 1h

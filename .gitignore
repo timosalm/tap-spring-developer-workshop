@@ -1,0 +1,17 @@
+.DS_Store
+PRIVATE.md
+TODO
+values.yaml
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/
+
+### Downloads ###
+*.vsix
+tanzu-framework*
