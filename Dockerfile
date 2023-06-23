@@ -40,6 +40,7 @@ RUN \
 )
 RUN echo "export PATH=\"${KREW_ROOT:-$HOME/.krew}/bin:$PATH\"" >> ${HOME}/.bashrc
 ENV PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+ENV KUBECTL_VERSION=1.25
 RUN kubectl krew install tree
 RUN kubectl krew install eksporter
 RUN chmod 775 -R $HOME/.krew
