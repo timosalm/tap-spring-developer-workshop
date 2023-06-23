@@ -20,6 +20,6 @@ spec:
   workshops:
     - name: tap-spring-developer-workshops
       capacity: 40
-      reserved: 30
+      reserved: 1
       expires: 2h
       orphaned: 1h
