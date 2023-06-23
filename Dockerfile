@@ -18,6 +18,7 @@ RUN rm -rf /usr/lib/code-server /usr/bin/code-server
 
 RUN code-server --install-extension /tmp/tanzu-vscode-extension.vsix
 RUN code-server --install-extension /tmp/tanzu-app-accelerator.vsix
+
 RUN chown -R eduk8s:users /home/eduk8s/.cache
 RUN chown -R eduk8s:users /home/eduk8s/.local
 RUN chown -R eduk8s:users /home/eduk8s/.config
