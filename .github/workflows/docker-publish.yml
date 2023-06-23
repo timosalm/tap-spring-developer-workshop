@@ -54,6 +54,13 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Log into Tanzu Network
+        uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+        with:
+          registry: registry.tanzu.vmware.com
+          username: ${{ secrets.TANZUNET_USERNAME }}
+          password: ${{ secrets.TANZUNET_PASSWORD }}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
