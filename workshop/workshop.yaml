@@ -2,12 +2,12 @@ name: Developer Workshop
 modules:
   activate:
     - workshop-overview
-    - app-accelerators
-    - catalog
-    - prepaved-path-to-prod
-    - workload
-    - supply-chains
-    - path-to-prod-ci
-    - path-to-prod-cd
-    - runtime
+    - exercises/app-accelerators
+    - exercises/catalog
+    - exercises/prepaved-path-to-prod
+    - exercises/workload
+    - exercises/supply-chains
+    - exercises/path-to-prod-ci
+    - exercises/path-to-prod-cd
+    - exercises/runtime
     - workshop-summary
