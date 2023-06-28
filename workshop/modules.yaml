@@ -1,7 +1,7 @@
 modules:
     workshop-overview:
         name: Workshop Overview
-        exit_sign: Summary
+        exit_sign: Accelerators
     exercises/app-accelerators:    
         name: Application Accelerators
         exit_sign: TAP GUI - Catalog

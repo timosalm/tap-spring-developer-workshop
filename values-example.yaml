@@ -5,9 +5,9 @@ container_registry:
   username: 
   password:
 training_portal_password: 
-workshop_container_image: ghcr.io/tsalm-vmware/tap-spring-developer-workshop:main
+workshop_container_image: ghcr.io/timosalm/tap-spring-developer-workshop:main
 workshop_git:
-  username: tsalm-vmware
+  username: timosalm
   branch: main
 tap:
   ingress_domain: example.com
