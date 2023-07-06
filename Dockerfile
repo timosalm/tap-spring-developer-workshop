@@ -12,7 +12,7 @@ RUN mv $(find /tmp/ -name 'tanzu-core-linux_amd64' -print0) /usr/local/bin/tanzu
 # Install Tanzu Dev Tools
 ADD tanzu-vscode-extension.vsix /tmp
 ADD tanzu-app-accelerator.vsix /tmp
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=4.14.0
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=4.14.1
 RUN cp -rf /usr/lib/code-server/* /opt/code-server/
 RUN rm -rf /usr/lib/code-server /usr/bin/code-server
 

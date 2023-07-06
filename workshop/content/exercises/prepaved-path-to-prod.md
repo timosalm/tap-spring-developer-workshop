@@ -22,6 +22,8 @@ Cartographer allows operators via the **Supply Chain** abstraction to define all
 By design, **a supply chain can be used by many workloads of a specific type**, like any web application. 
 ![Reusable CI/CD](../images/reusable-cicd.png)
 
+VMware Tanzu Application Platform provides **full integration of all of its components via out-of-the-box supply chains** that can be customized for your processes and tools.
+
 While the supply chain is operator-facing, Cartographer also provides an **interface for developers** called **Workload**. Workloads allow developers to create application specifications such as the location of their repository, environment variables, and service claims.
 
 Let's have a closer look at how a Workload allows developers to configure the continuous path to production.
@@ -65,3 +67,6 @@ As we have Kuberetens access from the workshop environment, let's apply our conf
 tanzu apps workload create -f product-service/config/workload.yaml
 ```
 
+We'll now have a closer look at TAP-GUI for a visualization of all the different steps of the supply chain and the capabilities of the tools they're implemented with.
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
