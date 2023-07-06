@@ -22,7 +22,7 @@ By designing your API first, you are able to facilitate discussion with your sta
 
 With so many APIs in a microservices application, developers need an API Gateway that they can control!
 
-![Updated architecture with API Gateway](../images/microservice-architecture-cb.png)
+![Updated architecture with API Gateway](../images/microservice-architecture-gateway.png)
 
 ##### Authentication and Authorization
 
