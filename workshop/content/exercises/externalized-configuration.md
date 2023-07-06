@@ -9,3 +9,4 @@ Part of TAP is the commercial **Application Configuration Service for VMware Tan
 **TODO: Configure Configuration Sources e.g. via Crossplane, Add related stuff to product-service incl. RefreshScope: https://github.com/timosalm/spring-cloud-demo-tap/tree/main/product-service**
 
 ![Updated architecture with Configuration Service](../images/microservice-architecture-config.png)
+
