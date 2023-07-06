@@ -25,7 +25,15 @@ modules:
         exit_sign: Next Challenge
     exercises/caching-and-circuit-breaking:
         name: Mitigating the Impact of Backing Service Failures
-        exit_sign: Summary
+        exit_sign: More Factors
+    exercises/more-factors:
+        name: A Closer look at he other Factors
+        exit_sign: Maximize Robustness
+    exercises/graalvm:
+        name: Maximize Robustness And Save Costs
+        exit_sign: 3 More Factors
+    exercises/beyond-12-factors:
+        name: Beyond the the Twelve-Factor App
     workshop-summary:
         name: Workshop Summary
         exit_sign: End Workshop

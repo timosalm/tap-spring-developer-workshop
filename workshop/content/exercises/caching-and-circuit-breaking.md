@@ -2,7 +2,7 @@
 name: The Twelve Factors
 ```
 
-The **sixth factor** implies that any **data** that needs to be persisted must be **stored in a stateful backing service**, such as a database.
+The **fourth and sixth factor** implies that any **data** that needs to be persisted must be **stored in a stateful backing service**, such as a database, because the processes are stateless and share-nothing. 
 Those backing services are treated as attached resources in a 12-factor app which can be swapped without changing the application code in case of failures. 
 
 Let‘s see how we can make our application even more **resilient to backing services failures**.
