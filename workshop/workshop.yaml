@@ -4,5 +4,7 @@ modules:
     - workshop-overview
     - exercises/product-service
     - exercises/prepaved-path-to-prod
-
+    - exercises/path-to-prod-ci
+    - exercises/path-to-prod-cd
+    - exercises/runtime
     - workshop-summary
