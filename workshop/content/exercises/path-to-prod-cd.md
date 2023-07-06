@@ -1,124 +1,106 @@
+##### Image Provider
 
-##### Source Provider
+To be able to get all the benefits our application Kubernetes provides, we have to containerize it.
 
-The first step in the path to production watches the in the Workload configured repository with the source code for new commits and makes the source code available for the following steps as an archive via HTTP. 
+The most obvious way to do this is to write a Dockerfile, run `docker build`, and push it to the container registry of our choice via `docker push`.
 
-[Flux Source Controller](https://fluxcd.io/flux/components/source/) is used for this functionality, but as with any other tool we provide with TAP it can be easily replaced by an alternative.
+![](../images/dockerfile.png)
 
-To get an idea of how that is implemented, we'll export the related **ClusterSourceTemplate** and open it in the IDE.
-```execute
-kubectl eksporter ClusterSourceTemplate source-template > ~/exports/source-template.yaml
+As you can see, in general, it is relatively easy and requires little effort to containerize an application, but whether you should go into production with it is another question because it is hard to create an optimized and secure container image (or Dockerfile).
+
+To improve container image creation, **Buildpacks** were conceived by Heroku in 2011. Since then, they have been adopted by Cloud Foundry and other PaaS.
+The new generation of buildpacks, the [Cloud Native Buildpacks](https://buildpacks.io), is an incubating project in the CNCF which was initiated by Pivotal (now part of VMware) and Heroku in 2018.
+
+Cloud Native Buildpacks (CNBs) detect what is needed to compile and run an application based on the application's source code. 
+The application is then compiled and packaged in a container image with best practices in mind by the appropriate buildpack.
+
+The biggest benefits of CNBs are increased security, minimized risk, and increased developer productivity because they don't need to care much about the details of how to build a container.
+
+**TODO: Paketo buildpacks and see it live via pack CLI**
+
+With all the benefits of Cloud Native Buildpacks, one of the **biggest challenges with container images still is to keep the operating system, used libraries, etc. up-to-date** in order to minimize attack vectors by CVEs.
+
+With **VMware Tanzu Build Service (TBS)**, which is part of TAP and based on the open source [kpack](https://github.com/pivotal/kpack), it's possible **automatically recreate and push an updated container image to the target registry if there is a new version of the buildpack or the base operating system available** (e.g. due to a CVE).
+With our Supply Chain, it's then possible to deploy security patches automatically.
+
+In the details of the Image Provider step in **TAP-GUI**, you're able to see the **logs of the container build and the tag of the produced image**.
+It also shows the reason for an image build. In this case, it's due to our configuration change. As mentioned, image builds can also be triggered if new operating system or buildpack versions are available.
+This shows another time the benefit of Cartographer's asynchronous behavior.
+
+###### Dockerfile-based builds
+
+For those few use-cases, no buildpack is yet available, and the effort to build a custom one is too high, it's also possible to build a container based on a Dockerfile with TAP. Developers have to specify the following parameter in their Workload configuration where the value references the path of the Dockerfile.
 ```
-```editor:select-matching-text
-file: ~/exports/source-template.yaml
-text: "revisionPath"
-after: 1
+apiVersion: carto.run/v1alpha1
+kind: Workload
+...
+spec:
+  params:
+  - name: dockerfile
+    value: ./Dockerfile
+...
 ```
-A ClusterSourceTemplate indicates how the supply chain could instantiate an object responsible for providing source code. All it cares about is whether the `spec.urlPath` and `spec.revisionPath` are passed in correctly from the templated object that implements the actual functionality we want to use as part of our path to production.
+For the building of container images from a Dockerfile without the need for running Docker inside a container, TAP uses the open-source tool [kaniko](https://github.com/GoogleContainerTools/kaniko).
 
-To define the templating of the Kubernetes resource that provides the implementation of the desired functionality, there are two options. Simple templates can be defined in `spec.template` and provide string interpolation in a `\$(...)\$` tag with jsonpath syntax.
-As in our example, Carvel's ytt can be used for more complex logic, such as conditionals or looping over collections (defined via `spec.ytt` in Templates).
-Both options for templating provide a data structure that contains the configuration from the Workload, defined inputs for the resource, and parameters in the ClusterSupplyChain.
+##### Image Scanner
 
-```editor:select-matching-text
-file: ~/exports/source-template.yaml
-text: "kind: GitRepository"
-before: 1
-after: 14
-```
+If you **have a closer look at the Image Scanner step in TAP-GUI** you can see that **different CVEs were found than with the source scanning**. 
+There are several reasons for that:
+- The **container image includes the full stack** required to run the application. In this case, the application, Tomcat application server, Java runtime environment, operating system, and additional tools. 
+- The container image also **includes all the dependencies** required to run the application. To reduce disc space and network traffic, those will usually not be committed to the version control system together with the source code and instead defined in dependency management tools like Maven or npm and downloaded during the build process. Most of the **CVE scanners don't download the dependencies** for source code scans, **which leads often to false positives or missed CVEs**, as they only compare what's defined in the definition file of the used dependency management tools (e.g. pom.xml or package.json) with CVE databases. Therefore, they are, for example, not aware of nested dependencies.
 
-In our case, Flux Source Controller is also Kubernetes native and provides a CRD. A custom resource will be then stamped out / updated by Cartographer every time the Workload, an input, or a parameter changes.
+You may ask yourself whether there is still a value in source scans. The answer is yes, as **shifting security left in the path to production improves the productivity of developers**.
 
-There are two other custom resources defined for the templating (MavenArtifact and ImageRepository), which will be stamped out instead of the GitRepository based on the Workload configuration. 
-The **MavenArtifact** can pull artifacts from existing Maven repositories for integration with existing CI systems, such as Jenkins. The **ImageRepository** consumes a container image containing source code to make it possible via the tanzu CLI to provide source code from a local directory, such as, from a directory in the developer’s file system.
+Due to the false positives, it makes sense to have **different scan policies for source scanning and image scanning**, which is supported by VMware Tanzu Application Platform but not implemented for this workshop.
 
-More information on templating with Cartographer can be found here:
-```dashboard:open-url
-url: https://cartographer.sh/docs/v0.7.0/templating/
-```
+**TODO: Different ScanPolicies for Source and Image Scan, Image Scan allows everything because developers shouldn't have control over the Image scan**
 
-You can view the **output of the Source Provider** step in TAP-GUI by clicking on the rectangle next to it, displaying the first digits of the commit revision.
+##### Config Provider, App Config, Service Bindings, Api Descriptors 
 
-##### Source Tester
- 
-The Source Tester step executes uses by default [Tekton](https://tekton.dev) and as an alternative Jenkins (more to come in the future) to run a Pipeline that executes tests part of the application's source code. 
-Depending on how much flexibility your developers need, they can define it for their applications or as the rest of the supply chain, it will also be defined and provided by the operators. The pipeline can also be applied via GitOps, in our case, there is already a very basic example that just works for Spring Boot applications using Maven applied to the cluster.
-```execute
-kubectl eksporter Pipeline --keep metadata.labels
-```
+The steps between "Image Scanner" and "Config Writer" in the supply chain generate the YAML of all the Kubernetes resources required to run the application.
 
-To decouple the pipeline from the supply chain, its not directly stamped out by a template or referenced by name and instead will be detected based on it's `apps.tanzu.vmware.com/pipeline: test` label.
+###### Config Provider
 
-The Pipeline will be executed by stamping out a `PipelineRun` custom resource, which is in contrast to, for example, the GitRepository an immutable resource. This means the template has to create a new resource whenever the configuration changes.
+The Config Provider step uses the **Cartographer Conventions** component to provide a means for operators to express their knowledge about how applications can run on Kubernetes as a convention. It supports defining and applying conventions to pods. 
 
-For more information, you can have a look here:
-```dashboard:open-url
-url: https://cartographer.sh/docs/v0.7.0/tutorials/lifecycle/
-```
+Operators can **define conventions** to target workloads by **using container image metadata**.
+Conventions can use this information to only apply changes to the configuration of workloads when they match specific criteria (for example, Spring Boot or .Net apps, or Spring Boot v2.3+). Targeted conventions can ensure uniformity across specific workload types deployed on the cluster.
 
-**This type of integration of Tekton into the Cartographer world is heavily used within the OOTB supply chains to integrate tools outside of Kubernetes.**
+Conventions **can also be defined** to apply to workloads **without targeting container image metadata**. Examples of possible uses of this type of convention include appending a logging/metrics sidecar, adding environment variables, or adding cached volumes. 
 
-Let's now jump to **TAP-GUI to view the logs of the test run** in the detail view of the Source Tester step.
+TAP for example applies **Spring Boot conventions** to any Spring Boot application submitted to the supply chain. They modify or add properties to the environment variable `JAVA_TOOL_OPTIONS`, like for example, to configure graceful shutdown and the default port to 8080, and more. 
 
-##### Source Scanner
+###### App Config
 
-In the next step, the provided **source code will be scanned** for known vulnerabilities by default using [Grype](https://github.com/anchore/grype). VMware Tanzu Application platform also offers integrations to other scanners like **Trivy** or **Snyk**.
+The App Config step **uses the Pod spec** generated by Cartographer Conventions **for the generation of  YAML for deployment resources**. In the case of a **Workload of type web**, this will be a **Knative Service** which you can see in TAP-GUI in the rectangle for the output of the step. More information on Knative will be provided in the next section.
+For **other types of workloads** that don't provide an HTTP endpoint, the generated resources are, for example, a **Kubernetes Deployment and a Service**.
 
-**Go to TAP-GUI** and have a look at the details view of the Source Scanner step. You can see that some critical were found by the scanner. 
-You can **click on the CVE's ID** to get more information.
-The TAP-GUI also provides a dashboard to discover all the CVEs in the organizations and workloads that are affected.
-```dashboard:open-url
-url: https://tap-gui.{{ ENV_TAP_INGRESS }}/security-analysis
-```
-If you have a closer look at the dashboard, you can see that some of the workloads don't violate a policy but also have several CVEs with critical or high severity.
-
-For source scans to happen, **scan policies** must be defined on a namespace level which can be done during the automated provisioning of new namespaces. It defines how to evaluate whether the artifacts scanned are compliant, for example, allowing one to be either very strict or restrictive about particular vulnerabilities found. 
-If an artifact is not compliant, the application will not be deployed.
-
-Let's go back to the visualization of the supply chain and **click on the policy name in the detail view of the Source Scanner**.
-```dashboard:open-url
-url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/payment-service
-```
-
-Our source can step failed because the `notAllowedSeverities`configuration in the scan policy is set to  `["Critical", "High", "UnknownSeverity"]`. It's also possible to whitelist CVEs with the `ignoreCves` configuration.
-
-For sure, it's also possible to view the results via kubectl and the custom resource.
+We can have a look at the fully generated YAML in a ConfigMap where it will be stored to be transferred to the next step.
 ```terminal:execute
-command: kubectl describe sourcescan payment-service
+command: kubectl get configmap product-service -o yaml | less
 clear: true
 ```
 
-###### Storing the software bills of materials (SBoMs)
-The resulting source code vulnerability reports will be automatically stored in a database which allows us to query for image, source code, package, and vulnerability relationships via an API and the tanzu CLI's insight plugin. The so-called **Metadata Store** accepts CycloneDX input and outputs in both human-readable and machine-readable formats, including JSON, text, CycloneDX, and SPDX.
+###### Service Bindings, Api Descriptors 
+Both steps generate additional resources in YAML format for Service Bindings, which we will cover in the next section, and auto registration of API documentation in TAP-GUI.
 
-```terminal:execute
-command: |
-  COMMIT_REVISION=$(kubectl get sourcescan payment-service -o jsonpath='{.spec.blob.revision}' | awk -F / '{ print $2 }')
-  tanzu insight source get --commit $COMMIT_REVISION
-clear: true
-```
+##### Config Writer 
+After generating the YAML of all the Kubernetes resources required to run the application, it's time to apply them to a cluster. Usually, there is more than one cluster the application should run on, for example, on a test cluster before production.
 
-###### Updating the scan policy
-Let's now try to get the step pass by white-listing the severities for demo purposes.
+The Config Writer is responsible for writing the YAML files either to a Git repository for **GitOps** or, as an alternative, packaging them in a container image and pushing it to a container registry for **RegistryOps**.
 
-```terminal:execute
-command: echo "ignoreCves := [$(tanzu insight source vulnerabilities --commit $COMMIT_REVISION  --output-format api-json | jq '. | map(.CVEID) | join(",")' | sed 's/,/","/g')]"
-clear: true
-```
-**Copy the output of the command.**
+**The workshop environment is configured for GitOps.**
+In the **details view of the Config Writer step in TAP-GUI**, click on the **approve pull request button** that was auto-created by TAP to merge the changes to an in the configuration specified branch of the GitOps repository. 
+![Detail view of the Config Writer step](../images/pull-request-button.png)
 
-```editor:select-matching-text
-file: ~/samples/scan-policy.yaml
-text: "ignoreCves := []"
-```
+In this case, the **Git branches are used for staging**, and we are directly merging in the prod branch.
+For demo purposes, this pull request was auto-approved and merged.
 
-**Paste the output of the command to override the current value, save the file, and run the following command to apply the updated scan policy.**
+##### Delivery
+With the deployment configuration of our application available in a Git repository, we are now able to deploy it automatically to a fleet of clusters on every change. There are several tools for this job available, like ArgoCD or Carvel's kapp-controller.
 
-```execute
-kubectl apply -f ~/samples/scan-policy.yaml
-```
+**Cartographer** also **provides a way to define a continuous delivery workflow** resource on the target cluster, which e.g. picks up that configuration from the Git repository, deploys it, and runs some automated integration tests, which is called **ClusterDelivery**.
 
-If you **go back to TAP-GUI**, you should see that the **status of the source scan will change**, and the source code will be passed to the next step.
-This demonstrates the **asynchronous behavior of Cartographer**. As only the source scan is affected by the change, the steps before will not be executed again.
+For the sake of simplicity, our application is deployed to the same cluster we used for building it. 
 
-In the next section, we will have a closer look at aspects like container building and continuous delivery.
+In the next section, you'll get some information about components that are relevant for the running application.

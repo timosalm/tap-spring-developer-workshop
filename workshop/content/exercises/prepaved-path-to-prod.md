@@ -1,4 +1,4 @@
-** TODO: Shorten text **
+**TODO: Shorten text**
 
 To handle the more complex deployment and operations of modern applications, there is a need for a culture change towards **DevSecOps**, a buzzword for improved collaboration between developers, security, and operations teams.
 This collaboration should be **supported by automated processes**, like a self-service for developers to get access to the tools they need.
@@ -61,7 +61,7 @@ kubectl apply -f workload.yaml
 
 Using **GitOps** to apply the Workload has the benefit that **developers don't need access to the Kubernetes cluster**, and once a change is triggered in Git by a developer, it's applied to the environment with little or no involvement from operations.
 
-** TODO: Use local source code **
+**TODO: Use local source code**
 As we have Kuberetens access from the workshop environment, let's apply our configuration via the tanzu CLI.
 ```execute
 tanzu apps workload create -f product-service/config/workload.yaml
