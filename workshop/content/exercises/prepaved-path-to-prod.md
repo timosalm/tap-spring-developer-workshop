@@ -70,3 +70,4 @@ tanzu apps workload create -f product-service/config/workload.yaml
 We'll now have a closer look at TAP-GUI for a visualization of all the different steps of the supply chain and the capabilities of the tools they're implemented with.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
+```
