@@ -16,6 +16,12 @@ modules:
         exit_sign: Application Runtime
     exercises/runtime:
         name: Capabilities of The Application Runtime
+        exit_sign: Mitigating Challenges
+    exercises/12-factors:
+        name: The Twelve Factors
+        exit_sign: Configuration
+    exercises/externalized-configuration:
+        name: Externalized Configuration
         exit_sign: Summary
     workshop-summary:
         name: Workshop Summary

@@ -58,6 +58,8 @@ The developer defines the backing services the application wants to bind to in t
 
 ##### Application Live View
 
+**TODO**
+
 ##### Serverless runtime
 
 After we've finally had a look at all the different steps of our supply chain let's open the provided URL to access the order service.
@@ -90,5 +92,5 @@ The major **subprojects of Knative** are Serving and Eventing.
 
 It also provides **configurable auto-scaling** and **scale to zero**, which is the reason why you had to wait for some seconds after you first called your application. Other features are rollbacks, canary and blue-green deployment via revisions, and traffic splitting.
 
-
 More runtime components of VMware Tanzu Application Platform will be covered in the workshop.
+Let's now focus on the challenges of our typical microservice application and how to mitigate them. 
