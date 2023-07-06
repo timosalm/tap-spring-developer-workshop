@@ -7,5 +7,6 @@ modules:
     - exercises/path-to-prod-ci
     - exercises/path-to-prod-cd
     - exercises/runtime
+    - exercises/12-factors
     - exercises/externalized-configuration
     - workshop-summary
