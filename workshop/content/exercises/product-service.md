@@ -18,7 +18,7 @@ Press **Continue** until you see **Generate Project**. When you click on **Gener
 file: product-service/src/main/java/com/example/productservice/Application.java
 ```
 
-** OPTIONAL TODO: Add to Git repository (Gitea) **
+**OPTIONAL TODO: Add to Git repository (Gitea)**
 
 The next step would be to push the code to a Git repository to collaborate with your team members on it. We will skip this for now and continue with the implementation of the business functionality.
 
