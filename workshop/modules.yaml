@@ -22,6 +22,9 @@ modules:
         exit_sign: Configuration
     exercises/externalized-configuration:
         name: Externalized Configuration
+        exit_sign: Next Challenge
+    exercises/caching-and-circuit-breaking:
+        name: Mitigating the Impact of Backing Service Failures
         exit_sign: Summary
     workshop-summary:
         name: Workshop Summary

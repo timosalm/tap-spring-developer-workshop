@@ -9,4 +9,5 @@ modules:
     - exercises/runtime
     - exercises/12-factors
     - exercises/externalized-configuration
+    - exercises/caching-and-circuit-breaking
     - workshop-summary
