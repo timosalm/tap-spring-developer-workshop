@@ -24,4 +24,6 @@ The next step would be to push the code to a Git repository to collaborate with 
 
 **TODO: Automate much of the stuff via educates instructions** to get to https://github.com/timosalm/spring-cloud-demo-tap/tree/main/product-service/src/main/java/com/example/productservice without e.g. @RefreshScope and advanced security configuration.
 
+**TODO: Use VSCode Tanzu Plugin for iterate and debug**
+
 After the basic implementation of our product service, we will now configure a continuous path to production.
