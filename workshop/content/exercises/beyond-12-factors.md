@@ -16,7 +16,11 @@ By default, the Wavefront Spring Boot Starter creates a Freemium account without
 
 ![Updated architecture with Observability](../images/microservice-architecture-tracing.png)
 
-##### API Gateway
+##### Factor: API first
+
+**TODO** TAP GUI Docs and API plugin
+
+###### API Gateway
 
 By designing your API first, you are able to facilitate discussion with your stakeholders (your internal team, customers, or possibly other teams within your organization who want to consume your API) well before you might have coded yourself past the point of no return. 
 
