@@ -31,30 +31,6 @@ spec:
     - name: TAP_INGRESS
       value: #@ data.values.tap.ingress_domain
     objects:
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: RoleBinding
-      metadata:
-        name: default-permit-deliverable
-      roleRef:
-        apiGroup: rbac.authorization.k8s.io
-        kind: ClusterRole
-        name: deliverable
-      subjects:
-        - kind: ServiceAccount
-          name: default
-          namespace: $(session_namespace)
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: RoleBinding
-      metadata:
-        name: default-permit-workload
-      roleRef:
-        apiGroup: rbac.authorization.k8s.io
-        kind: ClusterRole
-        name: workload
-      subjects:
-        - kind: ServiceAccount
-          name: default
-          namespace: $(session_namespace)
     # Install grype
     - apiVersion: packaging.carvel.dev/v1alpha1
       kind: PackageInstall
@@ -98,6 +74,12 @@ spec:
         - namespaces
         verbs:
         - 'patch'
+      - apiGroups:
+        - [carto.run]
+        resources:
+        - workloads
+        verbs:
+        - '*'
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: RoleBinding
       metadata:
@@ -112,14 +94,6 @@ spec:
           namespace: $(workshop_namespace)
           name: $(service_account)
     # Resources
-    - apiVersion: v1
-      kind: Secret
-      metadata:
-        name: registry-credentials
-      type: kubernetes.io/dockerconfigjson
-      data:
-        #@ docker_creds = {"username": data.values.container_registry.username, "password": data.values.container_registry.password}
-        .dockerconfigjson: #@ base64.encode(json.encode({"auths": {data.values.container_registry.hostname: docker_creds}}))
     - apiVersion: tekton.dev/v1beta1
       kind: Pipeline
       metadata:
