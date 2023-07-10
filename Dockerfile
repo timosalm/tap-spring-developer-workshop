@@ -3,11 +3,14 @@ FROM registry.tanzu.vmware.com/tanzu-application-platform/tap-packages@sha256:c1
 USER root
 
 # Tanzu CLI
-ADD tanzu-framework-linux-amd64.tar /tmp
-RUN mv $(find /tmp/ -name 'tanzu-core-linux_amd64' -print0) /usr/local/bin/tanzu && \
-  chmod 755 /usr/local/bin/tanzu && \
-  tanzu plugin install --local /tmp/cli/ all && \
-  chmod -R 755 .config/tanzu
+RUN apt-get install -y ca-certificates curl gpg
+RUN curl -fsSL https://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-RSA-KEY.pub | sudo gpg --dearmor -o /etc/apt/keyrings/tanzu-archive-keyring.gpg
+RUN echo "deb [signed-by=/etc/apt/keyrings/tanzu-archive-keyring.gpg] https://storage.googleapis.com/tanzu-cli-os-packages/apt tanzu-cli-jessie main" | sudo tee /etc/apt/sources.list.d/tanzu.list
+RUN apt-get update
+RUN apt-get install -y tanzu-cli 
+RUN tanzu config set env.TANZU_CLI_ADDITIONAL_PLUGIN_DISCOVERY_IMAGES_TEST_ONLY projects.registry.vmware.com/tanzu_cli_stage/plugins/plugin-inventory:latest 
+RUN yes | tanzu plugin install --group vmware-tap/default:v1.6.0-rc.2 
+
 
 # Install Tanzu Dev Tools
 ADD tanzu-vscode-extension.vsix /tmp
