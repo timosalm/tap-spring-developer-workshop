@@ -75,7 +75,7 @@ spec:
         verbs:
         - 'patch'
       - apiGroups:
-        - [carto.run]
+        - carto.run
         resources:
         - workloads
         verbs:
