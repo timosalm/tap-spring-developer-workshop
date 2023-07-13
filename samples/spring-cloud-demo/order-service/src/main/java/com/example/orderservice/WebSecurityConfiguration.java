@@ -1,24 +1,14 @@
 package com.example.orderservice;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-@EnableWebSecurity
 @Configuration
-class WebSecurityConfiguration {
+class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf().disable()
-                .authorizeHttpRequests(authorize -> authorize
-                        .mvcMatchers("/api/**").authenticated()
-                        .anyRequest().permitAll()
-                )
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt).build();
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/**");
     }
 }
