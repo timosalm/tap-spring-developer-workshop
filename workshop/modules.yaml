@@ -4,7 +4,7 @@ modules:
         exit_sign: Start
     exercises/product-service:    
         name: Implementing the Product Service
-        exit_sign: TAP GUI - Catalog
+        exit_sign: Path to Production
     exercises/prepaved-path-to-prod:
         name: Pre-paved Path to Production
         exit_sign: Continuous Integration 
