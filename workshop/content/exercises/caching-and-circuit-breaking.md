@@ -22,18 +22,18 @@ With Spring Boot’s autoconfiguration and Caching abstraction and in this case 
 file: ~/order-service/pom.xml
 line: 68
 text: |
-    <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-cache</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
-		</dependency>
+        <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
 ```
 
 ```editor:insert-lines-before-line
-file: ~/order-service/com/example/orderservice/OrderServiceApplication.java
+file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
 line: 10
 text: |
     import org.springframework.cache.annotation.EnableCaching;
@@ -46,13 +46,13 @@ text: |
 ```
 
 ```editor:insert-lines-before-line
-file: ~/order-service/com/example/orderservice/OrderServiceApplication.java
+file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
 line: 13
 text: |
     import org.springframework.cache.annotation.Cacheable;
 ```
 ```editor:insert-lines-before-line
-file: ~/order-service/com/example/orderservice/OrderServiceApplication.java
+file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
 line: 29
 text: |
     @Cacheable("Products")
