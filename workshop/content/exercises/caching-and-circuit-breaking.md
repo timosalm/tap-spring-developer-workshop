@@ -16,8 +16,13 @@ The cache abstraction **does not provide an actual store**. Examples of Cache pr
 To **improve the reliability and performance of our calls from the order service to its relational database via JDBC and the product service via REST**, let’s add a distributed caching solution, in this case **Redis**. 
 With Spring Boot’s autoconfiguration and Caching abstraction and in this case Spring Data Redis it’s very easy to add Caching to the **order-service**.
 
-**TODO: Create Redis instance via Crossplane, Add related stuff to order-service: https://github.com/timosalm/spring-cloud-demo-tap/tree/main/order-service**
+Let's first claim the pre-installed Bitnami Redis service to obtain an instance for the service.
+```terminal:execute
+command: tanzu service class-claim create redis-1 --class redis-unmanaged --parameter storageGB=0.5
+clear: true
+```
 
+Next, the required libraries have to be added to our `pom.xml`.
 ```editor:insert-lines-before-line
 file: ~/order-service/pom.xml
 line: 68
@@ -32,6 +37,7 @@ text: |
         </dependency>
 ```
 
+Caching and related annotations have to be declaratively enabled via the `@EnableCaching`annotation on a @Configuration class or alternatively via XML configuration.
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
 line: 10
@@ -39,23 +45,62 @@ text: |
     import org.springframework.cache.annotation.EnableCaching;
 ```
 ```editor:insert-lines-before-line
-file: ~/order-service/com/example/orderservice/OrderServiceApplication.java
+file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
 line: 11
 text: |
     @EnableCaching
 ```
 
+To enable caching for the REST call to the product service can be done by just adding the `@Cacheable` annotation with name of the associated cache to the method.
 ```editor:insert-lines-before-line
-file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
-line: 13
+file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
+line: 11
 text: |
     import org.springframework.cache.annotation.Cacheable;
 ```
 ```editor:insert-lines-before-line
-file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
+file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
 line: 29
 text: |
-    @Cacheable("Products")
+        @Cacheable("Products")
+```
+
+For caching of the calls to its relational database, we first have to add override all the used methods of the JpaRepository to be able to add related annotations. 
+```editor:insert-lines-before-line
+file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
+line: 8
+text: |
+        @Cacheable("Orders")
+        @Override
+        List<Order> findAll();
+
+        @Cacheable("Order")
+        @Override
+        Optional<Order> findById(Long id);
+
+        @Override
+        <S extends Order> S save(S order);
+```
+```editor:insert-lines-before-line
+file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
+line: 5
+text: |
+     import org.springframework.cache.annotation.Cacheable;
+```
+
+The cache abstraction not only allows populating caches, but also allows removing the cached data with the @CacheEvict which makes for example sense for the save method which adds a new order to the database.
+
+```editor:insert-lines-before-line
+file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
+line: 6
+text: |
+     import org.springframework.cache.annotation.CacheEvict;
+```
+```editor:insert-lines-before-line
+file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
+line: 22
+text: |
+        @CacheEvict(cacheNames = {"Order", "Orders"}, allEntries = true)
 ```
 
 ![Updated architecture with Caching](../images/microservice-architecture-cache.png)
