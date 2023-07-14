@@ -62,7 +62,7 @@ text: |
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
 line: 
 text: |2
-          @Cacheable("Products")
+      @Cacheable("Products")
 ```
 
 For caching of the calls to its relational database, we first have to add override all the used methods of the JpaRepository to be able to add related annotations. 
@@ -70,16 +70,16 @@ For caching of the calls to its relational database, we first have to add overri
 file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
 line: 8
 text: |2
-        @Cacheable("Orders")
-        @Override
-        List<Order> findAll();
+      @Cacheable("Orders")
+      @Override
+      List<Order> findAll();
 
-        @Cacheable("Order")
-        @Override
-        Optional<Order> findById(Long id);
+      @Cacheable("Order")
+      @Override
+      Optional<Order> findById(Long id);
 
-        @Override
-        <S extends Order> S save(S order);
+      @Override
+      <S extends Order> S save(S order);
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
@@ -100,7 +100,7 @@ text: |
 file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
 line: 22
 text: |2
-        @CacheEvict(cacheNames = {"Order", "Orders"}, allEntries = true)
+      @CacheEvict(cacheNames = {"Order", "Orders"}, allEntries = true)
 ```
 
 ![Updated architecture with Caching](../images/microservice-architecture-cache.png)
