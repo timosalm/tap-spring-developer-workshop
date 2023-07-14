@@ -26,7 +26,7 @@ Next, the required libraries have to be added to our `pom.xml`.
 ```editor:insert-lines-before-line
 file: ~/order-service/pom.xml
 line: 68
-text: |
+text: |2
         <dependency>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-starter-cache</artifactId>
@@ -37,7 +37,7 @@ text: |
         </dependency>
 ```
 
-Caching and related annotations have to be declaratively enabled via the `@EnableCaching`annotation on a @Configuration class or alternatively via XML configuration.
+Caching and related annotations have to be declaratively enabled via the `@EnableCaching` annotation on a @Configuration class or alternatively via XML configuration.
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
 line: 10
