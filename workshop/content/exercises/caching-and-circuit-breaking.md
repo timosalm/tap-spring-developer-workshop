@@ -27,14 +27,14 @@ Next, the required libraries have to be added to our `pom.xml`.
 file: ~/order-service/pom.xml
 line: 68
 text: |2
-        <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
+          <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+          </dependency>
+          <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+          </dependency>
 ```
 
 Caching and related annotations have to be declaratively enabled via the `@EnableCaching` annotation on a @Configuration class or alternatively via XML configuration.
@@ -46,7 +46,7 @@ text: |
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
-line: 11
+line: 12
 text: |
     @EnableCaching
 ```
@@ -54,22 +54,22 @@ text: |
 To enable caching for the REST call to the product service can be done by just adding the `@Cacheable` annotation with name of the associated cache to the method.
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
-line: 11
+line: 13
 text: |
     import org.springframework.cache.annotation.Cacheable;
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
-line: 29
-text: |
-        @Cacheable("Products")
+line: 
+text: |2
+          @Cacheable("Products")
 ```
 
 For caching of the calls to its relational database, we first have to add override all the used methods of the JpaRepository to be able to add related annotations. 
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
 line: 8
-text: |
+text: |2
         @Cacheable("Orders")
         @Override
         List<Order> findAll();
@@ -99,7 +99,7 @@ text: |
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
 line: 22
-text: |
+text: |2
         @CacheEvict(cacheNames = {"Order", "Orders"}, allEntries = true)
 ```
 
