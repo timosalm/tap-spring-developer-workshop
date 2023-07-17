@@ -115,7 +115,7 @@ If for example the cache of the product list for our order service has expired a
 First, we have to add the required library to our `pom.xml`.
 ```editor:insert-lines-before-line
 file: ~/order-service/pom.xml
-line: 73
+line: 76
 text: |2
           <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -132,8 +132,8 @@ text: "ProductService(RestTemplate restTemplate) {"
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
 text: |2
   private final CircuitBreakerFactory circuitBreakerFactory;
-  ProductService(RestTemplate restTemplate, CircuitBreakerFactory circuitBreakerFactory) {
-      this.circuitBreakerFactory = circuitBreakerFactory;
+      ProductService(RestTemplate restTemplate, CircuitBreakerFactory circuitBreakerFactory) {
+          this.circuitBreakerFactory = circuitBreakerFactory;
 ```
 
 
@@ -153,6 +153,7 @@ text: |2
                     log.error("Call to product service failed, using empty product list as fallback", throwable);
                     return Collections.emptyList();
                 });
+```
 The `Supplier` is the code that you are going to wrap in a circuit breaker. The `Function` is the fallback that will be executed if the circuit breaker is tripped. In our case, the fallback just returns an empty product list. The function will be passed the Throwable that caused the fallback to be triggered. You can optionally exclude the fallback if you do not want to provide one.
 
 ![Updated architecture with Circuit Breaker](../images/microservice-architecture-cb.png)
