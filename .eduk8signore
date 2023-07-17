@@ -6,3 +6,4 @@
 ./values-example.yaml
 ./.dockerignore
 ./setup
+./.github
