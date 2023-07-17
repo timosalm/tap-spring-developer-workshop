@@ -1,5 +1,8 @@
+```dashboard:open-dashboard
+name: The Twelve Factors
+```
 The **fifth factor** calls for the **strict separation between the build, release, and run stages**. 
-As you already saw, the **out-of-the-box supply chains of VMware Tanzu Application Platform** and Cartographer are designed to **fulfill this best- practice**.
+As you already saw, the **out-of-the-box supply chains of VMware Tanzu Application Platform** and Cartographer are designed to **fulfill this best-practice**.
 
 ##### Service Registration and Discovery
 

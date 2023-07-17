@@ -145,7 +145,7 @@ text: "return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(pro
 ```editor:replace-text-selection
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
 text: |2
-      return circuitBreakerFactory.create("products").run(() ->
+  return circuitBreakerFactory.create("products").run(() ->
               Arrays.asList(Objects.requireNonNull(
                 restTemplate.exchange(productsApiUrl, HttpMethod.GET, new HttpEntity<>(null, headers), Product[].class).getBody()
           )),
