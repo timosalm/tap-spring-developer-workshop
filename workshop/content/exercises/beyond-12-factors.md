@@ -8,11 +8,46 @@ On of those is **Telemetry**.
 
 ##### Distributed Tracing
 With Distributed Tracing you can track user requests end-to-end across microservices architectures. 
-Spring Boot Actuator provides dependency management and auto-configuration for Micrometer Tracing, a facade for popular tracer libraries.
+**Spring Boot Actuator provides dependency management and auto-configuration for [Micrometer Tracing](https://micrometer.io/docs/tracing)**, a facade for popular tracer libraries.
 
-In our example, we are sending the metrics and traces to Aria Operations for Applications (formerly known as Wavefront), our full-stack observability solution from infrastructure to applications.
+Spring Boot ships auto-configuration for the following tracers:
+- OpenTelemetry with Zipkin, Wavefront, or OTLP
+- OpenZipkin Brave with Zipkin or Wavefront
+
+In addition to the `org.springframework.boot:spring-boot-starter-actuator` dependency, we have to add a library that bridges the Micrometer Observation API to either OpenTelemetry or Brave and one that reports traces to the selected solution.
+
+For our example, let's use **OpenTelemetry with Wavefront**.
+```editor:insert-lines-before-line
+file: ~/product-service/pom.xml
+line: 76
+text: |2
+          <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+          </dependency>
+          <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-reporter-wavefront</artifactId>
+          </dependency>
+```
+
+To configure reporting to Wavefront we can use the `management.wavefront.*` configuration properties.
+```editor:append-lines-to-file
+file: ~/product-service/src/main/resources/application.yml
+text: |
+  management.wavefront.application.name: spring-cloud-demo-tap
+```
+
+Wavefront is now known as **Aria Operations for Applications**, our full-stack observability solution from infrastructure to applications.
 
 By default, the Wavefront Spring Boot Starter creates a Freemium account without a registration for you. But you have to configure the credentials of the freemium account for one instance for the others to see the distributed tracing instead of just the metrics.
+
+By default, Spring Boot samples only 10% of requests to prevent overwhelming the trace backend. Let's set it to 100% for our demo so that every request is sent to the trace backend.
+```editor:append-lines-to-file
+file: ~/product-service/src/main/resources/application.yml
+text: |
+  management.tracing.sampling.probability=1.0
+```
 
 ![Updated architecture with Observability](../images/microservice-architecture-tracing.png)
 
