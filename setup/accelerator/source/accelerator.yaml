@@ -15,7 +15,7 @@ accelerator:
     - name: javaVersion
       label: Java version
       inputType: radio
-      dataType: number
+      dataType: string
       defaultValue: 17
       choices:
         - value: 17
@@ -82,7 +82,7 @@ engine:
       - text: NAMESPACE
         with: "#namespace"
       - text: JAVA_VERSION
-        with: "#javaVersion.toString()"
+        with: "#javaVersion"
       - text: ARTIFACT_NAME
         with: "#artifactId"
   - include: [ "Tiltfile" ]
