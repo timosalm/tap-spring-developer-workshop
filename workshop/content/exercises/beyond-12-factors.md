@@ -14,9 +14,11 @@ Spring Boot ships auto-configuration for the following tracers:
 - OpenTelemetry with Zipkin, Wavefront, or OTLP
 - OpenZipkin Brave with Zipkin or Wavefront
 
+Wavefront is now known as **Aria Operations for Applications**, our full-stack observability solution from infrastructure to applications.
+
 In addition to the `org.springframework.boot:spring-boot-starter-actuator` dependency, we have to add a library that bridges the Micrometer Observation API to either OpenTelemetry or Brave and one that reports traces to the selected solution.
 
-For our example, let's use **OpenTelemetry with Wavefront**.
+For our example, let's use **OpenTelemetry with ZipKin**.
 ```editor:insert-lines-before-line
 file: ~/product-service/pom.xml
 line: 76
@@ -26,28 +28,23 @@ text: |2
             <artifactId>micrometer-tracing-bridge-otel</artifactId>
           </dependency>
           <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-reporter-wavefront</artifactId>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-zipkin</artifactId>
           </dependency>
 ```
-
-To configure reporting to Wavefront we can use the `management.wavefront.*` configuration properties.
-```editor:append-lines-to-file
-file: ~/product-service/src/main/resources/application.yml
-text: |
-  management.wavefront.application.name: spring-cloud-demo-tap
-```
-
-Wavefront is now known as **Aria Operations for Applications**, our full-stack observability solution from infrastructure to applications.
-
-By default, the Wavefront Spring Boot Starter creates a Freemium account without a registration for you. But you have to configure the credentials of the freemium account for one instance for the others to see the distributed tracing instead of just the metrics.
 
 By default, Spring Boot samples only 10% of requests to prevent overwhelming the trace backend. Let's set it to 100% for our demo so that every request is sent to the trace backend.
 ```editor:append-lines-to-file
 file: ~/product-service/src/main/resources/application.yml
 text: |
-  management.tracing.sampling.probability=1.0
+  management.tracing.sampling.probability: 1.0
 ```
+
+To configure reporting to ZipKin we can use the `management.zipkin.tracing.*` configuration properties.
+In our case, we would like to **set the required configuration automatically via a ServiceBinding**. Unfortunately, the [spring-cloud-bindings](https://github.com/spring-cloud/spring-cloud-bindings) library, which will be automatically added by the Spring Boot Buildpack, doesn't support it yet. 
+But it's possible to add additional bindings by registering additional implementations of the `BindingsPropertiesProcessor`.
+
+**TODO: Add spring-cloud-bindings support and Service Binding to workload + ZipKin server, UI TAB etc.**
 
 ![Updated architecture with Observability](../images/microservice-architecture-tracing.png)
 
@@ -60,6 +57,14 @@ text: |
 By designing your API first, you are able to facilitate discussion with your stakeholders (your internal team, customers, or possibly other teams within your organization who want to consume your API) well before you might have coded yourself past the point of no return. 
 
 With so many APIs in a microservices application, developers need an API Gateway that they can control!
+
+[Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) aims to provide a simple and effective way to route to APIs and provides  features related to security and resiliency to them.
+
+Based on the open source Spring Cloud Gateway project, our commercial offering **VMware Spring Cloud Gateway for Kubernetes** provides additional functionalities like a Kubernetes "native" experience, simple single sign-On (SSO) configuration, and OpenAPI auto-generation for documentation. 
+
+Let‘s have a look how you can deploy and configure a gateway for your microservices application with TAP and the included VMware Spring Cloud Gateway for Kubernetes.
+
+**TODO: Provisioning via Crossplane + provide Config, (Optional) Change Endpoints to internal**
 
 ![Updated architecture with API Gateway](../images/microservice-architecture-gateway.png)
 
