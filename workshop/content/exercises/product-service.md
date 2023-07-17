@@ -20,7 +20,7 @@ file: product-service/src/main/java/com/example/productservice/Application.java
 
 The next step is to push the code to a Git repository to collaborate with your team members on it. 
 ```terminal:execute
-command: cd product-service && git init -b {{ session_namespace }} && git remote add origin {{ ENV_GITEA_BASE_URL}}/product-service.git && git add . && git commit -m "Initial implementation" && git push -u origin {{ session_namespace }} && cd..
+command: cd product-service && git init -b {{ session_namespace }} && git remote add origin {{ ENV_GITEA_BASE_URL}}/product-service.git && git add . && git commit -m "Initial implementation" && git push -u origin {{ session_namespace }} && cd ..
 clear: true
 ```
 
