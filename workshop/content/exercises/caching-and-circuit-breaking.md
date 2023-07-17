@@ -110,9 +110,49 @@ text: |2
 In distributed systems like microservices, requests might timeout or fail completely.
 If for example the cache of the product list for our order service has expired and a request to the product service to fetch the product list fails, with a so-called Circuit Breaker, we are able to define a fallback that will be called for all further calls to the product service until a variable amount of time, to allow the product service to recover and prevent a network or service failure from cascading to other services.
 
-[Spring Cloud Circuit Breaker](https://spring.io/projects/spring-cloud-circuitbreaker) supports the three popular open-source options Resilience4J, Sentinel, and Hystrix. We'll now integrate Resilience4J in the order service.
+[Spring Cloud Circuit Breaker](https://spring.io/projects/spring-cloud-circuitbreaker) supports the two open-source options Resilience4J, and Spring Retry. We'll now integrate Resilience4J in the order service.
 
-**TODO: Add related stuff to order-service: https://github.com/timosalm/spring-cloud-demo-tap/tree/main/order-service**
+First, we have to add the required library to our `pom.xml`.
+```editor:insert-lines-before-line
+file: ~/order-service/pom.xml
+line: 73
+text: |2
+          <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+          </dependency>
+```
+
+To create a circuit breaker in your code you can use the CircuitBreakerFactory.
+```editor:select-matching-text
+file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
+text: "ProductService(RestTemplate restTemplate) {"
+```
+```editor:replace-text-selection
+file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
+text: |2
+  private final CircuitBreakerFactory circuitBreakerFactory;
+  ProductService(RestTemplate restTemplate, CircuitBreakerFactory circuitBreakerFactory) {
+      this.circuitBreakerFactory = circuitBreakerFactory;
+```
+
+
+`CircuitBreakerFactory.create` will create a `CircuitBreaker` instance that provides a run method that accepts a `Supplier` and a `Function` as an argument. 
+```editor:select-matching-text
+file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
+text: "return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(productsApiUrl, Product[].class)));"
+```
+```editor:replace-text-selection
+file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
+text: |2
+          return circuitBreakerFactory.create("products").run(() ->
+                        Arrays.asList(Objects.requireNonNull(
+                                restTemplate.exchange(productsApiUrl, HttpMethod.GET, new HttpEntity<>(null, headers), Product[].class).getBody()
+                        )),
+                throwable -> {
+                    log.error("Call to product service failed, using empty product list as fallback", throwable);
+                    return Collections.emptyList();
+                });
+The `Supplier` is the code that you are going to wrap in a circuit breaker. The `Function` is the fallback that will be executed if the circuit breaker is tripped. In our case, the fallback just returns an empty product list. The function will be passed the Throwable that caused the fallback to be triggered. You can optionally exclude the fallback if you do not want to provide one.
 
 ![Updated architecture with Circuit Breaker](../images/microservice-architecture-cb.png)
-
