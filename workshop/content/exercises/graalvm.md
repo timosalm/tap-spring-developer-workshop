@@ -48,7 +48,8 @@ With **ahead-of-time compilation** of the Java code to a standalone executable, 
 
 ![](../images/jit-vs-aot.png)
 
-###### - Standalone executable of ahead-of-time compiled Java code
+###### What are native images?
+- Standalone executable of ahead-of-time compiled Java code
 - Includes the application classes, classes from its dependencies, runtime library classes, and statically linked native code from JDK
 - Runs without the need of a JVM, necessary components like for memory management, thread scheduling, and so on are included in a runtime system, called “Substrate VM” 
 - Specific to the OS and machine architecture for which it was compiled
