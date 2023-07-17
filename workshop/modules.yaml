@@ -34,6 +34,7 @@ modules:
         exit_sign: 3 More Factors
     exercises/beyond-12-factors:
         name: Beyond the Twelve-Factor App
+        exit_sign: Summary
     workshop-summary:
         name: Workshop Summary
         exit_sign: End Workshop

@@ -3,10 +3,9 @@ spring:
   jpa.hibernate.ddl-auto: update
   config.import: "optional:configserver:"
  
-wavefront.application.name: spring-cloud-demo-tap
-
 logging.level.org.springframework.cache: TRACE
 management:
+  tracing.sampling.probability: 1.0
   endpoint.restart.enabled: true
   endpoints.web.exposure.include: "*"
 

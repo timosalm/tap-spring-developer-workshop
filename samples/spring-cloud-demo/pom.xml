@@ -12,7 +12,6 @@
         <module>product-service</module>
         <module>order-service</module>
         <module>shipping-service</module>
-        <module>gateway</module>
     </modules>
 
 </project>
