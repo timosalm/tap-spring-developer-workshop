@@ -145,14 +145,14 @@ text: "return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(pro
 ```editor:replace-text-selection
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
 text: |2
-          return circuitBreakerFactory.create("products").run(() ->
-                        Arrays.asList(Objects.requireNonNull(
-                                restTemplate.exchange(productsApiUrl, HttpMethod.GET, new HttpEntity<>(null, headers), Product[].class).getBody()
-                        )),
-                throwable -> {
-                    log.error("Call to product service failed, using empty product list as fallback", throwable);
-                    return Collections.emptyList();
-                });
+      return circuitBreakerFactory.create("products").run(() ->
+              Arrays.asList(Objects.requireNonNull(
+                restTemplate.exchange(productsApiUrl, HttpMethod.GET, new HttpEntity<>(null, headers), Product[].class).getBody()
+          )),
+          throwable -> {
+              log.error("Call to product service failed, using empty product list as fallback", throwable);
+              return Collections.emptyList();
+          });
 ```
 The `Supplier` is the code that you are going to wrap in a circuit breaker. The `Function` is the fallback that will be executed if the circuit breaker is tripped. In our case, the fallback just returns an empty product list. The function will be passed the Throwable that caused the fallback to be triggered. You can optionally exclude the fallback if you do not want to provide one.
 
