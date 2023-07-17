@@ -74,7 +74,7 @@ engine:
         - text: "<version>2.7.13</version>"
           with: "'<version>' + #springBootVersion + '</version>'"
         - text: "<spring-cloud.version>2021.0.8</spring-cloud.version>"
-          with: "'<version>' + #springCloudVersion + '</version>'"
+          with: "'<spring-cloud.version>' + #springCloudVersion + '</spring-cloud.version>'"
   - include: [ "config/workload.yaml" ]
     chain:
     - type: ReplaceText
