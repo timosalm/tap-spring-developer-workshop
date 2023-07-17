@@ -30,6 +30,12 @@ spec:
     env: 
     - name: TAP_INGRESS
       value: #@ data.values.tap.ingress_domain
+    - name: GITEA_BASE_URL
+      value: #@ data.values.gitea.base_url
+    - name: GITEA_USERNAME
+      value: #@ data.values.gitea.basic_auth_username
+    - name: GITEA_PASSWORD
+      value: #@ data.values.gitea.basic_auth_password
     ingresses:
     - name: twelve-factors
       protocol: https

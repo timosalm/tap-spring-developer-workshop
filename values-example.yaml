@@ -11,3 +11,7 @@ workshop_git:
   branch: main
 tap:
   ingress_domain: example.com
+gitea:
+  base_url: https://gitea.example.com/gitea_admin
+  basic_auth_username:
+  basic_auth_password:

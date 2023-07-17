@@ -18,9 +18,11 @@ Press **Continue** until you see **Generate Project**. When you click on **Gener
 file: product-service/src/main/java/com/example/productservice/Application.java
 ```
 
-**OPTIONAL TODO: Add to Git repository (Gitea)**
-
-The next step would be to push the code to a Git repository to collaborate with your team members on it. We will skip this for now and continue with the implementation of the business functionality.
+The next step is to push the code to a Git repository to collaborate with your team members on it. 
+```terminal:execute
+command: cd product-service && git init -b ${SESSION_NAMESPACE} && git remote add origin git@${GITEA_BASE_URL}:${GITEA_USERNAME}/product-service.git && git add . && git push -u origin ${SESSION_NAMESPACE} && cd..
+clear: true
+```
 
 **TODO: Automate much of the stuff via educates instructions** to get to https://github.com/timosalm/spring-cloud-demo-tap/tree/main/product-service/src/main/java/com/example/productservice without e.g. @RefreshScope and advanced security configuration.
 
