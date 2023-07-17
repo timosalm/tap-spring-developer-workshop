@@ -60,7 +60,7 @@ text: |
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
-line: 
+line: 30
 text: |2
       @Cacheable("Products")
 ```
@@ -98,7 +98,7 @@ text: |
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
-line: 22
+line: 18
 text: |2
       @CacheEvict(cacheNames = {"Order", "Orders"}, allEntries = true)
 ```

@@ -2,7 +2,7 @@ Created in 2012, the **12-factor app methodology provides a well-defined framewo
 
 ```dashboard:create-dashboard
 name: The Twelve Factors
-url: https://12factor.net
+url: https://{{ session_namespace }}-twelve-factors.{{ ingress_domain }}
 ```
 
 We will now have a look at the factors that are relevant for the implementation of our application, and the solution Spring provides for them.

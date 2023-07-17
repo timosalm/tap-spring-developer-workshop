@@ -30,6 +30,11 @@ spec:
     env: 
     - name: TAP_INGRESS
       value: #@ data.values.tap.ingress_domain
+    ingresses:
+    - name: twelve-factors
+      protocol: https
+      host: 12factor.net 
+      port: 443
     objects:
     # Install grype
     - apiVersion: packaging.carvel.dev/v1alpha1
