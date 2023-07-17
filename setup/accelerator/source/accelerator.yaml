@@ -16,12 +16,12 @@ accelerator:
       label: Java version
       inputType: radio
       dataType: string
-      defaultValue: 17
+      defaultValue: "17"
       choices:
-        - value: 17
-          text: 17
-        - value: 19
-          text: 19
+        - value: "17"
+          text: "17"
+        - value: "19"
+          text: "19"
       required: true
     - name: springBootVersion
       label: Spring Boot version
