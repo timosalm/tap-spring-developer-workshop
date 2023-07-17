@@ -1,0 +1,93 @@
+accelerator:
+  displayName: Spring Microservice
+  description: Provides a starting point to implement a 15 factors microservice.
+  iconUrl: https://spring.io/img/spring.svg
+  tags:
+    - java
+    - spring
+    - microservice
+  options:
+    - name: pkgName
+      label: Package name
+      inputType: text
+      defaultValue: "com.example"
+      required: true
+    - name: javaVersion
+      label: Java version
+      inputType: radio
+      dataType: number
+      defaultValue: 17
+      choices:
+        - value: 17
+          text: 17
+        - value: 19
+          text: 19
+      required: true
+    - name: springBootVersion
+      label: Spring Boot version
+      inputType: select
+      choices:
+      - value: 2.7.13
+        text: 2.7.13
+      - value: 3.1.1
+        text: 3.1.1
+      defaultValue: "3.1.1"
+      required: true
+    - name: namespace
+      label: Deployment namespace
+      display: true
+      description: The Kubernetes namespace the application will be deployed in
+      inputType: text
+      dataType: string
+      defaultValue: "default"
+engine:
+  let:
+  - name: springCloudVersion
+    expression: "#springBootVersion == \"2.7.13\" ? \"2021.0.8\" : \"2022.0.3\""
+  merge:
+  - include: [ "**/*" ]
+    exclude: [ "**/*.java", "**/*.yaml", "pom.xml", "config/workload.yaml"]
+  - include: [ "**/*.java", "**/*.yaml" ]
+    chain:
+    - type: ReplaceText
+      substitutions:
+      - text: ARTIFACT_NAME
+        with: "#artifactId.replace('-', '')"
+      - text: com.example
+        with: "#pkgName"
+    - type: RewritePath
+      regex: src/main/java/com/example/ARTIFACT_NAME/(.*)
+      rewriteTo: "'src/main/java/' + #pkgName.replace('.', '/') + '/' + #artifactId.replace('-', '')  + '/' + #g1"
+    - type: RewritePath
+      regex: src/test/java/com/example/ARTIFACT_NAME/(.*)
+      rewriteTo: "'src/test/java/' + #pkgName.replace('.', '/') + '/' + #artifactId.replace('-', '')  + '/' + #g1"
+  - include: [ "pom.xml" ]
+    chain:
+      - type: ReplaceText
+        substitutions:
+        - text: "<groupId>com.example</groupId>"
+          with: "'<groupId>' + #pkgName + '</groupId>'"
+        - text: ARTIFACT_NAME
+          with: "#artifactId"
+        - text: "<java.version>17</java.version>"
+          with: "'<java.version>' + #javaVersion + '</java.version>'"
+        - text: "<version>2.7.13</version>"
+          with: "'<version>' + #springBootVersion + '</version>'"
+        - text: "<spring-cloud.version>2021.0.8</spring-cloud.version>"
+          with: "'<version>' + #springCloudVersion + '</version>'"
+  - include: [ "config/workload.yaml" ]
+    chain:
+    - type: ReplaceText
+      substitutions:
+      - text: NAMESPACE
+        with: "#namespace"
+      - text: JAVA_VERSION
+        with: "#javaVersion.toString()"
+      - text: ARTIFACT_NAME
+        with: "#artifactId"
+  - include: [ "Tiltfile" ]
+    chain:
+    - type: ReplaceText
+      substitutions:
+      - text: ARTIFACT_NAME
+        with: "#artifactId"

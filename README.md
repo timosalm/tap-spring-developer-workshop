@@ -1,10 +1,9 @@
 # Installation
  
 ## App Accelerator
-The Application Accelerator used for this application is stored in the following repository: https://github.com/timosalm/tap-accelerators.git
+The Application Accelerator used for this application can be registered in the TAP environment via the following command.
 ```
-kubectl apply -f https://raw.githubusercontent.com/timosalm/tap-accelerators/main/config/15-factors-microservice-fragment.yaml
-kubectl apply -f https://raw.githubusercontent.com/timosalm/tap-accelerators/main/config/15-factors-microservice.yaml
+kubectl apply -f https://raw.githubusercontent.com/timosalm/tap-spring-developer-workshop/main/setup/accelerator/accelerator-resource.yaml
 ```
 
 # Development

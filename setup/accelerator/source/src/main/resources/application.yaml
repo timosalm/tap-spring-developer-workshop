@@ -1,0 +1,2 @@
+spring:
+  application.name: ARTIFACT_NAME # for config server
