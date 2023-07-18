@@ -19,6 +19,7 @@ spec:
   session:
     namespaces:
       budget: custom
+      role: view
     applications:
       terminal:
         enabled: true
@@ -111,6 +112,16 @@ spec:
           namespace: $(workshop_namespace)
           name: $(service_account)
     # Resources
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        annotations:
+          tekton.dev/git-0: #@ data.values.gitops.host
+        name: git-https
+      type: kubernetes.io/basic-auth
+      stringData:
+        username: #@ data.values.gitops.username
+        password: #@ data.values.gitops.password
     - apiVersion: tekton.dev/v1beta1
       kind: Pipeline
       metadata:

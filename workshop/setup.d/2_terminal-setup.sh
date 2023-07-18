@@ -17,21 +17,3 @@ for serviceName in order-service shipping-service; do
     sed -i 's/SOURCE_GIT_BRANCH/'"$SESSION_NAMESPACE"'/g' ${serviceName}/config/workload.yaml
     kubectl apply -f ${serviceName}/config/workload.yaml
 done
-
-'"$PWD"'
-
-kubectl() {
-    if [[ $@ == *"secret"* ]]; then
-        command echo "No resources found in $SESSION_NAMESPACE namespace."
-    else
-        command kubectl "$@"
-    fi
-}
-
-k() {
-    if [[ $@ == *"secret"* ]]; then
-        command echo "No resources found in $SESSION_NAMESPACE namespace."
-    else
-        command kubectl "$@"
-    fi
-}
