@@ -82,16 +82,11 @@ spec:
         verbs: ['*']
       - apiGroups:
         - ""
-        resources:
-        - namespaces, serviceaccounts
-        verbs:
-        - 'patch'
-      - apiGroups:
-        - carto.run
-        resources:
-        - workloads
-        verbs:
-        - '*'
+        resources: [namespaces, serviceaccounts]
+        verbs: ['patch']
+      - apiGroups: [carto.run]
+        resources: [workloads]
+        verbs: ['*']
       - apiGroups: [services.apps.tanzu.vmware.com]
         resources: [classclaims,clusterinstanceclasses]
         verbs: ['*']        
