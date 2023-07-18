@@ -6,9 +6,25 @@ VMware Tanzu Application Platform makes it easy as possible to discover, curate,
 
 This experience is made possible by using the **Services Toolkit** component. 
 
-The **order service** uses a **PostgreSQL database** to store orders and **RabbitMQ** to asynchronously communicate with the **shipping service**.
+The **order service** uses a **PostgreSQL database** to store orders ...
+```editor:open-file
+file: ~/order-service/pom.xml
+line: 34
+```
+```editor:open-file
+file: ~/order-service/src/main/java/com/example/orderservice/order/OrderApplicationService.java
+line: 32
+```
 
-**TODO: Have a closer look at the oder-service implementation**
+... and **RabbitMQ** to asynchronously communicate with the **shipping service**.
+```editor:open-file
+file: ~/order-service/pom.xml
+line: 43
+```
+```editor:open-file
+file: ~/order-service/src/main/java/com/example/orderservice/order/ShippingService.java
+line: 45
+```
 
 For the best experience, developers should have a self-service to provision backing services across all the stages for the application.
 
@@ -34,7 +50,7 @@ clear: true
 ```
 Now we can claim the pre-installed Bitnami PostgreSQL service to obtain such a database.
 ```terminal:execute
-command: tanzu service class-claim create postgres-1 --class postgresql-unmanaged --parameter storageGB=0.5
+command: tanzu service class-claim create postgres-1 --class postgresql-unmanaged --parameter storageGB=1
 clear: true
 ```
 It might take a moment or two before the claim reports `Ready: True`. After the claim is ready, you then have a successful claim for a PostgreSQL database.
@@ -44,17 +60,37 @@ clear: true
 ```
 Let's also trigger the provisioning of a RabbitMq instance.
 ```terminal:execute
-command: tanzu service class-claim create rmq-1 --class rabbitmq-unmanaged --parameter storageGB=0.5
+command: tanzu service class-claim create rmq-1 --class rabbitmq-unmanaged --parameter storageGB=1
 clear: true
 ```
 
 Services Toolkit also provides the **functionality to automatically inject credentials that are required for the connection to the backing services** into the containers of the running application via the [Service Binding Specification](https://github.com/k8s-service-bindings/spec) for Kubernetes. 
 
-The developer defines the backing services the application wants to bind to in the Workload. Those backing services have to be available in the cluster or registered in it to be consumed by the service binding.
+The **developer defines the backing services** the application wants **to bind to in the Workload**. Those backing services have to be available in the cluster or registered in it to be consumed by the service binding.
+```editor:insert-value-into-yaml
+file: ~/order-service/config/workload.yaml
+path: spec
+value:
+  serviceClaims:
+  - name: db
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ClassClaim
+      name: postgres-1
+  - name: rmq
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ClassClaim
+      name: rmq-1
+```
 
-**TODO: Interactively add Service Bindings to the already available workload.yaml**
+After configuring the Workload definition for the service bindings on our machine, we have to update it on the cluster.
+```terminal:execute
+command: tanzu apps workload apply -f order-service/config/workload.yaml
+clear: true
+```
 
-**TODO: Apply the updated workload and may add code to the app that it run with an in-memory db by default - Show it with App life view environment**
+**TODO: Show it with App live view environment**
 
 ##### Application Live View
 

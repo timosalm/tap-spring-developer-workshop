@@ -72,6 +72,27 @@ spec:
           targetImagePullSecret: registry-credentials
     # Permissions for workshop session
     - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        name: $(session_namespace)-session-cr
+      rules:
+      - apiGroups: [services.apps.tanzu.vmware.com]
+        resources: [clusterinstanceclasses]
+        verbs: [get, list, claim]    
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: $(session_namespace)-session-rb
+        namespace: $(session_namespace)
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: $(session_namespace)-session-cr
+      subjects:
+        - kind: ServiceAccount
+          namespace: $(workshop_namespace)
+          name: $(service_account)
+    - apiVersion: rbac.authorization.k8s.io/v1
       kind: Role
       metadata:
         name: $(session_namespace)-session
@@ -80,15 +101,14 @@ spec:
       - apiGroups: [scanning.apps.tanzu.vmware.com]
         resources: [scanpolicies]
         verbs: ['*']
-      - apiGroups:
-        - ""
+      - apiGroups: [""]
         resources: [namespaces, serviceaccounts]
-        verbs: ['patch']
+        verbs: [patch]
       - apiGroups: [carto.run]
         resources: [workloads]
         verbs: ['*']
       - apiGroups: [services.apps.tanzu.vmware.com]
-        resources: [classclaims,clusterinstanceclasses]
+        resources: [classclaims]
         verbs: ['*']        
       - apiGroups: [claimable.services.apps.tanzu.vmware.com]
         resources: [instancequeries]
