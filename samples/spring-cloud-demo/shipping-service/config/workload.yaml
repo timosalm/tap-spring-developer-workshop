@@ -7,20 +7,11 @@ metadata:
     apps.tanzu.vmware.com/workload-type: worker
     apps.tanzu.vmware.com/has-tests: "true"
 spec:
-  params:
-  - name: testing_pipeline_params
-    value:
-      source-sub-path: shipping-service
-  build:
-    env:
-    - name: BP_JVM_VERSION
-      value: "17"
   source:
     git:
-      url: https://github.com/tsalm-pivotal/spring-cloud-demo-tap.git
+      url: SOURCE_GIT_URL
       ref:
-        branch: main
-    subPath: shipping-service
+        branch: SOURCE_GIT_BRANCH
   serviceClaims:
   - name: rmq
     ref:
@@ -37,3 +28,7 @@ spec:
       apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ResourceClaim
       name: observability-binding-compatible
+  build:
+    env:
+    - name: BP_JVM_VERSION
+      value: "17"
