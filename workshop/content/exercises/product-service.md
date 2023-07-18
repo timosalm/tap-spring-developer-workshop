@@ -10,9 +10,12 @@ command: workbench.view.extension.tanzu-app-accelerator
 ```
 
 Select the **Spring Microservice** accelerator from the list, and change the following values in the form:
-- Name: product-service
-- Deployment namespace: {{ session_namespace }}
+- **Name: product-service**
+- **Git base url: {{ ENV_GITEA_BASE_URL}}/product-service.git**
+- **Git branch: {{ session_namespace }}**
+- **Deployment namespace: {{ session_namespace }}**
 Press **Continue** until you see **Generate Project**. When you click on **Generate Project** (Click **OK** at the pop-up window), a new tab will open. The Accelerator has now generated the code in a new tab. We can close the tab and continue to work on the IDE integrated into the workshop UI.
+
 
 ```editor:open-file
 file: product-service/src/main/java/com/example/productservice/Application.java

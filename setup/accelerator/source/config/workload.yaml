@@ -10,9 +10,9 @@ metadata:
 spec:
   source:
     git:
-      url: https://github.com/timosalm/ARTIFACT_NAME.git
+      url: SOURCE_GIT_BASE_URL/ARTIFACT_NAME.git
       ref:
-        branch: main
+        branch: SOURCE_GIT_BRANCH
   build:
     env:
     - name: BP_JVM_VERSION
