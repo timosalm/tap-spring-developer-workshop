@@ -13,4 +13,4 @@ management:
 shipping:
   in-exchange: order-shipping-exchange
   out-exchange: order-delivered-exchange
-  duration: 10000
+  duration: 1000

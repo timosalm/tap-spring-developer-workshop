@@ -30,7 +30,7 @@ command: cd product-service && git init -b {{ session_namespace }} && git remote
 clear: true
 ```
 
-**TODO: Automate much of the stuff via educates instructions** to get to https://github.com/timosalm/spring-cloud-demo-tap/tree/main/product-service/src/main/java/com/example/productservice without e.g. @RefreshScope and advanced security configuration.
+**TODO: Add text
 
 ```editor:append-lines-to-file
 file: ~/product-service/src/main/java/com/example/productservice/product/Product.java
