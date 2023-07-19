@@ -110,17 +110,6 @@ text: |2
     }
 ```
 
-```editor:insert-lines-before-line
-file: ~/product-service/src/main/java/com/example/productservice/product/ProductResource.java
-line: 11
-text: |2
-      private final ProductApplicationService productApplicationService;
-
-      ProductResource(ProductApplicationService productApplicationService) {
-          this.productApplicationService = productApplicationService;
-      }
-```
-
 ```editor:select-matching-text
 file: ~/product-service/src/main/java/com/example/productservice/product/ProductResource.java
 text: "Hello World"
