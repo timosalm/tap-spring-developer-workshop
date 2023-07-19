@@ -86,7 +86,7 @@ value:
 
 After configuring the Workload definition for the service bindings on our machine, we have to update it on the cluster.
 ```terminal:execute
-command: tanzu apps workload apply -f order-service/config/workload.yaml
+command: tanzu apps workload apply -f order-service/config/workload.yaml -y
 clear: true
 ```
 

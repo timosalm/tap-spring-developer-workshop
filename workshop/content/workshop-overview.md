@@ -10,6 +10,8 @@ All the microservices are or will be implemented using the Spring Framework ecos
 
 #### Spring by VMware 
 
+![](images/spring-logo.svg)
+
 The goal of **Spring** is to simplify and accelerate application development, and due to its autoconfiguration, **Spring Boot** is the foundation for fast development of production-ready applications. 
 
 **Spring Cloud** supports the development of microservice architectures by implementing proven patterns for example for resilience, reliability, and coordination.
