@@ -61,11 +61,22 @@ engine:
   let:
   - name: springCloudVersion
     expression: "#springBootVersion == \"2.7.13\" ? \"2021.0.8\" : \"2022.0.3\""
+  - name: serviceNamePrefix
+    expression: "#kebab2Camel(#artifactId.replace('-service', ''))"
   merge:
   - include: [ "**/*" ]
     exclude: [ "**/*.java", "**/*.yaml", "pom.xml", "config/workload.yaml"]
   - include: [ "**/*.java", "**/*.yaml" ]
     chain:
+    - merge:
+      - include: [ "**/*" ]
+        exclude: [ "**/HelloWorldResource.java" ]
+      - include: [ "**/HelloWorldResource.java" ]
+        chain:
+        - type: ReplaceText
+          substitutions:
+          - text: ARTIFACT_NAME
+            with: "'ARTIFACT_NAME' + '.' + #serviceNamePrefix.toLowerCase()"
     - type: ReplaceText
       substitutions:
       - text: ARTIFACT_NAME
@@ -78,6 +89,22 @@ engine:
     - type: RewritePath
       regex: src/test/java/com/example/ARTIFACT_NAME/(.*)
       rewriteTo: "'src/test/java/' + #pkgName.replace('.', '/') + '/' + #artifactId.replace('-', '')  + '/' + #g1"
+    - merge:
+      - include: [ "**/*" ]
+        exclude: [ "**/HelloWorldResource.java" ]
+      - include: [ "**/HelloWorldResource.java" ]
+        chain:
+        - type: ReplaceText
+          substitutions:
+          - text: HelloWorld
+            with: "#serviceNamePrefix.substring(0, 1).toUpperCase() + #serviceNamePrefix.substring(1)"
+          - text: helloWorld
+            with: "'fetch' + #serviceNamePrefix.substring(0, 1).toUpperCase() + #serviceNamePrefix.substring(1) + 's'"
+          - text: helloworld
+            with: "#serviceNamePrefix.toLowerCase() + 's'"
+        - type: RewritePath
+          regex: (?<untouchedpath>.*)HelloWorldResource.java
+          rewriteTo: "#untouchedpath + '/' + #serviceNamePrefix.toLowerCase() + '/' + #serviceNamePrefix.substring(0, 1).toUpperCase() + #serviceNamePrefix.substring(1) + 'Resource.java'"
   - include: [ "pom.xml" ]
     chain:
       - type: ReplaceText
