@@ -30,7 +30,7 @@ command: cd product-service && git init -b {{ session_namespace }} && git remote
 clear: true
 ```
 
-**TODO: Add text
+**TODO: Add description to commands**
 
 ```editor:append-lines-to-file
 file: ~/product-service/src/main/java/com/example/productservice/product/Product.java
