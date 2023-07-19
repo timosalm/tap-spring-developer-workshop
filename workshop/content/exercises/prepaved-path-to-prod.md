@@ -64,7 +64,7 @@ Using **GitOps** to apply the Workload has the benefit that **developers don't n
 **TODO: Use local source code**
 As we have Kuberetens access from the workshop environment, let's apply our configuration via the tanzu CLI.
 ```execute
-tanzu apps workload create -f product-service/config/workload.yaml
+tanzu apps workload create -f product-service/config/workload.yaml -y
 ```
 
 We'll now have a closer look at TAP-GUI for a visualization of all the different steps of the supply chain and the capabilities of the tools they're implemented with.

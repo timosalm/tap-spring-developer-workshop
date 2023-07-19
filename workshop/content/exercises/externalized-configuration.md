@@ -84,5 +84,11 @@ value:
   config.import: "optional:configtree:${SERVICE_BINDING_ROOT}/spring-properties/"
 ```
 
+**TODO: Push and discover
+```execute
+cd product-service && git add . && git commit -m "Add external configuration support" && git push && tanzu apps workload apply -f config/workload.yaml -y && cd ..
+```
+
+
 ![Updated architecture with Configuration Service](../images/microservice-architecture-config.png)
 
