@@ -101,6 +101,12 @@ text: |2
 
 ```editor:insert-lines-before-line
 file: ~/product-service/src/main/java/com/example/productservice/product/ProductResource.java
+line: 5
+text: "import java.util.List;"
+```
+
+```editor:insert-lines-before-line
+file: ~/product-service/src/main/java/com/example/productservice/product/ProductResource.java
 line: 11
 text: |2
     private final ProductApplicationService productApplicationService;
@@ -126,6 +132,10 @@ text: |2
 
 ```editor:append-lines-to-file
 file: ~/product-service/src/main/resources/application.yaml
+text: "product-service.product-names: VMware Tanzu Application Platform"
+```
+```editor:append-lines-to-file
+file: ~/product-service/src/test/resources/application.yaml
 text: "product-service.product-names: VMware Tanzu Application Platform"
 ```
 
