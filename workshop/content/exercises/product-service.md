@@ -17,6 +17,9 @@ Select the **Spring Microservice** accelerator from the list, and change the fol
 Press **Continue** until you see **Generate Project**. When you click on **Generate Project** (Click **OK** at the pop-up window), a new tab will open. The Accelerator has now generated the code in a new tab. We can close the tab and continue to work on the IDE integrated into the workshop UI.
 
 
+```editor:execute-command
+command: workbench.view.explorer
+```
 ```editor:open-file
 file: product-service/src/main/java/com/example/productservice/Application.java
 ```
@@ -100,11 +103,11 @@ text: |2
 file: ~/product-service/src/main/java/com/example/productservice/product/ProductResource.java
 line: 11
 text: |2
-      private final ProductApplicationService productApplicationService;
+    private final ProductApplicationService productApplicationService;
 
-      ProductResource(ProductApplicationService productApplicationService) {
-          this.productApplicationService = productApplicationService;
-      }
+    ProductResource(ProductApplicationService productApplicationService) {
+        this.productApplicationService = productApplicationService;
+    }
 ```
 
 ```editor:insert-lines-before-line
@@ -126,8 +129,8 @@ before: 1
 ```editor:replace-text-selection
 file: ~/product-service/src/main/java/com/example/productservice/product/ProductResource.java
 text: |2
-      public ResponseEntity<List<Product>> fetchProducts() {
-            return ResponseEntity.ok(productApplicationService.fetchProducts());
+    public ResponseEntity<List<Product>> fetchProducts() {
+        return ResponseEntity.ok(productApplicationService.fetchProducts());
 ```
 
 **TODO: Use VSCode Tanzu Plugin for iterate and debug, to identify and fix missing application.yaml config**
