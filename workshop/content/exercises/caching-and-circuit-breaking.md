@@ -16,10 +16,21 @@ The cache abstraction **does not provide an actual store**. Examples of Cache pr
 To **improve the reliability and performance of our calls from the order service to its relational database via JDBC and the product service via REST**, let’s add a distributed caching solution, in this case **Redis**. 
 With Spring Boot’s autoconfiguration and Caching abstraction and in this case Spring Data Redis it’s very easy to add Caching to the **order-service**.
 
-Let's first claim the pre-installed Bitnami Redis service to obtain an instance for the service.
+Let's first claim the pre-installed Bitnami Redis service to obtain an instance for the service ...
 ```terminal:execute
 command: tanzu service class-claim create redis-1 --class redis-unmanaged --parameter storageGB=0.5
 clear: true
+```
+... and add a service binding to our Workload.
+```editor:insert-value-into-yaml
+file: ~/order-service/config/workload.yaml
+path: spec.serviceClaims
+value:
+  - name: cache
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ClassClaim
+      name: redis-1
 ```
 
 Next, the required libraries have to be added to our `pom.xml`.
@@ -103,6 +114,36 @@ text: |2
       @CacheEvict(cacheNames = {"Order", "Orders"}, allEntries = true)
 ```
 
+To apply the changes, we have to update the Workload in the environment and commit the updated source code.
+```terminal:execute
+command: |
+  cd order-service && git add . && git commit -m "Add caching" && git push
+  cd ..
+clear: true
+```
+```terminal:execute
+command: tanzu apps workload apply -f order-service/config/workload.yaml -y
+clear: true
+```
+
+As soon as our outdated application and service binding is applied ...
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/order-service
+```
+
+... let's check whether the caching works via the application logs and sending two requests to the API.
+```execute-2
+kubectl logs -l serving.knative.dev/service=order-service
+```
+```terminal:execute
+command: curl https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
+clear: true
+```
+```terminal:execute
+command: curl https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
+clear: true
+```
+
 ![Updated architecture with Caching](../images/microservice-architecture-cache.png)
 
 ##### Circuit Breaker
@@ -155,5 +196,34 @@ text: |2
           });
 ```
 The `Supplier` is the code that you are going to wrap in a circuit breaker. The `Function` is the fallback that will be executed if the circuit breaker is tripped. In our case, the fallback just returns an empty product list. The function will be passed the Throwable that caused the fallback to be triggered. You can optionally exclude the fallback if you do not want to provide one.
+
+After pushing our changes to Git, the updated source code will be automatically deployed to production. 
+```terminal:execute
+command: |
+  cd order-service && git add . && git commit -m "Add circuit-breaker" && git push
+  cd ..
+clear: true
+```
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/order-service
+```
+
+As soon as the updated application is running, we can test the functionality by first sending a request to it with a running product service, terminating the product service and sending another request to the order service. 
+```terminal:execute
+command: curl -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
+clear: true
+```
+"productId": 2147483647,
+  "shippingAddress": "string"
+```terminal:execute
+command: kubectl delete app product-service
+clear: true
+```
+
+If everything works as expected the order service should fall back to an empty product list instead.
+```terminal:execute
+command: curl -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
+clear: true
+```
 
 ![Updated architecture with Circuit Breaker](../images/microservice-architecture-cb.png)

@@ -139,4 +139,12 @@ file: ~/product-service/src/test/resources/application.yaml
 text: "product-service.product-names: VMware Tanzu Application Platform"
 ```
 
+Let's commit the updated source code.
+```terminal:execute
+command: |
+  cd product-service && git add . && git commit -m "Add business code" && git push
+  cd ..
+clear: true
+```
+
 After the basic implementation of our product service, we will now configure a continuous path to production.

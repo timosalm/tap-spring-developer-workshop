@@ -8,7 +8,7 @@ Part of TAP is the commercial **Application Configuration Service for VMware Tan
 
 A Git repository as source of the externalized configuration is already created for you.
 ```dashboard:open-url
-url: https://{{ ENV_GITEA_BASE_URL }}/externalized-configuration/src/{{ session_namespace }}
+url: {{ ENV_GITEA_BASE_URL }}/externalized-configuration/src/{{ session_namespace }}
 ```
 
 Our commercial product provides a Kubernetes-native experience for the configuration via a `ConfigurationSource` resource.
@@ -26,7 +26,7 @@ command: |
     spec:
       backends:
         - type: git
-          uri: https://{{ ENV_GITEA_BASE_URL }}/externalized-configuration
+          uri: {{ ENV_GITEA_BASE_URL }}/externalized-configuration
           defaultLabel: {{ session_namespace }}
   EOF
 clear: true
