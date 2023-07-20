@@ -84,11 +84,27 @@ value:
   config.import: "optional:configtree:${SERVICE_BINDING_ROOT}/spring-properties/"
 ```
 
-**TODO: Push and discover
-```execute
-cd product-service && git add . && git commit -m "Add external configuration support" && git push && tanzu apps workload apply -f config/workload.yaml -y && cd ..
+To apply the changes, we have to update the Workload in the environment and commit the updated source code.
+```terminal:execute
+command: |
+  cd product-service && git add . && git commit -m "Add external configuration support" && git push
+  cd ..
+clear: true
+```
+```terminal:execute
+command: tanzu apps workload apply -f product-service/config/workload.yaml -y
+clear: true
 ```
 
+As soon as our outdated application and service binding is applied ...
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
+```
+... we should be able to see a longer product list configured via our Git repository.
+```terminal:execute
+command: curl https://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products
+clear: true
+```
 
 ![Updated architecture with Configuration Service](../images/microservice-architecture-config.png)
 

@@ -140,6 +140,14 @@ spec:
       stringData:
         username: #@ data.values.gitops.username
         password: #@ data.values.gitops.password
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: registry-credentials
+      type: kubernetes.io/dockerconfigjson
+      data:
+        #@ docker_creds = {"username": data.values.container_registry.username, "password": data.values.container_registry.password}
+        .dockerconfigjson: #@ base64.encode(json.encode({"auths": {data.values.container_registry.hostname: docker_creds}}))
     - apiVersion: tekton.dev/v1beta1
       kind: Pipeline
       metadata:
