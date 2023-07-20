@@ -44,28 +44,6 @@ Let's go back to the visualization of the supply chain and **click on the policy
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
 ```
-Our source can step failed because the `notAllowedSeverities`configuration in the scan policy is set to  `["Critical", "High", "UnknownSeverity"]`. It's also possible to whitelist CVEs with the `ignoreCves` configuration.
-
-Let's now try to get the step pass by white-listing the severities for demo purposes.
-
-```terminal:execute
-command: echo "ignoreCves := [$(tanzu insight source vulnerabilities --commit $COMMIT_REVISION  --output-format api-json | jq '. | map(.CVEID) | join(",")' | sed 's/,/","/g')]"
-clear: true
-```
-**Copy the output of the command.**
-
-```editor:select-matching-text
-file: ~/samples/scan-policy.yaml
-text: "ignoreCves := []"
-```
-
-**Paste the output of the command to override the current value, save the file, and run the following command to apply the updated scan policy.**
-
-```execute
-kubectl apply -f ~/samples/scan-policy.yaml
-```
-
-If you **go back to TAP-GUI**, you should see that the **status of the source scan will change**, and the source code will be passed to the next step.
-This demonstrates the **asynchronous behavior of Cartographer**. As only the source scan is affected by the change, the steps before will not be executed again.
+Our source can step didn't fail because the `notAllowedSeverities`configuration in the scan policy is only set to `["UnknownSeverity"]`. If that would be different, it's also possible to whitelist CVEs with the `ignoreCves` configuration.
 
 In the next section, we will have a closer look at aspects like container building and continuous delivery.
