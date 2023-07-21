@@ -58,40 +58,6 @@ command: |
       port: 9411
       protocol: TCP
       targetPort: 9411
-  ---
-  apiVersion: projectcontour.io/v1
-  kind: HTTPProxy
-  metadata:
-    name: zipkin
-  spec:
-    routes:
-    - conditions:
-      - prefix: /
-      services:
-      - name: zipkin
-        port: 9411
-    virtualhost:
-      fqdn: zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
-  ---
-  apiVersion: v1
-  kind: Secret
-  metadata:
-    name: zipkin-binding-compatible
-  type: servicebinding.io/zipkin
-  stringData:
-    type: zipkin
-    provider: open-source
-    url: http://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
-  ---
-  apiVersion: services.apps.tanzu.vmware.com/v1alpha1
-  kind: ResourceClaim
-  metadata:
-    name: zipkin-1
-  spec:
-    ref:
-      apiVersion: v1
-      kind: Secret
-      name: zipkin-binding-compatible
   EOF
 clear: true
 ```
@@ -101,7 +67,19 @@ In addition to the `org.springframework.boot:spring-boot-starter-actuator` depen
 
 For our example, let's use **OpenTelemetry with Zikin**.
 
-
+```editor:insert-lines-before-line
+file: ~/product-service/pom.xml
+line: 33
+text: |2
+          <dependency>
+            <groupId>io.micrometer</groupId>
+          <artifactId>micrometer-tracing-bridge-otel</artifactId>
+          </dependency>
+          <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-zipkin</artifactId>
+          </dependency>
+```
 
 To automatically propagate traces over the network, use the auto-configured `RestTemplateBuilder` or `WebClient.Builder` to construct the client.
 
