@@ -101,19 +101,7 @@ In addition to the `org.springframework.boot:spring-boot-starter-actuator` depen
 
 For our example, let's use **OpenTelemetry with Zikin**.
 
-```editor:insert-lines-before-line
-file: ~/product-service/pom.xml
-line: 33
-text: |2
-          <dependency>
-            <groupId>io.micrometer</groupId>
-          <artifactId>micrometer-tracing-bridge-otel</artifactId>
-          </dependency>
-          <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-exporter-zipkin</artifactId>
-          </dependency>
-```
+
 
 To automatically propagate traces over the network, use the auto-configured `RestTemplateBuilder` or `WebClient.Builder` to construct the client.
 
