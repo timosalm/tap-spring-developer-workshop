@@ -95,10 +95,6 @@ command: |
 clear: true
 ```
 
-In addition to the org.springframework.boot:spring-boot-starter-actuator dependency, we have to add a library that bridges the Micrometer Observation API to either OpenTelemetry or Brave and one that reports traces to the selected solution.
-
-For our example, let's use **OpenTelemetry with Zikin**.
-
 ```editor:insert-lines-before-line
 file: ~/product-service/pom.xml
 line: 33
