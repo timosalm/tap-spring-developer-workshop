@@ -120,7 +120,7 @@ spec:
       - apiGroups: [apps]    
         resources: [deployments]
         verbs: ['*'] 
-      - apiGroups: []
+      - apiGroups: [""]
         resources: [secrets,services]
         verbs: ['*'] 
       - apiGroups: [projectcontour.io]

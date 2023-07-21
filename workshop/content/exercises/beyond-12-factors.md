@@ -45,7 +45,7 @@ command: |
           - containerPort: 9411
             protocol: TCP
   --- 
-  apiVersion: apps/v1
+  apiVersion: v1
   kind: Service
   metadata:
     name: zipkin
@@ -91,7 +91,7 @@ command: |
       apiVersion: v1
       kind: Secret
       name: zipkin-binding-compatible
-    EOF
+  EOF
 clear: true
 ```
 
