@@ -98,7 +98,7 @@ clear: true
 In addition to the `org.springframework.boot:spring-boot-starter-actuator` dependency, we have to add a library that bridges the Micrometer Observation API to either OpenTelemetry or Brave and one that reports traces to the selected solution.
 
 For our example, let's use **OpenTelemetry with Zikin**.
-
+{% raw %}
 ```editor:insert-lines-before-line
 file: ~/product-service/pom.xml
 line: 33
@@ -112,6 +112,7 @@ text: |2
             <artifactId>opentelemetry-exporter-zipkin</artifactId>
           </dependency>
 ```
+{% endraw %}
 
 To automatically propagate traces over the network, use the auto-configured `RestTemplateBuilder` or `WebClient.Builder` to construct the client.
 
