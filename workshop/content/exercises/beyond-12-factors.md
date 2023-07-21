@@ -22,6 +22,7 @@ Wavefront is now known as **Aria Operations for Applications**, our full-stack o
 
 For this workshop we use Zipkin as our trace backend to collect and visualize the traces.
 **TODO: Use Crossplane and remove RBAC from workshop-template.yaml**
+{% raw %}
 ```terminal:execute
 command: |
   cat <<EOF | kubectl apply -f -
@@ -94,11 +95,12 @@ command: |
   EOF
 clear: true
 ```
+{% endraw %}
 
 In addition to the `org.springframework.boot:spring-boot-starter-actuator` dependency, we have to add a library that bridges the Micrometer Observation API to either OpenTelemetry or Brave and one that reports traces to the selected solution.
 
 For our example, let's use **OpenTelemetry with Zikin**.
-{% raw %}
+
 ```editor:insert-lines-before-line
 file: ~/product-service/pom.xml
 line: 33
@@ -112,7 +114,6 @@ text: |2
             <artifactId>opentelemetry-exporter-zipkin</artifactId>
           </dependency>
 ```
-{% endraw %}
 
 To automatically propagate traces over the network, use the auto-configured `RestTemplateBuilder` or `WebClient.Builder` to construct the client.
 
@@ -147,6 +148,17 @@ text: |
         });
     }
   } 
+```
+```editor:insert-lines-before-line
+file: ~/product-service/pom.xml
+line: 33
+text: |2
+          <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-bindings</artifactId>
+            <version>1.13.0</version>
+            <scope>provided</scope>
+          </dependency>
 ```
 You must also add an entry in `META_INF/spring.factories` so that the custom processor can be discovered.
 ```editor:append-lines-to-file
