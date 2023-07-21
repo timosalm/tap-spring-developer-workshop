@@ -100,7 +100,7 @@ In addition to the `org.springframework.boot:spring-boot-starter-actuator` depen
 For our example, let's use **OpenTelemetry with Zikin**.
 ```editor:insert-lines-before-line
 file: ~/product-service/pom.xml
-line: 76
+line: 33
 text: |2
           <dependency>
             <groupId>io.micrometer</groupId>
