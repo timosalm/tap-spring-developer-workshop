@@ -22,46 +22,7 @@ Wavefront is now known as **Aria Operations for Applications**, our full-stack o
 
 For this workshop we use Zipkin as our trace backend to collect and visualize the traces.
 **TODO: Use Crossplane and remove RBAC from workshop-template.yaml**
-{% raw %}
-```terminal:execute
-command: |
-  cat <<EOF | kubectl apply -f -
-  apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    name: zipkin
-  spec:
-    selector:
-      matchLabels:
-        app: zipkin
-    template:
-      metadata:
-        labels:
-          app: zipkin
-      spec:
-        containers:
-        - image: openzipkin/zipkin
-          name: zipkin
-          ports:
-          - containerPort: 9411
-            protocol: TCP
-  --- 
-  apiVersion: v1
-  kind: Service
-  metadata:
-    name: zipkin
-  spec:
-    selector:
-      app: zipkin
-    ports:
-    - name: http
-      port: 9411
-      protocol: TCP
-      targetPort: 9411
-  EOF
-clear: true
-```
-{% endraw %}
+
 
 In addition to the `org.springframework.boot:spring-boot-starter-actuator` dependency, we have to add a library that bridges the Micrometer Observation API to either OpenTelemetry or Brave and one that reports traces to the selected solution.
 
