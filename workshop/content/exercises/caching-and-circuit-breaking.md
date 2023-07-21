@@ -213,8 +213,7 @@ As soon as the updated application is running, we can test the functionality by 
 command: curl -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
 clear: true
 ```
-"productId": 2147483647,
-  "shippingAddress": "string"
+
 ```terminal:execute
 command: kubectl delete app product-service
 clear: true

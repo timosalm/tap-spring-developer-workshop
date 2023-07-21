@@ -115,7 +115,17 @@ spec:
         verbs: ['*']  
       - apiGroups: [config.apps.tanzu.vmware.com]    
         resources: [configurationsources, configurationslices]
-        verbs: ['*']     
+        verbs: ['*']    
+      # TMP for e.g. observability until Crossplane integration
+      - apiGroups: [apps]    
+        resources: [deployments]
+        verbs: ['*'] 
+      - apiGroups: []
+        resources: [secrets,services]
+        verbs: ['*'] 
+      - apiGroups: [projectcontour.io]
+        resources: [httpproxies]
+        verbs: ['*']
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: RoleBinding
       metadata:
