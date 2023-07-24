@@ -210,7 +210,8 @@ url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespac
 
 As soon as the updated application is running, we can test the functionality by first sending a request to it with a running product service, terminating the product service and sending another request to the order service. 
 ```terminal:execute
-command: curl -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
+command: |
+  curl -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
 clear: true
 ```
 
@@ -221,7 +222,8 @@ clear: true
 
 If everything works as expected the order service should fall back to an empty product list instead.
 ```terminal:execute
-command: curl -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
+command: |
+  curl -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
 clear: true
 ```
 
