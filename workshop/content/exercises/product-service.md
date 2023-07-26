@@ -14,6 +14,9 @@ Select the **Spring Microservice** accelerator from the list, and change the fol
 - **Git base url:** `{{ ENV_GITEA_BASE_URL}}`
 - **Git branch:** `{{ session_namespace }}`
 - **Deployment namespace:** `{{ session_namespace }}`
+
+![](images/accelerator-config.png)
+
 Press **Continue** until you see **Generate Project**. When you click on **Generate Project** (Click **OK** at the pop-up window), a new tab will open. The Accelerator has now generated the code in a new tab. We can close the tab and continue to work on the IDE integrated into the workshop UI.
 
 
