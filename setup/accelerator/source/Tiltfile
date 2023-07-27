@@ -7,7 +7,6 @@ k8s_custom_deploy(
   'ARTIFACT_NAME',
   apply_cmd="tanzu apps workload apply -f config/workload.yaml --debug --live-update" +
     " --local-path " + LOCAL_PATH +
-    " --source-image " + SOURCE_IMAGE +
     " --namespace " + NAMESPACE +
     " --label apps.tanzu.vmware.com/has-tests-" +
     " --yes " +
