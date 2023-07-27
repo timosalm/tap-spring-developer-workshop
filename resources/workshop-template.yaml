@@ -98,6 +98,9 @@ spec:
         name: $(session_namespace)-session
         namespace: $(session_namespace)
       rules:
+      - apiGroups: [""]
+        resources: ["pods/portforward"]
+        verbs: [*]
       - apiGroups: [scanning.apps.tanzu.vmware.com]
         resources: [scanpolicies]
         verbs: ['*']
