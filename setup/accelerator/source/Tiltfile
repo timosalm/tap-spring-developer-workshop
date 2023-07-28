@@ -1,6 +1,6 @@
 SOURCE_IMAGE = os.getenv("SOURCE_IMAGE", default='source-image-location')
 LOCAL_PATH = os.getenv("LOCAL_PATH", default='local-path')
-NAMESPACE = os.getenv("NAMESPACE", default='default')
+NAMESPACE = os.getenv("NAMESPACE", default='NAMESPACE_NAME')
 OUTPUT_TO_NULL_COMMAND = os.getenv("OUTPUT_TO_NULL_COMMAND", default=' > /dev/null ')
 
 k8s_custom_deploy(
