@@ -139,3 +139,5 @@ engine:
       substitutions:
       - text: ARTIFACT_NAME
         with: "#artifactId"
+      - text: NAMESPACE_NAME
+        with: "#namespace"
