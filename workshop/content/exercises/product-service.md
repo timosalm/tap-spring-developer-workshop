@@ -177,10 +177,22 @@ text: |2
 
 **TODO: Use VSCode Tanzu Plugin for iterate and debug, to identify and fix missing application.yaml config**
 
+The `ProductApplicationService` requires the property `product-service.product-names` to be set with a list of names.
+
+```editor:select-matching-text
+file: ~/product-service/src/main/java/com/example/productservice/product/ProductApplicationService.java
+text: "@Value"
+before: 1
+```
+
+Lets add this property to `product-service/src/main/resources/application.yaml`.
+
 ```editor:append-lines-to-file
 file: ~/product-service/src/main/resources/application.yaml
 text: "product-service.product-names: VMware Tanzu Application Platform"
 ```
+Since we also have an `application.yaml` in `product-service/src/test/resources` for testing purposes we also need to add it there as well.
+
 ```editor:append-lines-to-file
 file: ~/product-service/src/test/resources/application.yaml
 text: "product-service.product-names: VMware Tanzu Application Platform"
@@ -191,6 +203,18 @@ Let's commit the updated source code.
 command: |
   cd product-service && git add . && git commit -m "Add business code" && git push
   cd ..
+clear: true
+```
+Lets test this out on TAP!
+
+Right click on `product-service/Tiltfile` and select Tanzu: Live Update Start.
+
+![](../images/live-update-start.png)
+
+We can tail the logs as the deployment takes place by running `tanzu apps workload tail`.
+
+```terminal:execute
+command: tanzu apps workload tail product-service --since 1h
 clear: true
 ```
 
