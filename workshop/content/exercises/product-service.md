@@ -207,9 +207,58 @@ clear: true
 ```
 Lets test this out on TAP!
 
-Right click on `product-service/Tiltfile` and select Tanzu: Live Update Start.
+We can use a utility called Tilt to deploy our code from our IDE.  In addition Tilt will port forward port `8080` for us to the 
+running container.
 
-![](../images/live-update-start.png)
+The Tanzu CLI has a developer friendly feature called live update which allows us to modify our code in the IDE
+and instantly replacing the code running in the container with the modified code allowing us to instantly see the changes we made.  
+This will feel very familiar if you are familiar with using Spring Dev Tools locally.
+
+The accelerator we used already created a `Tiltfile` for us which instructs Tilt what to do.
+
+```editor:open-file
+file: product-service/Tiltfile
+```
+
+To run this file all we need to do is run the command `tilt up`
+
+```terminal:execute
+command: |
+  tilt up --file ./product-service/Tiltfile --stream
+clear: true
+```
+After several minutes you should see the logs appear in the terminal from the application starting up.
+
+We can not test our endpoint to see if it works.
+
+```dashboard:open-url
+url: http://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products
+```
+
+```editor:select-matching-text
+file: ~/product-service/src/main/resources/application.yaml
+text: "product-service.product-names: VMware Tanzu Application Platform"
+before: 1
+```
+```editor:replace-text-selection
+file: ~/product-service/src/main/resources/application.yaml
+text: |2
+    product-service.product-names: VMware Tanzu Application Platform, VMWare Fusion
+```
+If you look back in the terminal you should see the application restart in the logs.
+Now if you hit the URL to the `product-service` again you should see the updated list of products
+
+```dashboard:open-url
+url: http://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products
+```
+
+```terminal:execute
+command: |
+  <ctrl+c>
+  tilt down --file ./product-service/Tiltfile 
+clear: true
+```
+
 
 We can tail the logs as the deployment takes place by running `tanzu apps workload tail`.
 
