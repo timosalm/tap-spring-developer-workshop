@@ -232,13 +232,12 @@ After several minutes you should see the logs appear in the terminal from the ap
 We can not test our endpoint to see if it works.
 
 ```dashboard:open-url
-url: http://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products
+url: http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products
 ```
 
 ```editor:select-matching-text
 file: ~/product-service/src/main/resources/application.yaml
 text: "product-service.product-names: VMware Tanzu Application Platform"
-before: 1
 ```
 ```editor:replace-text-selection
 file: ~/product-service/src/main/resources/application.yaml
@@ -249,7 +248,10 @@ If you look back in the terminal you should see the application restart in the l
 Now if you hit the URL to the `product-service` again you should see the updated list of products
 
 ```dashboard:open-url
-url: http://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products
+url: http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products
+```
+
+```terminal:interrupt
 ```
 
 ```terminal:execute
