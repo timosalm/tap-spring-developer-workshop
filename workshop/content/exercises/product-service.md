@@ -230,10 +230,9 @@ clear: true
 After several minutes you should see the logs appear in the terminal from the application starting up.
 
 ```terminal:execute
+session: 2
 command: |
   tanzu apps workload tail product-service --since 1h
-clear: true
-session: 2
 ```
 
 We can not test our endpoint to see if it works.
