@@ -229,6 +229,12 @@ clear: true
 ```
 After several minutes you should see the logs appear in the terminal from the application starting up.
 
+```terminal:execute-2
+command: |
+  tanzu apps workload tail product-service --since 1h
+clear: true
+```
+
 We can not test our endpoint to see if it works.
 
 ```dashboard:open-url
@@ -256,7 +262,6 @@ url: http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1
 
 ```terminal:execute
 command: |
-  <ctrl+c>
   tilt down --file ./product-service/Tiltfile 
 clear: true
 ```
