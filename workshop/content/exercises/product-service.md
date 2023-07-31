@@ -248,8 +248,7 @@ text: "product-service.product-names: VMware Tanzu Application Platform"
 ```
 ```editor:replace-text-selection
 file: ~/product-service/src/main/resources/application.yaml
-text: |2
-    product-service.product-names: VMware Tanzu Application Platform, VMWare Fusion
+text: "product-service.product-names: VMware Tanzu Application Platform, VMWare Fusion"
 ```
 If you look back in the terminal you should see the application restart in the logs.
 Now if you hit the URL to the `product-service` again you should see the updated list of products
