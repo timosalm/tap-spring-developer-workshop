@@ -229,6 +229,7 @@ clear: true
 ```
 After several minutes you should see the logs appear in the terminal from the application starting up.
 
+In the mean time we can tail the logs using the `tanzu apps workload tail` command.
 ```terminal:execute
 session: 2
 command: |
@@ -266,12 +267,10 @@ command: |
 clear: true
 ```
 
-
-We can tail the logs as the deployment takes place by running `tanzu apps workload tail`.
-
-```terminal:execute
-command: tanzu apps workload tail product-service --since 1h
-clear: true
+```terminal:interrupt
+session: 2
 ```
+
+
 
 After the basic implementation of our product service, we will now configure a continuous path to production.
