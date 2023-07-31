@@ -107,7 +107,7 @@ clear: true
 The URL is also available in the detail view of the Delivery step in TAP-GUI.
 Or you can just call it here:
 ```dashboard:open-url
-url: https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
+url: http://order-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
 ```
 
 When you open the URL in the browser, you may see that TLS is configured, and it takes some time until you get a first response from the application.
