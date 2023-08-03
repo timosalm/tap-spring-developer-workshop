@@ -37,7 +37,7 @@ jobs:
           pivnet download-product-files --product-slug='tanzu-application-platform' --release-version='1.6.1' --product-file-id=1443264
           mv $(find . -name 'tanzu-app-accelerator-*' -print0) tanzu-app-accelerator.vsix
           # tanzu-vscode-extension-*.vsix
-          pivnet download-product-files --product-slug='tanzu-application-platform' --release-version='1.6.1' --product-file-id=1538659
+          pivnet download-product-files --product-slug='tanzu-developer-tools-for-vscode' --release-version='1.0.6' --product-file-id=1562308
           mv $(find . -name 'tanzu-vscode-extension-*' -print0) tanzu-vscode-extension.vsix
           # tanzu-cli-linux-amd64*.tar
           pivnet download-product-files --product-slug='tanzu-application-platform' --release-version='1.6.1' --product-file-id=1539749
