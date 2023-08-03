@@ -18,17 +18,17 @@ modules:
         name: The Twelve Factors
         exit_sign: Configuration
     exercises/externalized-configuration:
-        name: Externalized Configuration
+        name: "Factor 3: Config"
         exit_sign: Next Challenge
     exercises/caching-and-circuit-breaking:
-        name: Mitigating the Impact of Backing Service Failures
+        name: "Factors 4 & 6: Backing Services And Processes"
         exit_sign: More Factors
     exercises/more-factors:
-        name: A Closer Look at the Other Factors
+        name: A Closer Look At The Other Factors
         exit_sign: Maximize Robustness
     exercises/graalvm:
         name: Maximize Robustness And Save Costs
-        exit_sign: 3 More Factors
+        exit_sign: Three More Factors
     exercises/beyond-12-factors:
         name: Beyond the Twelve-Factor App
         exit_sign: Summary
