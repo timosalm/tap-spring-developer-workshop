@@ -4,8 +4,7 @@ modules:
     - workshop-overview
     - exercises/product-service
     - exercises/prepaved-path-to-prod
-    - exercises/path-to-prod-ci
-    - exercises/path-to-prod-cd
+    - exercises/path-to-prod-cicd
     - exercises/runtime
     - exercises/12-factors
     - exercises/externalized-configuration

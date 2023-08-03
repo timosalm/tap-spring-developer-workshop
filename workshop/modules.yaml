@@ -7,12 +7,9 @@ modules:
         exit_sign: Path to Production
     exercises/prepaved-path-to-prod:
         name: Pre-paved Path to Production
-        exit_sign: Continuous Integration 
-    exercises/path-to-prod-ci:
-        name: Continuous Integration in the Path to Production
-        exit_sign: Continuous Delivery
-    exercises/path-to-prod-cd:
-        name: Continuous Delivery in the Path to Production
+        exit_sign: CI/CD
+    exercises/path-to-prod-cicd:
+        name: Continuous Integration and Delivery in the Path to Production
         exit_sign: Application Runtime
     exercises/runtime:
         name: Capabilities of The Application Runtime
