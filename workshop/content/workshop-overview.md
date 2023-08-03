@@ -1,4 +1,4 @@
-The picture shows a typical microservice application for a supply chain. 
+The picture shows a typical microservice application for a supply chain.
 
 ![A typical modern app architecture](images/microservice-architecture.png)
 
@@ -6,11 +6,13 @@ The picture shows a typical microservice application for a supply chain.
 - With the **order service** REST API, clients are able to fetch the current orders that are stored in a MySQL database, and they are also able to create new orders. The product id for a new order is validated with the list of products that will be fetched from the product service via a synchronous REST call.
 - After the order is created and stored in the database, information like the shipping address will be sent to the **shipping service** via asynchronous messaging, and after a configurable amount of time (for example 10 seconds), a status update for the DELIVERY will be sent back via asynchronous messaging to be consumed by the order microservice.
 
-All the microservices are or will be implemented using the Spring Framework ecosystem.
+All the microservices are implemented using Spring Boot and initially created on https://start.spring.io.
 
 #### Spring by VMware 
 
 ![](images/spring-logo.svg)
+
+With the acquisition of Pivotal, VMware is now the vendor of Spring, and Spring plays an important role in the VMware Tanzu portfolio.
 
 The goal of **Spring** is to simplify and accelerate application development, and due to its autoconfiguration, **Spring Boot** is the foundation for fast development of production-ready applications. 
 
