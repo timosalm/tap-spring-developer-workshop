@@ -70,7 +70,7 @@ path: spring
 value:
   config.import: "optional:configtree:${SERVICE_BINDING_ROOT}/spring-properties/"
 ```
-Removing the `optional:` prefix will cause the application to fail if it is unable to connect to the Config Server.
+Removing the `optional:` prefix will cause the application to fail if it is unable to find the directory.
 
 To apply the changes, we have to update the Workload in the environment and commit the updated source code.
 ```terminal:execute
@@ -83,6 +83,13 @@ clear: true
 command: tanzu apps workload apply -f product-service/config/workload.yaml -y
 clear: true
 ```
+Lets tail the logs again to watch as the new version of our application is built and deployed.
+
+```terminal:execute
+session: 2
+command: |
+  tanzu apps workload tail product-service --since 1h
+```
 
 As soon as our outdated application and service binding is applied ...
 ```dashboard:open-url
@@ -90,7 +97,7 @@ url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespac
 ```
 ... we should be able to see a longer product list configured via our Git repository.
 ```terminal:execute
-command: curl https://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products
+command: curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products
 clear: true
 ```
 
