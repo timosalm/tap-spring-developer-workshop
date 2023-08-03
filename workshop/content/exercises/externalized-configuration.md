@@ -97,7 +97,7 @@ url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespac
 ```
 ... we should be able to see a longer product list configured via our Git repository.
 ```terminal:execute
-command: curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products
+command: curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
 clear: true
 ```
 
