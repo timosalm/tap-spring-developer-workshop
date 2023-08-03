@@ -79,6 +79,9 @@ spec:
       - apiGroups: [services.apps.tanzu.vmware.com]
         resources: [clusterinstanceclasses]
         verbs: [get, list, claim]    
+      - apiGroups: [""]
+        resources: [nodes]
+        verbs: ["get", "watch", "list"]    
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
       metadata:
@@ -120,8 +123,14 @@ spec:
         resources: [configurationsources, configurationslices]
         verbs: ['*'] 
       - apiGroups: [tekton.dev]
-        resources: [pipelines]
+        resources: [pipelines, taskruns]
         verbs: ['*']   
+      - apiGroups: [kpack.io]
+        resources: [builds]
+        verbs: ['*']         
+      - apiGroups: [serving.knative.dev]
+        resources: [revisions]
+        verbs: ['*']              
       # TMP for e.g. observability until Crossplane integration
       - apiGroups: [apps]    
         resources: [deployments]
