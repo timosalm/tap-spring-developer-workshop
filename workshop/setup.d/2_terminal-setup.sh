@@ -20,5 +20,6 @@ for serviceName in order-service shipping-service; do
 done
 
 cd ~/samples/externalized-configuration && git init -b $SESSION_NAMESPACE && git remote add origin $GITEA_BASE_URL/externalized-configuration.git && git add . && git commit -m "Initial implementation" && git push -u origin $SESSION_NAMESPACE -f
+cd ~
 
 kubectl apply -f samples/workload-payment-service-native.yaml
