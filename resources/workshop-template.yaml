@@ -82,6 +82,9 @@ spec:
       - apiGroups: [""]
         resources: [nodes]
         verbs: ["get", "watch", "list"]    
+      - apiGroups: [learningcenter.tanzu.vmware.com]
+        resources: [workshopsessions]
+        verbs: ["get", "watch", "list"]          
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRoleBinding
       metadata:
@@ -134,12 +137,9 @@ spec:
       - apiGroups: [networking.internal.knative.dev]
         resources: [ingresses, serverlessservices]
         verbs: ['*']     
-      - apiGroups: [learningcenter.tanzu.vmware.com]
-        resources: [workshopsessions]
-        verbs: ["get", "watch", "list"]    
-      - apiGroups: [learningcenter.tanzu.vmware.com]
-        resources: [workshopsessions]
-        verbs: ["get", "watch", "list"]  
+      - apiGroups: [servicebinding.io]
+        resources: [servicebindings]
+        verbs: ['*'] 
       - apiGroups: [source.apps.tanzu.vmware.com]
         resources: [imagerepositories]
         verbs: ["get", "watch", "list"]    
