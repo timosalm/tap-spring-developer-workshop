@@ -32,7 +32,7 @@ Last but not least, via (`.spec.params`), it's possible to override default valu
 
 There are more configuration options available which you can have a look at in the detailed specification here:
 ```dashboard:open-url
-url: https://cartographer.sh/docs/v0.8.0/reference/workload/
+url: https://cartographer.sh/docs/v0.7.0/reference/workload/
 ```
 
 If developers have access to a namespace in the Kubernetes cluster the supply chain is available, they can use the **tanzu CLI** as a higher abstraction to apply a Workload. Using **GitOps** to apply the Workload has the benefit that **developers don't need access to the Kubernetes cluster**.

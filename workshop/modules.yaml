@@ -10,9 +10,6 @@ modules:
         exit_sign: CI/CD
     exercises/path-to-prod-cicd:
         name: Continuous Integration and Delivery in the Path to Production
-        exit_sign: Application Runtime
-    exercises/runtime:
-        name: Capabilities of The Application Runtime
         exit_sign: Mitigating Challenges
     exercises/12-factors:
         name: The Twelve Factors

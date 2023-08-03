@@ -99,10 +99,7 @@ spec:
         namespace: $(session_namespace)
       rules:
       - apiGroups: [""]
-        resources: ["pods/portforward"]
-        verbs: ['*']
-      - apiGroups: [""]
-        resources: ["pods/exec"]
+        resources: ["pods/portforward","pods/exec"]
         verbs: ['*']
       - apiGroups: [scanning.apps.tanzu.vmware.com]
         resources: [scanpolicies]
@@ -121,7 +118,10 @@ spec:
         verbs: ['*']  
       - apiGroups: [config.apps.tanzu.vmware.com]    
         resources: [configurationsources, configurationslices]
-        verbs: ['*']    
+        verbs: ['*'] 
+      - apiGroups: [tekton.dev]
+        resources: [pipelines]
+        verbs: ['*']   
       # TMP for e.g. observability until Crossplane integration
       - apiGroups: [apps]    
         resources: [deployments]
@@ -238,3 +238,57 @@ spec:
             not isSafe(vuln)
             msg = sprintf("CVE %s %s %s", [comp.name, vuln.id, ratings])
           }
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: zipkin
+      spec:
+        selector:
+          matchLabels:
+            app: zipkin
+        template:
+          metadata:
+            labels:
+              app: zipkin
+          spec:
+            containers:
+              - image: openzipkin/zipkin
+                name: zipkin
+                ports:
+                  - containerPort: 9411
+                    protocol: TCP
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        name: zipkin
+      spec:
+        selector:
+          app: zipkin
+        ports:
+          - name: http
+            port: 9411
+            protocol: TCP
+            targetPort: 9411
+    - apiVersion: projectcontour.io/v1
+      kind: HTTPProxy
+      metadata:
+        name: zipkin
+      spec:
+        routes:
+          - conditions:
+              - prefix: /
+            services:
+              - name: zipkin
+                port: 9411
+        virtualhost:
+          fqdn: "zipkin-$(session_namespace).$(ingress_domain)"
+    - apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      metadata:
+        name: product-config-claim
+      spec:
+        ref:
+          apiVersion: config.apps.tanzu.vmware.com/v1alpha4
+          kind: ConfigurationSlice
+          name: product-config-slice
+        

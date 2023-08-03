@@ -4,7 +4,7 @@ name: The Twelve Factors
 
 #### Factor 5: Build, release, run
 The **fifth factor** calls for the **strict separation between the build, release, and run stages**. 
-For this workshop, an open-source solution called [Cartographer](https://cartographer.sh) is used for the automation of the path to production, that is designed to **fulfill this best practice**.
+As we already learned, in TAP an open-source solution called [Cartographer](https://cartographer.sh) is used for the automation of the path to production, which is designed to **fulfill this best practice**.
 
 #### Factor 7: Port binding
 

@@ -8,7 +8,7 @@ name: The Twelve Factors
 **Factor eight**, concurrency, advises us that **cloud-native applications should scale out using the process model**. There was a time when, if an application reached the limit of its capacity, the solution was adding CPUs, RAM, and other resources (virtual or physical), which is called **vertical scaling**.
 
 A much more **modern approach**, one ideal for the kind of elastic scalability that the cloud supports, is to **scale out, or horizontally** where you create multiple instances of your application and then distribute the load among those.
-For this workshop, we are using a serverless application runtime for Kubernetes, which provides **configurable horizontal auto-scaling** and **scale to zero** called **Knative**.
+TAP includes a serverless application runtime for Kubernetes, which provides **configurable horizontal auto-scaling** and **scale to zero** called **Knative**.
 
 Knative is an open-source community project that provides a simple, consistent layer over Kubernetes that solves common problems of deploying software, connecting disparate systems together, upgrading software, observing software, routing traffic, and scaling automatically.
 ```dashboard:open-url
