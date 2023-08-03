@@ -41,7 +41,54 @@ As we have Kuberetens access from the workshop environment, let's apply our conf
 tanzu apps workload create -f product-service/config/workload.yaml -y
 ```
 
-We'll now have a closer look at TAP-GUI for visualization of all the different steps of the supply chain and the capabilities of the tools they're implemented with.
+We can monitor the supply chain for the `product-service` in the terminal by using the `tanzu apps workload tail` command.
+```terminal:execute
+session: 2
+command: |
+  tanzu apps workload tail product-service --since 1h
+```
+
+In addiiton to monitoring the supply chain in the terminal we can also monitor in the TAP GUI.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
+```
+After the supply chain completes you will see the logs of the `product-service` application stream to the terminal and you will see the Delivery step marked as completed in the TAP GUI.
+
+![Delivery TAP GUI](../images/delivery-tap-gui.png)
+
+We can also check the status of the workload using the `tanzu apps workload get` command.
+
+```terminal:execute
+command: |
+  tanzu apps workload get product-service
+```
+
+At this point the application is up and running so we can test it out by making a request to the `/api/v1/products` endpoint.
+
+```terminal:execute
+command: |
+  curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
+```
+
+When you execute the `curl` command you should see the following response
+
+```
+[
+  {
+    "id": 1,
+    "name": "VMware Tanzu Application Platform"
+  }
+]
+```
+
+If you are still tailing the logs from the `product-service` you will also notice there is an `INFO` level log that gets printed indicating that fetch products was called
+
+```
+product-service-00001-deployment-57bb88c6f7-xn42x[workload] 2023-08-03T15:56:28.015314355Z 2023-08-03T15:56:28.014Z  INFO 1 --- [nio-8080-exec-9] c.e.p.product.ProductApplicationService  : Fetch products called
+```
+
+Lets stop tailing the logs from the `product-service` and move on to the next step of the workshop.
+
+```terminal:interrupt
+session: 2
 ```
