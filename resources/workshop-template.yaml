@@ -130,7 +130,10 @@ spec:
         verbs: ['*']         
       - apiGroups: [serving.knative.dev]
         resources: [revisions]
-        verbs: ['*']              
+        verbs: ['*']      
+      - apiGroups: [networking.internal.knative.dev]
+        resources: [ingresses]
+        verbs: ['*']           
       # TMP for e.g. observability until Crossplane integration
       - apiGroups: [apps]    
         resources: [deployments]
