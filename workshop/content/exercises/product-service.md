@@ -18,7 +18,7 @@ product-service
 ```copy
 {{ ENV_GITEA_BASE_URL}}
 ```
-- **Git branch and deployment namespace:**
+- **Git branch and Deployment namespace:**
 ```copy
 {{ session_namespace }}
 ```
@@ -254,7 +254,7 @@ text: "product-service.product-names: VMware Tanzu Application Platform"
 ```
 ```editor:replace-text-selection
 file: ~/product-service/src/main/resources/application.yaml
-text: "product-service.product-names: VMware Tanzu Application Platform, VMWare Fusion"
+text: "product-service.product-names: VMware Tanzu Application Platform, VMware Spring Runtime"
 ```
 If you look back in the terminal you should see the application restart in the logs that are streamed.
 
