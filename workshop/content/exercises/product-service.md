@@ -10,10 +10,18 @@ command: workbench.view.extension.tanzu-app-accelerator
 ```
 
 Select the **Spring Microservice** accelerator from the list, and change the following values in the form:
-- **Name:** `product-service`
-- **Git base url:** `{{ ENV_GITEA_BASE_URL}}`
-- **Git branch:** `{{ session_namespace }}`
-- **Deployment namespace:** `{{ session_namespace }}`
+- **Name:** 
+```copy
+echo "product-service"
+```
+- **Git base url:**
+```copy
+echo "{{ ENV_GITEA_BASE_URL}}"
+```
+- **Git branch and deployment namespace:**
+```copy
+echo "{{ session_namespace }}"
+```
 
 ![](../images/accelerator-config.png)
 
@@ -49,7 +57,7 @@ Lets first look at the `pom.xml` file.
 file: product-service/pom.xml
 ```
 
-You will see we are using Java 17, Spring Boot 3.1.1, Spring Cloud 2023.0.3, and also including the dependencies `spring-boot-starter-web`, `spring-boot-starter-actuator`, and `spring-boot-starter-security`.
+You will see we are using Java 17, Spring Boot 3.1.1, Spring Cloud 2022.0.3, and also including the dependencies `spring-boot-starter-web`, `spring-boot-starter-actuator`, and `spring-boot-starter-security`.
 
 The accelerator also generated a main `Application` class for us which we can use to run our application.
 
