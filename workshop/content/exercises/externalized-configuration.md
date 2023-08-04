@@ -56,11 +56,11 @@ file: ~/product-service/config/workload.yaml
 path: spec
 value:
   serviceClaims:
-  - name: spring-properties
+  - name: config-server
     ref:
       apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ResourceClaim
-      name: product-config-claim
+      name: config-server-claim
 ```
 
 The only thing we have to add to our application source code, is the `spring.config.import` configuration targeting the mounted configuration.
@@ -68,7 +68,7 @@ The only thing we have to add to our application source code, is the `spring.con
 file: ~/product-service/src/main/resources/application.yaml
 path: spring
 value:
-  config.import: "optional:configtree:${SERVICE_BINDING_ROOT}/spring-properties/"
+  config.import: "optional:configtree:${SERVICE_BINDING_ROOT}/config-server/"
 ```
 Removing the `optional:` prefix will cause the application to fail if it is unable to find the directory.
 

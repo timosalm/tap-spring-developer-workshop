@@ -312,7 +312,7 @@ spec:
     - apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ResourceClaim
       metadata:
-        name: product-config-claim
+        name: config-server-claim
       spec:
         ref:
           apiVersion: config.apps.tanzu.vmware.com/v1alpha4

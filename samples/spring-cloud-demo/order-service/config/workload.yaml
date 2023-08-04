@@ -22,3 +22,9 @@ spec:
     env:
     - name: BP_JVM_VERSION
       value: "17"
+  serviceClaims:
+  - name: config-server
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      name: config-server-claim

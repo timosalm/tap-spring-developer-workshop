@@ -1,7 +1,7 @@
 spring:
   application.name: order-service # for config server
   jpa.hibernate.ddl-auto: update
-  config.import: "optional:configserver:"
+  config.import: "optional:configtree:${SERVICE_BINDING_ROOT}/config-server/"
   # https://github.com/spring-cloud/spring-cloud-bindings/issues/87
   data:
     redis:
