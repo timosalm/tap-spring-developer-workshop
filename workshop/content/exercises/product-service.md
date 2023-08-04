@@ -12,15 +12,15 @@ command: workbench.view.extension.tanzu-app-accelerator
 Select the **Spring Microservice** accelerator from the list, and change the following values in the form:
 - **Name:** 
 ```copy
-echo "product-service"
+product-service
 ```
 - **Git base url:**
 ```copy
-echo "{{ ENV_GITEA_BASE_URL}}"
+{{ ENV_GITEA_BASE_URL}}
 ```
 - **Git branch and deployment namespace:**
 ```copy
-echo "{{ session_namespace }}"
+{{ session_namespace }}
 ```
 
 ![](../images/accelerator-config.png)
