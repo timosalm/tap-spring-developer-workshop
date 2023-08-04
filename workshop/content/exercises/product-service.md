@@ -233,8 +233,9 @@ We can not test our endpoint to see if it works.
 ```terminal:execute
 session: 2
 command: |
-curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
+  curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
 ```
+
 Tilt using the underlying Tanzu CLI's live update feature allows us to make changes to our code and take the newly compiled code and replace it in the running container on TAP.
 
 To test this out lets add an additional product to `product-service.product-name`.
@@ -254,9 +255,9 @@ If you do not your can run `./mvnw compile` to make sure we recompile our app an
 ```terminal:execute
 session: 2
 command: |
-cd product-service
-./mvnw compile
-cd ../
+  cd product-service
+  ./mvnw compile
+  cd ../
 ```
 
 Now if you hit the URL to the `product-service` again you should see the updated list of products
@@ -264,7 +265,7 @@ Now if you hit the URL to the `product-service` again you should see the updated
 ```terminal:execute
 session: 2
 command: |
-curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
+  curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
 ```
 After the basic implementation of our product service, we will now configure a continuous path to production.
 
