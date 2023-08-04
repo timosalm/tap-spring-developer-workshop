@@ -175,8 +175,6 @@ text: |2
         return ResponseEntity.ok(productApplicationService.fetchProducts());
 ```
 
-**TODO: Use VSCode Tanzu Plugin for iterate and debug, to identify and fix missing application.yaml config**
-
 The `ProductApplicationService` requires the property `product-service.product-names` to be set with a list of names.
 
 ```editor:select-matching-text
@@ -227,20 +225,19 @@ command: |
   tilt up --file ./product-service/Tiltfile --stream
 clear: true
 ```
-After several minutes you should see the logs appear in the terminal from the application starting up.
-
-In the mean time we can tail the logs using the `tanzu apps workload tail` command.
-```terminal:execute
-session: 2
-command: |
-  tanzu apps workload tail product-service --since 1h
-```
+TAP will deploy the application using the source from our local file system.  After several minutes you should see the logs from your 
+Spring Boot app appear in the terminal, once you do, the app is up and running.
 
 We can not test our endpoint to see if it works.
 
-```dashboard:open-url
-url: http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products
+```terminal:execute
+session: 2
+command: |
+curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
 ```
+Tilt using the underlying Tanzu CLI's live update feature allows us to make changes to our code and take the newly compiled code and replace it in the running container on TAP.
+
+To test this out lets add an additional product to `product-service.product-name`.
 
 ```editor:select-matching-text
 file: ~/product-service/src/main/resources/application.yaml
@@ -250,13 +247,28 @@ text: "product-service.product-names: VMware Tanzu Application Platform"
 file: ~/product-service/src/main/resources/application.yaml
 text: "product-service.product-names: VMware Tanzu Application Platform, VMWare Fusion"
 ```
-If you look back in the terminal you should see the application restart in the logs.
-Now if you hit the URL to the `product-service` again you should see the updated list of products
+If you look back in the terminal you should see the application restart in the logs that are streamed.
 
-```dashboard:open-url
-url: http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products
+If you do not your can run `./mvnw compile` to make sure we recompile our app and trigger the update in the container.
+
+```terminal:execute
+session: 2
+command: |
+cd product-service
+./mvnw compile
+cd ../
 ```
 
+Now if you hit the URL to the `product-service` again you should see the updated list of products
+
+```terminal:execute
+session: 2
+command: |
+curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
+```
+After the basic implementation of our product service, we will now configure a continuous path to production.
+
+Lets stop Tilt and run `tilt down` to delete the product service.
 ```terminal:interrupt
 ```
 
@@ -265,11 +277,3 @@ command: |
   tilt down --file ./product-service/Tiltfile 
 clear: true
 ```
-
-```terminal:interrupt
-session: 2
-```
-
-
-
-After the basic implementation of our product service, we will now configure a continuous path to production.
