@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.ValidationException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class Order implements Serializable { // Serializable required for Redis 
 
     void validate(List<Product> products) {
         if (products.stream().noneMatch(product -> product.getId().equals(productId))) {
-            throw new ValidationException("Unknown product with id: " + productId);
+            throw new ProductNotFoundException("Unknown product with id: " + productId);
         }
     }
 

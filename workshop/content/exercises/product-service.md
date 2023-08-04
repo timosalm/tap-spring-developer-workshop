@@ -57,7 +57,7 @@ Lets first look at the `pom.xml` file.
 file: product-service/pom.xml
 ```
 
-You will see we are using Java 17, Spring Boot 3.1.1, Spring Cloud 2022.0.3, and also including the dependencies `spring-boot-starter-web`, `spring-boot-starter-actuator`, and `spring-boot-starter-security`.
+You will see we are using Java 17, Spring Boot 3.1.2, Spring Cloud 2022.0.3, and also including the dependencies `spring-boot-starter-web`, `spring-boot-starter-actuator`, and `spring-boot-starter-security`.
 
 The accelerator also generated a main `Application` class for us which we can use to run our application.
 

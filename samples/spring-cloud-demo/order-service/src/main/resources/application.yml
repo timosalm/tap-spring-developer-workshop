@@ -2,12 +2,19 @@ spring:
   application.name: order-service # for config server
   jpa.hibernate.ddl-auto: update
   config.import: "optional:configserver:"
+  # https://github.com/spring-cloud/spring-cloud-bindings/issues/87
+  data:
+    redis:
+      host: ${spring.redis.host}
+      password: ${spring.redis.password}
+      port: ${spring.redis.port}
  
 logging.level.org.springframework.cache: TRACE
 management:
   tracing.sampling.probability: 1.0
   endpoint.restart.enabled: true
   endpoints.web.exposure.include: "*"
+  zipkin.tracing.endpoint:
 
 order:
   exchange-name: order-delivered-exchange

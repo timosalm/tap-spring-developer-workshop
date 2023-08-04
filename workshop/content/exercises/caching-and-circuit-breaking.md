@@ -108,7 +108,7 @@ If for example a request to the product service to fetch the product list fails,
 First, we have to add the required library to our `pom.xml`.
 ```editor:insert-lines-before-line
 file: ~/order-service/pom.xml
-line: 76
+line: 70
 text: |2
           <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -148,7 +148,7 @@ text: |2
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
-line: 14
+line: 13
 text: |
     import java.util.Collections;
     import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
