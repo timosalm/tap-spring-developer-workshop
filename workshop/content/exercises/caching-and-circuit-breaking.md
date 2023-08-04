@@ -138,9 +138,7 @@ text: "return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(pro
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
 text: |2
   return circuitBreakerFactory.create("products").run(() ->
-              Arrays.asList(Objects.requireNonNull(
-                restTemplate.exchange(productsApiUrl, HttpMethod.GET, new HttpEntity<>(null, headers), Product[].class).getBody()
-          )),
+              Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(productsApiUrl, Product[].class))),
           throwable -> {
               log.error("Call to product service failed, using empty product list as fallback", throwable);
               return Collections.emptyList();
