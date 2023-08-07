@@ -27,12 +27,12 @@ In the resulting popup window select step-test to view the logs from running `mv
 
 ##### Image Provider
 
-To be able to get all the benefits our application Kubernetes provides, we have to containerize it.
+Since TAP is built upon Kubernetes we need to package our application into a container, this is what the image provider step does.
 
 The most obvious way to do this is to write a Dockerfile, run `docker build`, and push it to the container registry of our choice via `docker push`.
 
 For the building of container images from a Dockerfile, TAP uses the open-source tool [kaniko](https://github.com/GoogleContainerTools/kaniko).
-Developers have to specify the following parameter in their Workload configuration where the value references the path of the Dockerfile. 
+If you want to use a Dockerfile you can setup your applications Workload to do so using the following `spec.params`. 
 ```
 apiVersion: carto.run/v1alpha1
 kind: Workload
@@ -44,8 +44,9 @@ spec:
 ...
 ```
 
-Because it's hard to create an optimized and secure container image (or Dockerfile), TAP uses a **different approach as default for the containerization of your applications via so-called Cloud Native Buildpacks**. They detect based on the application's source code what's needed to compile and package it in a container image with best practices in mind. Combined with a solution part of TAP, called **VMware Tanzu Build Service (TBS)**, it's even possible to do automated base image updates!
-We will later have a closer look at it.
+However contructing a Dockerfile that is both optomized and free from security issues can be quite challenging for most developers, and frankly is not something they want to have to concern themselves with.  
+On TAP the default approach to building a container image for your application is to use [Cloud Native Buildpacks](https://buildpacks.io/). The benefit of using Cloud Native Buildpacks is that the buildpack takes care of compiling your application into a container image that is both secure and optomized.  The best part is all you need to do is provide TAP with the source code for your application (which we already did in our application's Workload).
+
 
 ##### Image Scanner
 
