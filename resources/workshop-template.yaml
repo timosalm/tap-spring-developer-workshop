@@ -285,10 +285,44 @@ spec:
     - apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ResourceClaim
       metadata:
-        name: config-server-claim
+        name: product-config-server-claim
       spec:
         ref:
           apiVersion: config.apps.tanzu.vmware.com/v1alpha4
           kind: ConfigurationSlice
           name: product-config-slice
+    - apiVersion: "config.apps.tanzu.vmware.com/v1alpha4"
+      kind: ConfigurationSlice
+      metadata:
+        name: order-config-slice
+      spec:
+        configurationSource: config-source
+        content:
+        - order-service
+    - apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      metadata:
+        name: order-config-server-claim
+      spec:
+        ref:
+          apiVersion: config.apps.tanzu.vmware.com/v1alpha4
+          kind: ConfigurationSlice
+          name: order-config-slice
+    - apiVersion: "config.apps.tanzu.vmware.com/v1alpha4"
+      kind: ConfigurationSlice
+      metadata:
+        name: shipping-config-slice
+      spec:
+        configurationSource: config-source
+        content:
+        - shipping-service
+    - apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      metadata:
+        name: shipping-config-server-claim
+      spec:
+        ref:
+          apiVersion: config.apps.tanzu.vmware.com/v1alpha4
+          kind: ConfigurationSlice
+          name: shipping-config-slice
         

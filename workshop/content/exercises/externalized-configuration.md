@@ -60,7 +60,7 @@ value:
     ref:
       apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ResourceClaim
-      name: config-server-claim
+      name: product-config-server-claim
 ```
 
 The only thing we have to add to our application source code, is the `spring.config.import` configuration targeting the mounted configuration.
