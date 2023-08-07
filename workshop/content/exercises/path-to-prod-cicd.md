@@ -1,22 +1,29 @@
 Let's first have a look at the Continuous integration (CI) part of the supply chain, which automates the process of building and testing the application we like to deploy.
 
-The first step in the path to production **watches** the in the Workload configured **repository with the source code** for new commits and makes the source code available for the following steps as an archive via HTTP. 
-
-For integration with existing CI systems, such as Jenkins, it's also possible to pull **artifacts from existing Maven repositories**, and to make it possible via the tanzu CLI to provide source code from a local directory, **container images containing source code** can be also defined as a source.
+The first step in the path to production **watches** the **repository with the source code** configured in the Workload for new commits and makes the source code available as an archive via HTTP. 
 
 ##### Source Tester
  
-The Source Tester step executes uses by default [Tekton](https://tekton.dev) and as an alternative Jenkins (more to come in the future) to run a Pipeline that executes tests part of the application's source code. 
-Depending on how much flexibility developers need, they can define it for their applications or as the rest of the supply chain, it will also be defined and provided by the operators. The pipeline can also be applied via GitOps, in our case, there is already a very basic example that just works for Spring Boot applications using Maven applied to the cluster.
+The Source Tester uses [Tekton](https://tekton.dev) by default to execute tests part as part of the pipeline.
+
+TAP ships with an out of the box test pipeline for Spring Boot applications.  We can see the test pipeline definition by running the following command.
 ```execute
 kubectl eksporter Pipeline --keep metadata.labels
 ```
-Let's now jump to **TAP-GUI to view the logs of the test run** in the detail view of the Source Tester step.  **Click on the test run link** which will be listed 
-as a GUID listed under the *Source Tester Logs*. 
+Let's open the supply chain of the `product-service` app we just deployed and view the test logs from the Source Tester step.
 
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
 ```
+
+In the supply chain UI select Source Tester, then click the GUID in the Stage Details.
+
+![](../images/source-tester-pipeline.png)
+
+In the resulting popup window select step-test to view the logs from running `mvn test`.
+
+![](../images/select-test-step.png)
+
 
 ##### Image Provider
 
