@@ -67,7 +67,7 @@ At this point the application is up and running so we can test it out by making 
 
 ```terminal:execute
 command: |
-  curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
+  curl -s https://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
 ```
 
 When you execute the `curl` command you should see the following response
