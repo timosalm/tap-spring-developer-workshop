@@ -75,19 +75,18 @@ Services Toolkit also provides the **functionality to automatically inject crede
 The **developer defines the backing services** the application wants **to bind to in the Workload**. Those backing services have to be available in the cluster or registered in it to be consumed by the service binding.
 ```editor:insert-value-into-yaml
 file: ~/order-service/config/workload.yaml
-path: spec
+path: spec.serviceClaims
 value:
-  serviceClaims:
-  - name: db
-    ref:
-      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
-      kind: ClassClaim
-      name: postgres-1
-  - name: rmq
-    ref:
-      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
-      kind: ClassClaim
-      name: rmq-1
+- name: db
+  ref:
+    apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+    kind: ClassClaim
+    name: postgres-1
+- name: rmq
+  ref:
+    apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+    kind: ClassClaim
+    name: rmq-1
 ```
 
 After configuring the Workload definition for the service bindings on our machine, we have to update it on the cluster.
