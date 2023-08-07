@@ -233,15 +233,29 @@ command: |
   tilt up --file ./product-service/Tiltfile --stream
 clear: true
 ```
-TAP will deploy the application using the source from our local file system.  After several minutes you should see the logs from your 
-Spring Boot app appear in the terminal, once you do, the app is up and running.
+TAP will deploy the application using the source from our local file system. 
 
-We can not test our endpoint to see if it works.
+We can use `watch` in the terminal to see the steps TAP will take (which you will learn about in subsiquent sections of this workshop) to deploy our application.
 
 ```terminal:execute
 session: 2
 command: |
-  curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
+  watch -n tanzu apps workloads get product-service
+```
+The deployment has finished once there is a service listed under the Knative Services section with a URL.
+
+![](../images/pipeline-terminal.png)
+
+We can now test our endpoint to see if it works.  Stop the `watch` command and execute the following `curl` request.
+
+```terminal:interrupt
+session: 2
+```
+
+```terminal:execute
+session: 2
+command: |
+  curl -s http://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
 ```
 
 Tilt using the underlying Tanzu CLI's live update feature allows us to make changes to our code and take the newly compiled code and replace it in the running container on TAP.
@@ -273,7 +287,7 @@ Now if you hit the URL to the `product-service` again you should see the updated
 ```terminal:execute
 session: 2
 command: |
-  curl -s http://product-service.{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
+  curl -s http://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
 ```
 After the basic implementation of our product service, we will now configure a continuous path to production.
 
