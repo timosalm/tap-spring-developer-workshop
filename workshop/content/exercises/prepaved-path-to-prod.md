@@ -21,51 +21,52 @@ Let's have a closer look at how a Workload allows developers to configure the co
 file: ~/product-service/config/workload.yaml
 ```
 
-In addition to the name of the Workload, there is also `app.kubernetes.io/part-of` label with the same value, which is used by for example the TAP GUI to match documentation with runtime resources.
+In addition to the name of the Workload, there is also `app.kubernetes.io/part-of` label with the same value, which is used by TAP GUI to match documentation with runtime resources.
 
 The location of an application's source code can be configured via the `spec.source` field. Here, we are using a branch of a Git repository as a source to be able to implement a **continuous path to production** where every git commit to the codebase will trigger another execution of the supply chain, and developers only have to apply a Workload once if they start with a new application or microservice. 
-For the to-be-deployed application, the Workload custom resource also provides configuration options for a **pre-built image in a registry** from e.g. an ISV via `spec.image`.
 
-Other configuration options are available for resource constraints (`spec.limits`, `spec.requests`) and environment variables for the build resources in the supply chain (`spec.build.env`) and to be passed to the running application (`spec.env`).
-
-Last but not least, via (`.spec.params`), it's possible to override default values of the additional parameters that are used in the Supply Chain but not part of the official Workload specification.
-
-There are more configuration options available which you can have a look at in the detailed specification here:
+There are more many more configuration options available which you can have a look at in the detailed specification here:
 ```dashboard:open-url
 url: https://cartographer.sh/docs/v0.7.0/reference/workload/
 ```
+We will explore some of these throughout the workshop as we continue on.
 
-If developers have access to a namespace in the Kubernetes cluster the supply chain is available, they can use the **tanzu CLI** as a higher abstraction to apply a Workload. Using **GitOps** to apply the Workload has the benefit that **developers don't need access to the Kubernetes cluster**.
-As we have Kuberetens access from the workshop environment, let's apply our configuration via the tanzu CLI.
+To create the workload we can use `tanzu apps workload create`.  
 ```execute
 tanzu apps workload create -f product-service/config/workload.yaml -y
 ```
 
 We can monitor the supply chain for the `product-service` in the terminal by using the `tanzu apps workload tail` command.
 ```terminal:execute
-session: 2
+session: 1
 command: |
   tanzu apps workload tail product-service --since 1h
+```
+We can also monitor the supply chain with the `watch` command we used in the previous lesson.
+
+```terminal:execute
+session: 2
+command: |
+  watch -n 1 tanzu apps workload get product-service
 ```
 
 In addiiton to monitoring the supply chain in the terminal we can also monitor in the TAP GUI.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
 ```
+
 After the supply chain completes you will see the logs of the `product-service` application stream to the terminal and you will see the Delivery step marked as completed in the TAP GUI.
 
 ![Delivery TAP GUI](../images/delivery-tap-gui.png)
 
-We can also check the status of the workload using the `tanzu apps workload get` command.
-
-```terminal:execute
-command: |
-  tanzu apps workload get product-service
-```
-
 At this point the application is up and running so we can test it out by making a request to the `/api/v1/products` endpoint.
 
+```terminal:interrupt
+session: 2
+```
+
 ```terminal:execute
+session: 2
 command: |
   curl -s https://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
 ```
@@ -90,5 +91,5 @@ product-service-00001-deployment-57bb88c6f7-xn42x[workload] 2023-08-03T15:56:28.
 Lets stop tailing the logs from the `product-service` and move on to the next step of the workshop.
 
 ```terminal:interrupt
-session: 2
+session: 1
 ```
