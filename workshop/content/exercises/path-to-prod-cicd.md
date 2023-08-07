@@ -11,30 +11,12 @@ Depending on how much flexibility developers need, they can define it for their 
 ```execute
 kubectl eksporter Pipeline --keep metadata.labels
 ```
-Let's now jump to **TAP-GUI to view the logs of the test run** in the detail view of the Source Tester step.
+Let's now jump to **TAP-GUI to view the logs of the test run** in the detail view of the Source Tester step.  **Click on the test run link** which will be listed 
+as a GUID listed under the *Source Tester Logs*. 
 
-##### Source Scanner
-
-In the next step, the provided **source code will be scanned** for known vulnerabilities.
-
-**Go to TAP-GUI** and have a look at the details view of the Source Scanner step. You can see that some critical were found by the scanner. 
-You can **click on the CVE's ID** to get more information.
-The TAP-GUI also provides a dashboard to discover all the CVEs in the organizations and workloads that are affected.
-```dashboard:open-url
-url: https://tap-gui.{{ ENV_TAP_INGRESS }}/security-analysis
-```
-If you have a closer look at the dashboard, you can see that some of the workloads don't violate a policy but also have several CVEs with critical or high severity.
-
-For source scans to happen, **scan policies** must be defined on a namespace level which can be done during the automated provisioning of new namespaces. It defines how to evaluate whether the artifacts scanned are compliant, for example, allowing one to be either very strict or restrictive about particular vulnerabilities found. 
-If an artifact is not compliant, the application will not be deployed.
-
-Let's go back to the visualization of the supply chain and **click on the policy name in the detail view of the Source Scanner**.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
 ```
-Our source can step didn't fail because the `notAllowedSeverities`configuration in the scan policy is only set to `["UnknownSeverity"]`. If that would be different, it's also possible to whitelist CVEs with the `ignoreCves` configuration.
-
-Now it's time to have a closer look at aspects like container building and continuous delivery.
 
 ##### Image Provider
 
@@ -60,11 +42,29 @@ We will later have a closer look at it.
 
 ##### Image Scanner
 
-If you **have a closer look at the Image Scanner step in TAP-GUI** you can see that **different CVEs were found than with the source scanning**.
-Reasons for that are for example that the **container image includes the full stack** required to run the application, and **for source code scans, most of the CVE scanners don't download the dependencies, which leads often to false positives or missed CVEs**.
+In the next step, the built **image will be scanned** for known vulnerabilities.
 
-You may ask yourself whether there is still a value in source scans. The answer is yes, as **shifting security left in the path to production improves the productivity of developers**.
-Due to the false positives, it makes sense to have **different scan policies for source scanning and image scanning**, which is supported by VMware Tanzu Application Platform but not implemented for this workshop.
+**Go to TAP-GUI** and have a look at the details view of the Image Scanner step of the supply chain. You can see that some critical were found by the scanner. 
+You can **click on the CVE's ID** to get more information.
+
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
+```
+
+The TAP-GUI also provides a dashboard to discover all the CVEs in the organizations and workloads that are affected.
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/security-analysis
+```
+
+For image scans to happen, **scan policies** must be defined on a namespace level which can be done during the automated provisioning of new namespaces. It defines how to evaluate whether the artifacts scanned are compliant, for example, allowing one to be either very strict or restrictive about particular vulnerabilities found. 
+If an artifact is not compliant, the application will not be deployed.
+
+Let's go back to the visualization of the supply chain and **click on the policy name in the detail view of the Image Scanner**.
+
+Our image can step didn't fail because the `notAllowedSeverities`configuration in the scan policy is only set to `["UnknownSeverity"]`. If that would be different, it's also possible to whitelist CVEs with the `ignoreCves` configuration.
+
+The **container image includes the full stack** required to run the application which includes more information than just running a source code scan (**for source code scans, most of the CVE scanners don't download the dependencies, which leads often to false positives or missed CVEs**).
+
 
 ##### Config Provider, App Config, Service Bindings, Api Descriptors 
 
