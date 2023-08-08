@@ -24,7 +24,7 @@ For our example, let's use **OpenTelemetry with Zikin**.
 
 ```editor:insert-lines-before-line
 file: ~/product-service/pom.xml
-line: 37
+line: 33
 text: |2
           <dependency>
             <groupId>io.micrometer</groupId>
@@ -82,6 +82,10 @@ text: |2
           </dependency>
 ```
 You must also add an entry in `META_INF/spring.factories` so that the custom processor can be discovered.
+```terminal:execute
+command: mkdir ~/product-service/src/main/resources/META-INF
+clear: true
+```
 ```editor:append-lines-to-file
 file: ~/product-service/src/main/resources/META-INF/spring.factories
 text: |
