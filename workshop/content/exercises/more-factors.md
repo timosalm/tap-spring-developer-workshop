@@ -64,10 +64,14 @@ Factor eleven defines that **Logs should be treated as event streams**.
 The key point with logs in a cloud-native application is that it writes all of its log entries to stdout and stderr and the aggregation, processing, and storage of logs is a nonfunctional requirement that is satisfied by your platform or cloud provider.
 
 For developers, TAP-GUI also provides the capability to view the logs of your application.
-**TODO: FIX url**
-```dashboard:open-url
-url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
+
+Execute the following command and click on the link in the terminal to open the logs view for the product service in a new tab. 
+```terminal:execute
+command: echo LINK TO LOGS VIEW: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/Component/product-service/workloads/pods/$(kubectl get pods -l serving.knative.dev/service=product-service -o jsonpath='{.items[0].metadata.uid}')/logs
+description: Post link to logs view for the product service in terminal
+clear: true
 ```
+
 ####  Factor 12: Admin processes
 
 The final factor states that administrative tasks, such as database migrations and one-time scripts, should be executed in the same environment and manner as regular application code. 
