@@ -106,7 +106,7 @@ Lets `watch` the updated version of our product-service rolled out by TAP.
 ```terminal:execute
 session: 2
 command: |
-  watch -n 1 tanzu apps workload tail product-service --since 1h
+  tanzu apps workload tail product-service --since 1h
 ```
 
 We can also issue a watch command to `curl` `/api/v1/products`.  Initially the JSON returned will be the products from our `application.yaml` file as before.  However once the 
