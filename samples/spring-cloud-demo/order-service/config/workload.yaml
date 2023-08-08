@@ -28,3 +28,8 @@ spec:
       apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ResourceClaim
       name: order-config-server-claim
+  - name: tracing
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      name: zipkin-1

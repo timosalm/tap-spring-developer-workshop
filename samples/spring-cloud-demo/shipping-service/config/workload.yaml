@@ -27,6 +27,11 @@ spec:
       apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ResourceClaim
       name: shipping-config-server-claim
+  - name: tracing
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      name: zipkin-1
   build:
     env:
     - name: BP_JVM_VERSION

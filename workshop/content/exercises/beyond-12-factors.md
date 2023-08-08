@@ -58,7 +58,6 @@ text: |
   import org.springframework.cloud.bindings.boot.BindingsPropertiesProcessor;
   import org.springframework.core.env.Environment;
 
-  import java.util.List;
   import java.util.Map;
   public class ZipkinBindingsPropertiesProcessor implements BindingsPropertiesProcessor {
     public static final String TYPE = "zipkin";
