@@ -1,1 +1,1 @@
-order.products-api-url: http://product-service/api/v1/products
+order.products-api-url: http://product-service.NAMESPACE/api/v1/products
