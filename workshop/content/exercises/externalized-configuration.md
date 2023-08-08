@@ -1,4 +1,4 @@
-In cloud-native applications, configuration shouldn't be bundled with code!
+In cloud-native applications, it is good practice to remove the application's configuration from the code and instead manage all configuration externally.
 
 In the cloud, you have multiple applications, environments, and service instances — so configuration has to be flexible.
 
@@ -6,17 +6,22 @@ In the cloud, you have multiple applications, environments, and service instance
 With the **Spring Cloud Config Server**, you have a central place to manage external properties for applications across all environments by integrating multiple version control systems to keep your config safe.
 The Config Server is implemented with Spring Boot, so you can also try it out easily on your local machine or even embed it in another application - however, it runs best as a standalone application.
 
-To deploy it on a container runtime, an official container image is available (`springcloud/configserver`). As it's not mentioned in the documentation anymore, and last time updated years ago, I recommend building your own.
+TAP provides the **Application Configuration Service for VMware Tanzu** which is a commercial offering based on the OSS Spring Cloud Config Server and provides a Kubernetes-native experience to enable the runtime configuration.
 
-Part of TAP is the commercial **Application Configuration Service for VMware Tanzu** which is based on the OSS Spring Cloud Config Server and provides a Kubernetes-native experience to enable the runtime configuration.
+To use the Application Configuration Service we first need a Git repository to store our configuration in.  For this workshop we have already setup a Git repo for you.
 
-A Git repository as source of the externalized configuration is already created for you.
 ```dashboard:open-url
 url: {{ ENV_GITEA_BASE_URL }}/externalized-configuration/src/{{ session_namespace }}
 ```
 
+If you are familiar with Spring Cloud Config certain concepts of the Application Configuration Service will feel very familiar while others are a bit different.
+
+For example, you can configure the Application Configuration Service to use a `defaultLabel` which can be a branch name, a tag name, or a specific Git commit hash to provide different configurations for different environments.  This is very similar to Spring Cloud Config.  In our case, it's just a branch for your workshop session.
+
+on the other hand to configure the Application Configuration Service to point to our Git repo we need to create a Kubernetes resource called a `ConfigurationSource`.
 Our commercial product provides a Kubernetes-native experience for the configuration via a `ConfigurationSource` resource.
-The only type of backend currently supported is Git. In addition to the URL of your repository with the externalized configuration, `defaultLabel` is also set, which can be a branch name, a tag name, or a specific Git commit hash to provide different configurations for different environments. In our case, it's just a branch for your workshop session.
+
+Lets create the `ConfigurationSource` with our `defaultLabel` pointing at out Git repo.
 
 ```terminal:execute
 command: |
@@ -33,7 +38,16 @@ command: |
   EOF
 clear: true
 ```
-As a next step, you have to create a `ConfigurationSlice` that references this configuration source and the related configuration file for the product service.
+
+As a next step, you have to create a `ConfigurationSlice` that references this configuration source and the related configuration file(s) for the product-service.
+In this case we just have a single file we would like to use to configure the product-service.
+
+```dashboard:open-url
+url: {{ ENV_GITEA_BASE_URL }}/externalized-configuration/src/{{ session_namespace }}/product-service.yaml
+```
+
+To create the `ConfigurationSlice` exercute the following command.
+
 ```terminal:execute
 command: |
   cat <<EOF | kubectl apply -f -
