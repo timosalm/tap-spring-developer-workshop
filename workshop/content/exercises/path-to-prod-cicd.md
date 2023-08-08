@@ -52,20 +52,25 @@ On TAP the default approach to building a container image for your application i
 
 In the next step, the built **image will be scanned** for known vulnerabilities.
 
-**Go to TAP-GUI** and have a look at the details view of the Image Scanner step of the supply chain. You can see that some critical were found by the scanner. 
-You can **click on the CVE's ID** to get more information.
+To see any vulnerabilities in the `product-service` image open it's supply chain.
+
 
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
 ```
 
-The TAP-GUI also provides a dashboard to discover all the CVEs in the organizations and workloads that are affected.
+Then select the Image Scanner step.  This will show any known vulnerability for the image that was built.
+You can click any on the CVE ids to see additional details.
+
+![](../images/image-scanner.png)
+
+
+TAP also provides a dashboard to discover all the CVEs in the organizations and workloads that are affected.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/security-analysis
 ```
 
-For image scans to happen, **scan policies** must be defined on a namespace level which can be done during the automated provisioning of new namespaces. It defines how to evaluate whether the artifacts scanned are compliant, for example, allowing one to be either very strict or restrictive about particular vulnerabilities found. 
-If an artifact is not compliant, the application will not be deployed.
+For image scans to happen, **scan policies** must be defined on a namespace level which can be done during the automated provisioning of new namespaces. It defines how to evaluate whether the artifacts scanned are compliant.  Depending on how restrictive those policies are will determine whether the artifact is compliant or not.  If an acrtifact is not compliant, it will not be deployed.
 
 Let's go back to the visualization of the supply chain and **click on the policy name in the detail view of the Image Scanner**.
 
@@ -78,16 +83,16 @@ The **container image includes the full stack** required to run the application 
 
 The steps between "Image Scanner" and "Config Writer" in the supply chain generate the YAML of all the Kubernetes resources required to run the application.
 
+![](../images/image-scanner-config-writier.png)
+
 ##### Config Writer 
 After generating the YAML of all the Kubernetes resources required to run the application, it's time to apply them to a cluster. Usually, there is more than one cluster the application should run on, for example, on a test cluster before production.
 
-The Config Writer is responsible for writing the YAML files either to a Git repository for **GitOps** or, as an alternative, packaging them in a container image and pushing it to a container registry for **RegistryOps**.
-
-**The workshop environment is configured for RegistryOps.**
+The Config Writer is responsible for writing the YAML files either to a Git repository for **GitOps** or, as an alternative, packaging them in a container image and pushing it to a container registry for **RegistryOps**.  This workshop environment is configured to use RegistryOps, so the configuration is pushed to a container registry in the Config Writer step.
 
 ##### Delivery
 With the deployment configuration of our application available, we are now able to deploy it automatically to a fleet of clusters on every change. 
-**Cartographer** also **provides a way to define a continuous delivery workflow** resource on the target cluster, which e.g. picks up that configuration, deploys it, and maybe runs some automated integration tests.
+**Cartographer** also **provides a way to define a continuous delivery workflow** resource on the target cluster, which picks up that configuration, deploys it.  After deployment a delivery workflow could then potentially run some integration tests on the app before routing traffic to it.
 
 For the sake of simplicity, our application is deployed to the same cluster we used for building it. 
 
