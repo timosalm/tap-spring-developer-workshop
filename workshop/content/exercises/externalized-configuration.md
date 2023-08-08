@@ -106,16 +106,17 @@ Lets `watch` the updated version of our product-service rolled out by TAP.
 ```terminal:execute
 session: 2
 command: |
-  watch -n 1 tanzu apps workload get product-service
+  watch -n 1 tanzu apps workload tail product-service --since 1h
 ```
 
-As soon as our updated application is deployed we should be able to see a longer product list configured via our Git repository.
+We can also issue a watch command to `curl` `/api/v1/products`.  Initially the JSON returned will be the products from our `application.yaml` file as before.  However once the 
+new version of our application is deployed the products returned will come from `product-service.yaml` from our `external-configuration` Git repo.
 ```terminal:execute
-command: curl -s https://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
+command: watch -n 1 'curl -s https://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .'
 clear: true
 ```
 
-The result of the `curl` command should now show the products listed in `product-service.yaml` from our `external-configuration` Git repo.
+The result of the `curl` command should eventually look like this.
 
 ```
 [
@@ -146,4 +147,11 @@ The result of the `curl` command should now show the products listed in `product
 ]
 ```
 
+Our architecture should now look like this
+
 ![Updated architecture with Configuration Service](../images/microservice-architecture-config.png)
+
+Lets interrupt our terminal sessions before moving on.
+
+```terminal:interrupt-all
+```
