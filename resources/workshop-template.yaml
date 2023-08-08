@@ -269,6 +269,23 @@ spec:
             port: 9411
             protocol: TCP
             targetPort: 9411
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: zipkin-binding-compatible
+      type: Opaque
+      stringData:
+        type: zipkin
+        uri: http://zipkin-$(session_namespace)
+    - apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      metadata:
+        name: zipkin-1
+      spec:
+        ref:
+          apiVersion: v1
+          kind: Secret
+          name: zipkin-binding-compatible
     - apiVersion: projectcontour.io/v1
       kind: HTTPProxy
       metadata:
