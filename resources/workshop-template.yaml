@@ -276,7 +276,7 @@ spec:
       type: Opaque
       stringData:
         type: zipkin
-        uri: http://zipkin-$(session_namespace)
+        uri: http://zipkin:9411
     - apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ResourceClaim
       metadata:
