@@ -203,6 +203,8 @@ spec:
       kind: ScanPolicy
       metadata:
         name: scan-policy
+        labels:
+          app.kubernetes.io/part-of: enable-in-gui
       spec:
         regoFile: |
           package main
