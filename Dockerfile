@@ -29,6 +29,10 @@ RUN chown -R eduk8s:users /home/eduk8s/.cache
 RUN chown -R eduk8s:users /home/eduk8s/.local
 RUN chown -R eduk8s:users /home/eduk8s/.config
 
+
+RUN curl -L -o /usr/local/bin/hey https://hey-release.s3.us-east-2.amazonaws.com/hey_linux_amd64 && \
+    chmod 755 /usr/local/bin/hey
+
 # TBS
 RUN curl -L -o /usr/local/bin/kp https://github.com/vmware-tanzu/kpack-cli/releases/download/v0.10.0/kp-linux-amd64-0.10.0 && \
   chmod 755 /usr/local/bin/kp
