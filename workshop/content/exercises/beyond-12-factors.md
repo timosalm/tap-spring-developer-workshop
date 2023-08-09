@@ -65,7 +65,7 @@ text: |
     @Override
     public void process(Environment environment, Bindings bindings, Map<String, Object> properties) {
         bindings.filterBindings(TYPE).forEach(binding -> {
-            properties.putIfAbsent("management.zipkin.tracing.endpoint", binding.getSecret().get("url") + "/api/v2/spans");
+            properties.putIfAbsent("management.zipkin.tracing.endpoint", binding.getSecret().get("uri") + "/api/v2/spans");
         });
     }
   } 
