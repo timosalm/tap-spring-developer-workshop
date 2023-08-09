@@ -39,7 +39,7 @@ In the "Add Folder To Workspace" popup paste the path to the order service proje
 
 
 The **order service** uses a **PostgreSQL database** to store orders.  We have both `spring-boot-starter-data-jpa` and `postgresql` on the classpath.
-```
+{% raw %}
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -49,7 +49,7 @@ The **order service** uses a **PostgreSQL database** to store orders.  We have b
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-```
+{% endraw %}
 The order service saves and updates orders to the database within the `OrderApplicationService` class.
 
 ```editor:open-file
@@ -58,12 +58,12 @@ line: 32
 ```
 
 The order service also uses and **RabbitMQ** to asynchronously communicate with the **shipping service** and includess `spring-boot-starter-amqp` on the classpath.
-```
+{% raw %}
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
-```
+{% endraw %}
 
 The order service sends messages to the shipping service within the `ShippingService` using the `exchange` method.
 
@@ -93,7 +93,7 @@ command: tanzu service class get postgresql-unmanaged
 clear: true
 ```
 This should result in a list that looks similar to 
-```
+{% raw %}
   NAME                  DESCRIPTION               
   kafka-unmanaged       Kafka by Bitnami          
   mongodb-unmanaged     MongoDB by Bitnami        
@@ -103,7 +103,7 @@ This should result in a list that looks similar to
   rabbitmq              It's a RabbitMQ cluster!  
   rabbitmq-unmanaged    RabbitMQ by Bitnami       
   redis-unmanaged       Redis by Bitnami
-```
+{% endraw %}
 
 Since the order service needs a PostgreSQL database lets claim the pre-installed Bitnami PostgreSQL service to obtain such a database.
 ```terminal:execute
@@ -112,16 +112,19 @@ clear: true
 ```
 It might take a moment or two before the claim reports `Ready: True`. After the claim is ready, you then have a successful claim for a PostgreSQL database.
 We can check whether the claim is ready by executing the following command.  The `status.Ready` value should be `True`.
+
 ```terminal:execute
 command: tanzu services class-claims get postgres-1
 clear: true
 ```
 The order service also needs a RabbitMQ instance so lets go ahead and create a claim for that service as well.
+
 ```terminal:execute
 command: tanzu service class-claim create rmq-1 --class rabbitmq-unmanaged --parameter storageGB=1
 clear: true
 ```
 Before moving on lets make sure the `status.Ready` value of the RabbitMQ service claim is `True`.
+
 ```terminal:execute
 command: tanzu services class-claims get rmq-1
 clear: true
@@ -166,8 +169,9 @@ session: 2
 command: watch -n 1 "curl -s https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/actuator/env | jq '.propertySources[] | select(.name == \"kubernetesServiceBindingSpecific\")'"
 clear: true
 ```
+
 Once the new version of the order service is deployed you should see the following JSON
-```
+{% raw %}
 {
   "name": "kubernetesServiceBindingSpecific",
   "properties": {
@@ -209,7 +213,7 @@ Once the new version of the order service is deployed you should see the followi
     }
   }
 }
-```
+{% endraw %}
 Lets interrupt the `watch` and `tail` commands.
 ```terminal:interrupt-all
 ```
