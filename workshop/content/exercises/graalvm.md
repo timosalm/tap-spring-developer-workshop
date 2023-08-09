@@ -32,7 +32,7 @@ command: hey -n 1000 -c 1000 -m GET https://product-service-{{session_namespace}
 clear: true
 ```
 
-Have a closer look at the CPU and memory consumption of the `user-container` and remember them for later reference.
+Have a closer look at the CPU and memory consumption of the **`workload` container** and remember them for later reference.
 ```terminal:execute
 command: kubectl top pods -l serving.knative.dev/service=product-service --containers
 clear: true

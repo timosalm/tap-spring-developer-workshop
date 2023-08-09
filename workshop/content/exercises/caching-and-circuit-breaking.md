@@ -146,7 +146,7 @@ If for example a request to the product service to fetch the product list fails,
 First, we have to add the required library to our `pom.xml`.
 ```editor:insert-lines-before-line
 file: ~/order-service/pom.xml
-line: 70
+line: 47
 text: |2
           <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -252,7 +252,7 @@ value:
 Next, the required libraries have to be added to our `pom.xml`.
 ```editor:insert-lines-before-line
 file: ~/order-service/pom.xml
-line: 68
+line: 51
 text: |2
           <dependency>
             <groupId>org.springframework.boot</groupId>
