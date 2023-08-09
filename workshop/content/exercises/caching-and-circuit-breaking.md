@@ -1,3 +1,7 @@
+```terminal:execute
+command: tanzu service class list
+clear: true
+```
 ```editor:execute-command
 command: spring.initializr.maven-project
 args:
