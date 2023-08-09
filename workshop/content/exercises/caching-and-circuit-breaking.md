@@ -20,3 +20,34 @@ Open the Explorer view in the IDE.
 ```editor:execute-command
 command: workbench.view.explorer
 ```
+The order service is in the following directory, copy the path to your clipboard
+
+```copy
+/home/eduk8s/order-service/
+```
+
+Now we need to add the order service to our workspace.  Execute the command below.
+
+```editor:execute-command
+command: workbench.action.addRootFolder
+```
+
+In the "Add Folder To Workspace" popup paste the path to the order service project and click OK.
+
+![](../images/add-order-service-to-workspace.png)
+
+
+The **order service** uses a **PostgreSQL database** to store orders.  We have both `spring-boot-starter-data-jpa` and `postgresql` on the classpath.
+{% raw %}
+```
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+```
+{% endraw %}
