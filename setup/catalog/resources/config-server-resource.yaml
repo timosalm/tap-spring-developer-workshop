@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: configserver
+  description: Configuration Server
+  annotations:
+    'backstage.io/techdocs-ref': dir:../
+spec:
+  type: config-server
+  owner: team-vmware-tanzu-se
+  system: sc-architecture-system

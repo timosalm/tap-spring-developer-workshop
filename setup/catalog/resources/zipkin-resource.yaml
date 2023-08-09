@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: zipkin-1
+  description: Zipkin for distributed tracing
+  annotations:
+    'backstage.io/techdocs-ref': dir:../
+spec:
+  type: tracing
+  owner: team-vmware-tanzu-se
+  system: sc-architecture-system

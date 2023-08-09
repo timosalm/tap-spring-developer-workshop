@@ -1,0 +1,26 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: sc-architecture-location
+  description: Spring Cloud Architecture on TAP
+  annotations:
+    'backstage.io/techdocs-ref': dir:.
+spec:
+  targets:
+    - ./systems/sc-architecture-system.yaml
+    - ./components/service/product-component.yaml
+    - ./components/service/order-component.yaml
+    - ./components/gateway-component.yaml
+    - ./components/service/shipping-component.yaml
+    - ./components/frontend-component.yaml
+    - ./groups/department.yaml
+    - ./groups/org.yaml
+    - ./groups/team.yaml
+    - ./resources/auth-server-resource.yaml
+    - ./resources/config-server-resource.yaml
+    - ./resources/redis-resource.yaml
+    - ./resources/zipkin-resource.yaml
+    - ./resources/postgres-resource.yaml
+    - ./resources/rabbit-resource.yaml
+    - ./apis/system-api.yaml
+    

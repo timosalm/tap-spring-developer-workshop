@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: authserver-1
+  description: OAuth 2 Authorization Server
+  annotations:
+    'backstage.io/techdocs-ref': dir:../
+spec:
+  type: auth-server
+  owner: team-vmware-tanzu-se
+  system: sc-architecture-system

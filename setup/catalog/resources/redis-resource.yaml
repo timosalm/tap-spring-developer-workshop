@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: redis-1
+  description: Redis for caching of relational database and rest calls from the order service
+  annotations:
+    'backstage.io/techdocs-ref': dir:../
+spec:
+  type: cache
+  owner: team-vmware-tanzu-se
+  system: sc-architecture-system

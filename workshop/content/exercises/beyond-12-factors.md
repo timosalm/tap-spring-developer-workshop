@@ -274,9 +274,10 @@ url: https://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
 ##### Authentication and Authorization
 
 Security is a vital part of any application and cloud environment!
-OAuth 2 is an authorization framework granting clients access to protected resources via an authorization server.
-To make the application secure, you can simply add Spring Security as a dependency. By adding the Spring Security OAuth 2 Client, it will secure your app with OAuth 2 by default.
-Spring Authorization Server delivers OAuth 2 Authorization Server support to the Spring community.
+**OAuth 2 is an authorization framework** granting clients access to protected resources via an authorization server.
+To make the application secure, you can simply add Spring Security as a dependency. **By adding the Spring Security OAuth 2 Client, it will secure your app with OAuth 2** by default.
+
+**Spring Authorization Server delivers OAuth 2 Authorization Server** support to the Spring community.
 
 ![Updated architecture with Authorization Server](../images/microservice-architecture-auth.png)
 

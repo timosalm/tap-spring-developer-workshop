@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: sc-architecture-system-api
+  description: The Spring Cloud Architecture System API
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team1@example.com
+  definition:
+    $text: http://scg-operator.tap-install/openapi 
