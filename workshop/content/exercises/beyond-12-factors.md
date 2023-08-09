@@ -128,7 +128,7 @@ clear: true
 ```
 
 ```dashboard:open-url
-url: https://zipkin-{{ session_namespace }}.{{ ingress_domain }}
+url: https://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
 ```
 
 ![Updated architecture with Observability](../images/microservice-architecture-tracing.png)
@@ -169,7 +169,7 @@ command: |
     name: api-gateway-1
   spec:
     api:
-      serverUrl: https://gateway-{{ session_namespace }}.{{ ENV_GITEA_BASE_URL }}
+      serverUrl: https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
     observability:
       tracing:
         zipkin:
@@ -228,7 +228,7 @@ clear: true
 ```
 We can also use ZipKin UI to see the new request flow.
 ```dashboard:open-url
-url: https://zipkin-{{ session_namespace }}.{{ ingress_domain }}
+url: https://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
 ```
 
 ![Updated architecture with API Gateway](../images/microservice-architecture-gateway.png)

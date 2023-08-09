@@ -283,7 +283,7 @@ spec:
               - name: zipkin
                 port: 9411
         virtualhost:
-          fqdn: "zipkin-$(session_namespace).$(ingress_domain)"
+          fqdn: #@ "zipkin-$(session_namespace).{}".format(data.values.tap.ingress_domain)
           tls:
             secretName: #@ data.values.tap.ingress_wildcard_cert
     - apiVersion: services.apps.tanzu.vmware.com/v1alpha1
@@ -341,6 +341,6 @@ spec:
               - name: api-gateway-1
                 port: 80
         virtualhost:
-          fqdn: "gateway-$(session_namespace).$(ingress_domain)"
+          fqdn: #@ "gateway-$(session_namespace).{}".format(data.values.tap.ingress_domain)
           tls:
             secretName: #@ data.values.tap.ingress_wildcard_cert
