@@ -224,3 +224,9 @@ Once the new version of the order service is deployed you should see the followi
 Lets interrupt the `watch` and `tail` commands.
 ```terminal:interrupt-all
 ```
+
+Finally we can test our order service by making a request to the endpoint.
+
+```terminal:execute
+command: curl -s -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders | jq .
+```
