@@ -134,3 +134,108 @@ Before moving on lets make sure the `status.Ready` value of the RabbitMQ service
 command: tanzu services class-claims get rmq-1
 clear: true
 ```
+
+Now that we have created service claims for the services we need we need to bind them to the order service workload (just like we bound the configuration service to the product service earlier).
+When these services are bound to the workload TAP will automatically set the correct Spring Data and Spring AMQP configuration properties for the username, password, and server URL using the [Service Binding Specification](https://github.com/k8s-service-bindings/spec) for Kubernetes. 
+
+Lets add the necessary service claims to the workload for the order service.
+
+```editor:insert-value-into-yaml
+file: ~/order-service/config/workload.yaml
+path: spec.serviceClaims
+value:
+- name: db
+  ref:
+    apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+    kind: ClassClaim
+    name: postgres-1
+- name: rmq
+  ref:
+    apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+    kind: ClassClaim
+    name: rmq-1
+```
+
+After configuring the Workload definition for the service bindings on our machine, we have to update it on the cluster.
+```terminal:execute
+command: tanzu apps workload apply -f order-service/config/workload.yaml -y
+clear: true
+```
+
+We can track the rollout of the latest version of the order service by tailing the logs.
+```terminal:execute
+command: tanzu apps workload tail order-service --since 1h
+clear: true
+```
+
+After the new version of the order service is deployed we can see the TAP has bound our services to the app by checking the environment Actuator enpoint for a property source called ``
+
+```terminal:execute
+session: 2
+command: watch -n 1 "curl -s https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/actuator/env | jq '.propertySources[] | select(.name == \"kubernetesServiceBindingSpecific\")'"
+clear: true
+```
+
+Once the new version of the order service is deployed you should see the following JSON
+{% raw %}
+```
+{
+  "name": "kubernetesServiceBindingSpecific",
+  "properties": {
+    "spring.datasource.driver-class-name": {
+      "value": "******"
+    },
+    "spring.rabbitmq.password": {
+      "value": "******"
+    },
+    "spring.datasource.username": {
+      "value": "******"
+    },
+    "spring.rabbitmq.port": {
+      "value": "******"
+    },
+    "spring.datasource.url": {
+      "value": "******"
+    },
+    "management.zipkin.tracing.endpoint": {
+      "value": "******"
+    },
+    "spring.rabbitmq.host": {
+      "value": "******"
+    },
+    "spring.r2dbc.password": {
+      "value": "******"
+    },
+    "spring.r2dbc.url": {
+      "value": "******"
+    },
+    "spring.r2dbc.username": {
+      "value": "******"
+    },
+    "spring.rabbitmq.username": {
+      "value": "******"
+    },
+    "spring.datasource.password": {
+      "value": "******"
+    }
+  }
+}
+```
+{% endraw %}
+Lets interrupt the `watch` and `tail` commands.
+```terminal:interrupt-all
+```
+
+Finally we can test our order service by making a request to the endpoint.
+
+```terminal:execute
+command: curl -s -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders | jq .
+```
+If we now make a request to fetch the orders we should see the order we just created returned.
+
+```terminal:execute
+command: curl -s https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders | jq .
+```
+
+Let's see how we can make our application even more **resilient to backing service failures**.
+
