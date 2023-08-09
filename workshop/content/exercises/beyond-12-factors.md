@@ -140,6 +140,40 @@ url: https://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
 The API-first approach prioritizes the design and development of the application programming interface (API) before any other aspects of the application. 
 This approach enables for example the consumers of an API to work more independently from its provider, and providers are able to facilitate discussions with stakeholders well before they might have coded themselves past the point of no return.
 
+###### Discover API documentation and more in Tanzu Developer Portal
+
+Tanzu Developer Portal helps you to find documentation for APIs available in your organization and try them out before integrating them in your applications.
+
+A core feature of Tanzu Developer Portal and the Cloud Native Computing Foundation’s project [Backstage](https://backstage.io), on which it's based on, is the **Software Catalog**. A centralized system that keeps track of ownership and metadata for all the applications in your organization's ecosystem. The catalog is built around the concept of metadata YAML files stored together with the code, which are then harvested and visualized.
+```dashboard:open-url
+url: {{ ENV_GITEA_BASE_URL }}/product-service/catalog/component.yaml
+```
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog
+```
+
+If you **switch the kind from "Component" to "System"** and select `sc-architecture-system` you can see lists of all the services, backing services, and also a graph visualizing their relationships defined by metadata YAML files.
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/system/sc-architecture-system
+```
+In addition to a link to jump to the related source code, there is also one to access the **technical documentation** which can be written in Markdown format in a source-code repository and displayed alongside the relevant catalog entries.
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/docs/default/System/sc-architecture-system
+```
+
+APIs provided by the components can be discovered via the **API documentation plug-in**. 
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/api/gateway-{{ ENV_TAP_INGRESS }}/definition
+```
+With a feature called **API Auto Registration**, TAP can automatically register your APIs in Tanzu Developer Portal.
+
+From the different components in the Software Catalog, you can also jump to the **Runtime Resources** view and have a closer look at the resources running on Kubernetes for your applications. If you select a Pod you're able to see the logs, and if it's running one of our services, also information provided by **App Live View**.
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/component/product-service/workloads
+```
+
+###### API Gateway
+
 With so many APIs in a microservices application, developers need an API Gateway that they can control!
 
 [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) is a **library that can be used to create an API gateway** to expose endpoints for application services written in any programming language.
@@ -237,8 +271,6 @@ url: https://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
 
 ![Updated architecture with API Gateway](../images/microservice-architecture-gateway.png)
 
-**TODO** TAP GUI Docs and API plugin
-
 ##### Authentication and Authorization
 
 Security is a vital part of any application and cloud environment!
@@ -250,7 +282,7 @@ Spring Authorization Server delivers OAuth 2 Authorization Server support to the
 
 ##### Factor: API first
 
-**TODO** TAP GUI Docs and API plugin
+**TODO** Tanzu Developer Portal Docs and API plugin
 
 ###### API Gateway
 

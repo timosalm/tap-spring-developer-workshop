@@ -21,7 +21,7 @@ Let's have a closer look at how a Workload allows developers to configure the co
 file: ~/product-service/config/workload.yaml
 ```
 
-In addition to the name of the Workload, there is also `app.kubernetes.io/part-of` label with the same value, which is used by TAP GUI to match documentation with runtime resources.
+In addition to the name of the Workload, there is also `app.kubernetes.io/part-of` label with the same value, which is used by Tanzu Developer Portal to match documentation with runtime resources.
 
 The location of an application's source code can be configured via the `spec.source` field. Here, we are using a branch of a Git repository as a source to be able to implement a **continuous path to production** where every git commit to the codebase will trigger another execution of the supply chain, and developers only have to apply a Workload once if they start with a new application or microservice. 
 
@@ -50,14 +50,14 @@ command: |
   watch -n 1 tanzu apps workload get product-service
 ```
 
-In addiiton to monitoring the supply chain in the terminal we can also monitor in the TAP GUI.
+In addiiton to monitoring the supply chain in the terminal we can also monitor in the Tanzu Developer Portal.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
 ```
 
-After the supply chain completes you will see the logs of the `product-service` application stream to the terminal and you will see the Delivery step marked as completed in the TAP GUI.
+After the supply chain completes you will see the logs of the `product-service` application stream to the terminal and you will see the Delivery step marked as completed in the Tanzu Developer Portal.
 
-![Delivery TAP GUI](../images/delivery-tap-gui.png)
+![Delivery Tanzu Developer Portal](../images/delivery-tap-gui.png)
 
 At this point the application is up and running so we can test it out by making a request to the `/api/v1/products` endpoint.
 

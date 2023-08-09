@@ -65,7 +65,7 @@ engine:
     expression: "#kebab2Camel(#artifactId.replace('-service', ''))"
   merge:
   - include: [ "**/*" ]
-    exclude: [ "**/*.java", "**/*.yaml", "pom.xml", "config/workload.yaml"]
+    exclude: [ "**/*.java", "**/*.yaml", "pom.xml", "config/workload.yaml", "catalog/*.yaml"]
   - include: [ "**/*.java", "**/*.yaml" ]
     chain:
     - merge:
@@ -141,3 +141,9 @@ engine:
         with: "#artifactId"
       - text: NAMESPACE_NAME
         with: "#namespace"
+  - include: ["catalog/*.yaml"]
+    chain:
+    - type: ReplaceText
+      substitutions:
+      - text: ARTIFACT_NAME
+        with: "#artifactId"
