@@ -134,24 +134,3 @@ Before moving on lets make sure the `status.Ready` value of the RabbitMQ service
 command: tanzu services class-claims get rmq-1
 clear: true
 ```
-
-Now that we have created service claims for the services we need we need to bind them to the order service workload (just like we bound the configuration service to the product service earlier).
-When these services are bound to the workload TAP will automatically set the correct Spring Data and Spring AMQP configuration properties for the username, password, and server URL using the [Service Binding Specification](https://github.com/k8s-service-bindings/spec) for Kubernetes. 
-
-Lets add the necessary service claims to the workload for the order service.
-
-```editor:insert-value-into-yaml
-file: ~/order-service/config/workload.yaml
-path: spec.serviceClaims
-value:
-- name: db
-  ref:
-    apiVersion: services.apps.tanzu.vmware.com/v1alpha1
-    kind: ClassClaim
-    name: postgres-1
-- name: rmq
-  ref:
-    apiVersion: services.apps.tanzu.vmware.com/v1alpha1
-    kind: ClassClaim
-    name: rmq-1
-```
