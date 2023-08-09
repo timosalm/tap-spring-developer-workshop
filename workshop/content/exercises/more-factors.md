@@ -67,7 +67,8 @@ For developers, TAP-GUI also provides the capability to view the logs of your ap
 
 Execute the following command and click on the link in the terminal to open the logs view for the product service in a new tab. 
 ```terminal:execute
-command: echo LINK TO LOGS VIEW: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/Component/product-service/workloads/pods/$(kubectl get pods -l serving.knative.dev/service=product-service -o jsonpath='{.items[0].metadata.uid}')/logs
+command: |
+  echo LINK TO LOGS VIEW: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/Component/product-service/workloads/pods/$(kubectl get pods -l serving.knative.dev/service=product-service -o jsonpath='{.items[0].metadata.uid}')/logs
 description: Post link to logs view for the product service in terminal
 clear: true
 ```
