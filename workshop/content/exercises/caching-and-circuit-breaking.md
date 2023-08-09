@@ -51,3 +51,37 @@ The **order service** uses a **PostgreSQL database** to store orders.  We have b
 		</dependency>
 ```
 {% endraw %}
+
+The order service saves and updates orders to the database within the `OrderApplicationService` class.
+
+```editor:open-file
+file: ~/order-service/src/main/java/com/example/orderservice/order/OrderApplicationService.java
+line: 32
+```
+
+The order service also uses and **RabbitMQ** to asynchronously communicate with the **shipping service** and includess `spring-boot-starter-amqp` on the classpath.
+{% raw %}
+```
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+```
+{% endraw %}
+
+The order service sends messages to the shipping service within the `ShippingService` using the `exchange` method.
+
+```editor:open-file
+file: ~/order-service/src/main/java/com/example/orderservice/order/ShippingService.java
+line: 45
+```
+
+TAP provides developers a self-service model to provision backing services across for their applications.
+
+In this workshop, we will run commands manually to dynamically provision a backing services for our application - in production environments, this should be automated.
+
+Let's first discover available service classes in the cluster. 
+```terminal:execute
+command: tanzu service class list
+clear: true
+```
