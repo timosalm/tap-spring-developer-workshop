@@ -7,6 +7,7 @@ metadata:
   labels:
     app.kubernetes.io/part-of: order-service
     apps.tanzu.vmware.com/workload-type: web
+    apps.tanzu.vmware.com/has-tests: "true"
 spec:
   source:
     git:
