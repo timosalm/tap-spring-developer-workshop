@@ -1,4 +1,11 @@
-
+```editor:execute-command
+command: spring.initializr.maven-project
+args:
+- language: Java
+  dependencies: [ "actuator", "webflux" ]
+  artifactId: demo
+  groupId: com.example
+```
 
 ```editor:execute-command
 command: workbench.view.explorer
