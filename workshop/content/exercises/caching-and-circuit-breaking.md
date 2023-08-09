@@ -163,7 +163,7 @@ After the new version of the order service is deployed we can see the TAP has bo
 
 ```terminal:execute
 session: 2
-command: watch -n 1 "curl -s https://order-service-tap-spring-developer-workshops-w01-s001.tap.ryanjbaxter.com/actuator/env | jq '.propertySources[] | select(.name == \"kubernetesServiceBindingSpecific\")'"
+command: watch -n 1 "curl -s https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/actuator/env | jq '.propertySources[] | select(.name == \"kubernetesServiceBindingSpecific\")'"
 clear: true
 ```
 Once the new version of the order service is deployed you should see the following JSON
