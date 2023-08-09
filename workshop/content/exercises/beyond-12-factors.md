@@ -276,39 +276,8 @@ url: https://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
 Security is a vital part of any application and cloud environment!
 OAuth 2 is an authorization framework granting clients access to protected resources via an authorization server.
 To make the application secure, you can simply add Spring Security as a dependency. By adding the Spring Security OAuth 2 Client, it will secure your app with OAuth 2 by default.
-Spring Authorization Server delivers OAuth 2 Authorization Server support to the Spring community.
-
-![Updated architecture with Authorization Server](../images/microservice-architecture-auth.png)
-
-##### Factor: API first
-
-**TODO** Tanzu Developer Portal Docs and API plugin
-
-###### API Gateway
-
-By designing your API first, you are able to facilitate discussion with your stakeholders (your internal team, customers, or possibly other teams within your organization who want to consume your API) well before you might have coded yourself past the point of no return. 
-
-With so many APIs in a microservices application, developers need an API Gateway that they can control!
-
-[Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) aims to provide a simple and effective way to route to APIs and provides  features related to security and resiliency to them.
-
-Based on the open source Spring Cloud Gateway project, our commercial offering **VMware Spring Cloud Gateway for Kubernetes** provides additional functionalities like a Kubernetes "native" experience, simple single sign-On (SSO) configuration, and OpenAPI auto-generation for documentation. 
-
-Let‘s have a look how you can deploy and configure a gateway for your microservices application with TAP and the included VMware Spring Cloud Gateway for Kubernetes.
-
-**TODO: Provisioning via Crossplane + provide Config, (Optional) Change Endpoints to internal**
-
-![Updated architecture with API Gateway](../images/microservice-architecture-gateway.png)
-
-##### Authentication and Authorization
-
-Security is a vital part of any application and cloud environment!
-OAuth 2 is an authorization framework granting clients access to protected resources via an authorization server.
-To make the application secure, you can simply add Spring Security as a dependency. By adding the Spring Security OAuth 2 Client, it will secure your app with OAuth 2 by default.
 Spring Authorization Server delivers OAuth 2 Authorization Server support to the Spring community.
 
 ![Updated architecture with Authorization Server](../images/microservice-architecture-auth.png)
 
 ##### Spring Cloud Stream & Function + TAP FaaS experience
-
-
