@@ -40,6 +40,7 @@ In the "Add Folder To Workspace" popup paste the path to the order service proje
 
 The **order service** uses a **PostgreSQL database** to store orders.  We have both `spring-boot-starter-data-jpa` and `postgresql` on the classpath.
 {% raw %}
+```
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -49,6 +50,7 @@ The **order service** uses a **PostgreSQL database** to store orders.  We have b
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+```
 {% endraw %}
 The order service saves and updates orders to the database within the `OrderApplicationService` class.
 
@@ -59,10 +61,12 @@ line: 32
 
 The order service also uses and **RabbitMQ** to asynchronously communicate with the **shipping service** and includess `spring-boot-starter-amqp` on the classpath.
 {% raw %}
+```
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
+```
 {% endraw %}
 
 The order service sends messages to the shipping service within the `ShippingService` using the `exchange` method.
@@ -94,6 +98,7 @@ clear: true
 ```
 This should result in a list that looks similar to 
 {% raw %}
+```
   NAME                  DESCRIPTION               
   kafka-unmanaged       Kafka by Bitnami          
   mongodb-unmanaged     MongoDB by Bitnami        
@@ -103,6 +108,7 @@ This should result in a list that looks similar to
   rabbitmq              It's a RabbitMQ cluster!  
   rabbitmq-unmanaged    RabbitMQ by Bitnami       
   redis-unmanaged       Redis by Bitnami
+```
 {% endraw %}
 
 Since the order service needs a PostgreSQL database lets claim the pre-installed Bitnami PostgreSQL service to obtain such a database.
@@ -172,6 +178,7 @@ clear: true
 
 Once the new version of the order service is deployed you should see the following JSON
 {% raw %}
+```
 {
   "name": "kubernetesServiceBindingSpecific",
   "properties": {
@@ -213,6 +220,7 @@ Once the new version of the order service is deployed you should see the followi
     }
   }
 }
+```
 {% endraw %}
 Lets interrupt the `watch` and `tail` commands.
 ```terminal:interrupt-all
