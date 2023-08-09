@@ -47,8 +47,7 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-bindings</artifactId>
-			<version>1.13.0</version>
-			<scope>provided</scope>
+			<version>2.0.1</version>
 		</dependency>
 
 		<dependency>

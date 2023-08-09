@@ -3,15 +3,13 @@ kind: Workload
 metadata:
   name: ARTIFACT_NAME
   namespace: NAMESPACE
+  annotations:
+    autoscaling.knative.dev/min-scale: "1"
   labels:
     app.kubernetes.io/part-of: ARTIFACT_NAME
     apps.tanzu.vmware.com/workload-type: web
     apps.tanzu.vmware.com/has-tests: "true"
 spec:
-  params:
-  - name: annotations
-    value: 
-      autoscaling.knative.dev/minScale: "1"
   source:
     git:
       url: SOURCE_GIT_BASE_URL/ARTIFACT_NAME.git

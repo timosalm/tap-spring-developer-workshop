@@ -3,11 +3,6 @@ spring:
   jpa.hibernate.ddl-auto: update
   config.import: "optional:configtree:${SERVICE_BINDING_ROOT}/config-server/"
   # https://github.com/spring-cloud/spring-cloud-bindings/issues/87
-  data:
-    redis:
-      host: ${spring.redis.host}
-      password: ${spring.redis.password}
-      port: ${spring.redis.port}
  
 logging.level.org.springframework.cache: TRACE
 management:

@@ -77,8 +77,7 @@ text: |2
           <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-bindings</artifactId>
-            <version>1.13.0</version>
-            <scope>provided</scope>
+            <version>2.0.1</version>
           </dependency>
 ```
 You must also add an entry in `META_INF/spring.factories` so that the custom processor can be discovered.
@@ -90,7 +89,7 @@ clear: true
 file: ~/product-service/src/main/resources/META-INF/spring.factories
 text: |
   org.springframework.cloud.bindings.boot.BindingsPropertiesProcessor=\
-  com.example.productservice.ZipkinBindingsPropertiesProcessor
+    com.example.productservice.ZipkinBindingsPropertiesProcessor
 ```
 
 Last but not least, the service binding has to be configured in the Workload and the changes pushed to Git and applied to the environment.
@@ -129,14 +128,13 @@ clear: true
 ```
 
 ```dashboard:open-url
-url: http://zipkin-{{ session_namespace }}.{{ ingress_domain }}
+url: https://zipkin-{{ session_namespace }}.{{ ingress_domain }}
 ```
 
 ![Updated architecture with Observability](../images/microservice-architecture-tracing.png)
 
 ##### Factor: API first
 
-**TODO: Adapt for commercial one**
 **TODO: Use Crossplane**
 
 The API-first approach prioritizes the design and development of the application programming interface (API) before any other aspects of the application. 
@@ -144,7 +142,7 @@ This approach enables for example the consumers of an API to work more independe
 
 With so many APIs in a microservices application, developers need an API Gateway that they can control!
 
-[Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) is a library that can be used to create an API gateway to expose endpoints for application services written in any programming language.
+[Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) is a **library that can be used to create an API gateway** to expose endpoints for application services written in any programming language.
 It aims to provide a simple and effective way to route to APIs and provides features related to security and resiliency to them.
 
 The best way to create a gateway for your microservices application with Spring Cloud Gateway from scratch is to go to [start.spring.io](https://start.spring.io), add the `spring-cloud-starter-gateway` dependency, and additional dependencies based on your needs for security, distributed tracing, externalized configuration etc.
@@ -155,47 +153,74 @@ The main building blocks of Spring Cloud Gateway are:
 - **Filters**: Used for modifications of requests and responses before or after sending the downstream request
 Spring Cloud Gateway already provides Predicates and Filters for most of the common use cases, but it's also [possible to build your own](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#developer-guide).
 
-Routes can be configured in a number of ways, like via the Java API provided by the Gateway. 
-In this workshop, you will configure some basic routes via configuration properties stored in our Git repository.
+Routes can be configured in a number of ways, like via the Java API provided by the Gateway, or configuration properties stored in a Git repository.
 
-Let's first configure the gateway for the Config Server. 
-```editor:append-lines-to-file
-file: ~/gateway/src/main/resources/application.yaml
-text: |
-  spring:
-    application.name: gateway
-    config.import: "optional:configserver:http://config-server.{{ session_namespace }}"
+**VMware Spring Cloud Gateway for Kubernetes** is an **API gateway created for developers** based on the open-source Spring Cloud Gateway project, along with integrating other Spring ecosystem projects such as Spring Security, Spring Session, and more. It automates the deployment of an API gateway service via the [Kubernetes Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) pattern, and includes several other [commercial features](https://docs.vmware.com/en/VMware-Spring-Cloud-Gateway-for-Kubernetes/2.0/scg-k8s/GUID-index.html#key-features) like simple Single Sign-On (SSO) configuration, and OpenAPI version 3 documentation auto-generation.
+
+![VMware Spring Cloud Gateway for Kubernetes](../images/scg-for-k8s.png)
+
+First, we have to configure a gateway instance via the `SpringCloudGateway` Kubernetes custom resource.
+```terminal:execute
+command: |
+  cat <<EOF | kubectl apply -f -
+  apiVersion: "tanzu.vmware.com/v1"
+  kind: SpringCloudGateway
+  metadata:
+    name: api-gateway-1
+  spec:
+    api:
+      serverUrl: https://gateway-{{ session_namespace }}.{{ ENV_GITEA_BASE_URL }}
+    observability:
+      tracing:
+        zipkin:
+          enabled: true
+          url: http://zipkin:9411/api/v2/spans
+  EOF
+clear: true
 ```
 
-Based on the application name, we can now add a properties file with the Route configuration to the cloned Git repository with the externalized configuration.
-```editor:append-lines-to-file
-file: ~/samples/externalized-configuration/gateway.yaml
-text: |2
-  management.zipkin.tracing.endpoint: http://zipkin:9411/api/v2/spans
-  spring.cloud.gateway:
+Now it's time to define our route configuration with a `SpringCloudGatewayRouteConfig` custom resource.
+```terminal:execute
+command: |
+  cat <<EOF | kubectl apply -f -
+  apiVersion: "tanzu.vmware.com/v1"
+  kind: SpringCloudGatewayRouteConfig
+  metadata:
+    name: supply-chain-app-route-config
+  spec:
     routes:
-    - id: product-service
-      uri: http://product-service.{{ session_namespace }}
+    - uri: http://product-service.{{ session_namespace }}
       predicates:
       - Path=/services/product-service/**
       filters:
       - StripPrefix=2
-    - id: order-service
-      uri: http://order-service.{{ session_namespace }}
+    - uri: http://order-service.{{ session_namespace }}
       predicates:
       - Path=/services/order-service/**
       filters:
       - StripPrefix=2
-```
-To apply the changes, let's commit the updated externalized configuration.
-```terminal:execute
-command: |
-  cd samples/externalized-configuration && git add . && git commit -m "Add external configuration for gateway" && git push
-  cd ~
+  EOF
 clear: true
 ```
 
-The automated deployment of the gateway is already configured, so we only have to wait for it until we're able to send a request through it to the order service. 
+The last step is to link our route configuration to the gateway instance with a `SpringCloudGatewayMapping` custom resource, which allows using a route configuration with multiple gateway instances.
+```terminal:execute
+command: |
+  cat <<EOF | kubectl apply -f -
+  apiVersion: "tanzu.vmware.com/v1"
+  kind: SpringCloudGatewayMapping
+  metadata:
+    name: supply-chain-app-routes
+  spec:
+    gatewayRef:
+      name: api-gateway-1
+    routeConfigRef:
+      name: supply-chain-app-route-config
+  EOF
+clear: true
+```
+
+We can now validate whether our configuration works by sending a request through it to the order service. 
 ```terminal:execute
 command: |
   curl -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/services/order-service/api/v1/orders
@@ -203,7 +228,7 @@ clear: true
 ```
 We can also use ZipKin UI to see the new request flow.
 ```dashboard:open-url
-url: http://zipkin-{{ session_namespace }}.{{ ingress_domain }}
+url: https://zipkin-{{ session_namespace }}.{{ ingress_domain }}
 ```
 
 ![Updated architecture with API Gateway](../images/microservice-architecture-gateway.png)

@@ -11,11 +11,8 @@ workshop_git:
   branch: main
 tap:
   ingress_domain: example.com
+  ingress_wildcard_cert:  tanzu-system-ingress/tls-delegation-cert
 gitea:
   base_url: https://gitea.example.com/gitea_admin
   basic_auth_username:
   basic_auth_password:
-gitops:
-  host: https://github.com
-  username: user
-  password: ""

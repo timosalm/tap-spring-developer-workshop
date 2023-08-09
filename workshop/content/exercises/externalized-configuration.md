@@ -18,10 +18,9 @@ If you are familiar with Spring Cloud Config certain concepts of the Application
 
 For example, you can configure the Application Configuration Service to use a `defaultLabel` which can be a branch name, a tag name, or a specific Git commit hash to provide different configurations for different environments.  This is very similar to Spring Cloud Config.  In our case, it's just a branch for your workshop session.
 
-on the other hand to configure the Application Configuration Service to point to our Git repo we need to create a Kubernetes resource called a `ConfigurationSource`.
 Our commercial product provides a Kubernetes-native experience for the configuration via a `ConfigurationSource` resource.
 
-Lets create the `ConfigurationSource` with our `defaultLabel` pointing at out Git repo.
+Let's create the `ConfigurationSource` with our `defaultLabel` pointing at our Git repo.
 
 ```terminal:execute
 command: |
