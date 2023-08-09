@@ -15,6 +15,10 @@ args:
 command: workbench.view.explorer
 ```
 
+```editor:execute-command
+command: workbench.view.explorer
+```
+
 The order service is in the following directory, copy the path to your clipboard
 
 ```copy
