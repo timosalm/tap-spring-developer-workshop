@@ -161,3 +161,16 @@ After configuring the Workload definition for the service bindings on our machin
 command: tanzu apps workload apply -f order-service/config/workload.yaml -y
 clear: true
 ```
+We can track the rollout of the latest version of the order service by tailing the logs.
+```terminal:execute
+command: tanzu apps workload tail order-service --since 1h
+clear: true
+```
+
+After the new version of the order service is deployed we can see the TAP has bound our services to the app by checking the environment Actuator enpoint for a property source called `kubernetesServiceBindingSpecific`.
+
+```terminal:execute
+session: 2
+command: watch -n 1 "curl -s https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/actuator/env | jq '.propertySources[] | select(.name == \"kubernetesServiceBindingSpecific\")'"
+clear: true
+```
