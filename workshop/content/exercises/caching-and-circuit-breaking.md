@@ -1,7 +1,3 @@
-```dashboard:open-dashboard
-name: The Twelve Factors
-```
-
 The **fourth and sixth factor** implies that any **data** that needs to be persisted must be **stored in a stateful backing service**, such as a database because the processes are stateless and share-nothing.
 A backing service is any service that your application needs for its functionality. Examples of the different types of backing services are data stores, messaging systems, and also services that provide business functionality.
 
@@ -54,22 +50,29 @@ The **order service** uses a **PostgreSQL database** to store orders.  We have b
 			<scope>runtime</scope>
 		</dependency>
 ```
+The order service saves and updates orders to the database within the `OrderApplicationService` class.
+
 ```editor:open-file
 file: ~/order-service/src/main/java/com/example/orderservice/order/OrderApplicationService.java
 line: 32
 ```
 
-... and **RabbitMQ** to asynchronously communicate with the **shipping service**.
-```editor:open-file
-file: ~/order-service/pom.xml
-line: 43
+The order service also uses and **RabbitMQ** to asynchronously communicate with the **shipping service** and includess `spring-boot-starter-amqp` on the classpath.
 ```
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+```
+
+The order service sends messages to the shipping service within the `ShippingService` using the `exchange` method.
+
 ```editor:open-file
 file: ~/order-service/src/main/java/com/example/orderservice/order/ShippingService.java
 line: 45
 ```
 
-For the best experience, developers should have a self-service to provision backing services across all the stages for the application.
+TAP provides developers a self-service model to provision backing services across for their applications.
 
 The Services Toolkit provides **dynamic provisioning** capabilities with **Crossplane**, and we are also **partnering with the company behind that open-source project called Upbound**.
 Support for additional provisioners might be added in the future.
