@@ -243,7 +243,7 @@ session: 2
 command: |
   watch -n 1 kubectl get service.serving.knative.dev product-service
 ```
-The deployment has finished once the the KNative service is marked `Ready`.
+The deployment has finished once the the Knative service is marked `Ready`.
 
 ![](../images/product-service-ready.png)
 
