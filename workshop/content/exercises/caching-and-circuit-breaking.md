@@ -301,15 +301,14 @@ text: "return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(pro
 ```editor:replace-text-selection
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
 text: |2
-  return circuitBreakerFactory.create("products").run(() ->
-              Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(productsApiUrl, Product[].class))),
-          throwable -> {
-              log.error("Call to product service failed, using empty product list as fallback", throwable);
-              return Collections.emptyList();
-          });
+        return Arrays.asList(Objects.requireNonNull(circuitBreakerFactory.create("products").run(() -> 
+        restTemplate.getForObject(productsApiUrl, Product[].class), t -> {
+            log.error("Call to product service failed, using empty product list as fallback");
+            return new Product[]{};
+        })));
 ```
 
-The `Supplier` is the code that you are going to wrap in a circuit breaker. The `Function` is the fallback that will be executed if the circuit breaker is tripped. In our case, the fallback just returns an empty product list. The function will be passed the Throwable that caused the fallback to be triggered. You can optionally exclude the fallback if you do not want to provide one.
+The `Supplier` is the code that you are going to wrap in a circuit breaker. The `Function` is the fallback that will be executed if the circuit breaker is tripped. In our case, the fallback just returns an empty product array. The function will be passed the Throwable that caused the fallback to be triggered. You can optionally exclude the fallback if you do not want to provide one.
 
 After pushing our changes to Git, the updated source code will be automatically deployed to production. 
 ```terminal:execute
@@ -318,29 +317,49 @@ command: |
   cd ..
 clear: true
 ```
-```dashboard:open-url
-url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/order-service
-```
+Since TAP is monitoring changes in the order service Git repo pushing the changes in the above command will cause a new build and deploy of the order service to take place.
 
-As soon as the updated application is running, we can test the functionality by terminating the product service, and sending a request to the order service. 
-```execute-2
-kubectl logs -l serving.knative.dev/service=order-service -f
-```
-
+We can monitor the rollout of the new version of the order service by tailing the logs. 
 ```terminal:execute
-command: kubectl delete app product-service
+session: 2
+command: tanzu apps workload tail order-service --since 1h
 clear: true
 ```
+If we delete the pod running the product service and then make a request to create a new order we should see an error come back indicating the order was not created.
+***NOTE*** The below `kubectl delete app` command will just delete the pod, the workload will still be deployed so Kubernetes will recreate the pod fairly quickly in order to restore things to the correct state.
 
 ```terminal:execute
 command: |
+  kubectl delete app product-service
   curl -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
 clear: true
 ```
-If everything works as expected the order service should fall back to an empty product list instead, and you should see the log entry `Call to product service failed, using empty product list as fallback`.
 
-```terminal:interrupt
-session: 2
+If everything works as expected the circuit breaker in the `ProductService.fetchProducts` method should be tripped and return an empty `List`.  In the logs of the order service you should see the following error.
+
+{% raw %}
+```
+2023-08-10T14:31:25.229Z ERROR 1 --- [nio-8080-exec-5] c.e.orderservice.order.ProductService    : Call to product service failed, using empty product list as fallback
+```
+{% endraw %}
+
+Since the order service cannot validate that the product with the id of `1` exists by making a request to the product service (due to the empty list being returned) we the order service will return a `500` response code with the response body 
+
+{% raw %}
+```
+{
+  "timestamp": "2023-08-10T14:37:47.298+00:00",
+  "status": 500,
+  "error": "Internal Server Error",
+  "message": "New order not created, there was an error",
+  "path": "/api/v1/orders"
+}
+```
+{% endraw %}
+
+Next we will move on to adding some caching to our application.
+
+```terminal:interrupt-all
 ```
 
 ##### Caching
