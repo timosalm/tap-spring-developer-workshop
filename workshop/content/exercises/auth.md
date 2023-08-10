@@ -102,7 +102,7 @@ clear: true
 
 To **secure the product service with OAuth**, we first have to add the related dependency. As already mentioned, for our setup, the services are acting as an OAuth resource server but there is also a library for OAuth clients available.
  ```editor:insert-lines-before-line
-file: ~/product-service/src/main/java/com/example/productservice/WebSecurityConfiguration.java
+file: ~/product-service/pom.xml
 line: 33
 text: |2
           <dependency>
