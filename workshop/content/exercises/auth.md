@@ -17,6 +17,7 @@ text: |
     name: authserver-1
     labels:
       name: authserver-1
+      namespace: {{ session_namespace }}
     annotations:
       sso.apps.tanzu.vmware.com/allow-client-namespaces: "{{ session_namespace }}"
       sso.apps.tanzu.vmware.com/allow-unsafe-issuer-uri: ""
@@ -65,6 +66,7 @@ text: |
   kind: ClientRegistration
   metadata:
     name: client-registration
+    namespace: {{ session_namespace }}
   spec:
     authServerSelector:
       matchLabels:
@@ -178,10 +180,27 @@ clear: true
 command: tanzu apps workload apply -f product-service/config/workload.yaml -y
 clear: true
 ```
-
-To do the same with the order service, just execute the following script. 
+**TODO: Create script**
+To do the same with the order service, just execute the following script.
 ```terminal:execute
 command: ./samples/add-oauth-to-order-service.sh
+clear: true
+```
+
+We also have to add a route for the frontend to the API gateway, which in this case also sets the required information for the OAuth flow
+```editor:insert-value-into-yaml
+file: ~/product-service/config/workload.yaml
+path: spec.routes
+value:
+  - uri: http://frontend.{{ session_namespace }}
+    predicates:
+    - Path=/frontend/**
+    filters:
+    - StripPrefix=1
+    - RewriteResponseBody=ISSUER_VALUE:http://authserver-1-{{ session_namespace }}.{{ ENV_TAP_INGRESS }},CLIENT_ID_VALUE:{{ session_namespace }}_client-registration
+``` 
+```terminal:execute
+command: kubectl apply -f config/gateway/
 clear: true
 ```
 

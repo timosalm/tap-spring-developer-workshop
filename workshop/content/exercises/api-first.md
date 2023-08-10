@@ -92,11 +92,6 @@ text: |
       - Path=/services/order-service/**
       filters:
       - StripPrefix=2
-    - uri: http://frontend.{{ session_namespace }}
-      predicates:
-      - Path=/frontend/**
-      filters:
-      - StripPrefix=1
 ```
 
 The last step is to link our route configuration to the gateway instance with a `SpringCloudGatewayMapping` custom resource, which allows using a route configuration with multiple gateway instances, and apply everything to the cluster.
