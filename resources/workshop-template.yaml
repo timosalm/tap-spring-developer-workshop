@@ -344,3 +344,12 @@ spec:
           fqdn: #@ "gateway-$(session_namespace).{}".format(data.values.tap.ingress_domain)
           tls:
             secretName: #@ data.values.tap.ingress_wildcard_cert
+    - apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      metadata:
+        name: auth-client
+      spec:
+        ref:
+          apiVersion: sso.apps.tanzu.vmware.com/v1alpha1
+          kind: ClientRegistration
+          name: client-registration

@@ -135,8 +135,6 @@ url: https://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
 
 ##### Factor: API first
 
-**TODO: Use Crossplane**
-
 The API-first approach prioritizes the design and development of the application programming interface (API) before any other aspects of the application. 
 This approach enables for example the consumers of an API to work more independently from its provider, and providers are able to facilitate discussions with stakeholders well before they might have coded themselves past the point of no return.
 
@@ -278,6 +276,148 @@ Security is a vital part of any application and cloud environment!
 To make the application secure, you can simply add Spring Security as a dependency. **By adding the Spring Security OAuth 2 Client, it will secure your app with OAuth 2** by default.
 
 **Spring Authorization Server delivers OAuth 2 Authorization Server** support to the Spring community.
+
+**Application Single Sign-On for VMware Tanzu** (commonly called AppSSO) is based on the Spring Authorization Server project provides APIs for curating and consuming a "Single Sign-On as a service" offering on Tanzu Application Platform. 
+
+The first step is to create an Authorization Server along with an RSAKey key for signing tokens. This AuthServer example uses an unsafe testing-only identity provider which should never be used in production environments! Information on how to configure external identity providers is available [here](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/app-sso-how-to-guides-service-operators-identity-providers.html).
+```terminal:execute
+command: |
+  cat <<EOF | kubectl apply -f -
+  apiVersion: "sso.apps.tanzu.vmware.com/v1alpha1"
+  kind: AuthServer
+  metadata:
+    name: authserver-1
+    labels:
+      name: authserver-1
+    annotations:
+      sso.apps.tanzu.vmware.com/allow-client-namespaces: "{{ session_namespace }}"
+      sso.apps.tanzu.vmware.com/allow-unsafe-issuer-uri: ""
+      sso.apps.tanzu.vmware.com/allow-unsafe-identity-provider: ""
+  spec:
+    replicas: 1
+    tls:
+      deactivated: true
+    identityProviders:
+      - name: "internal"
+        internalUnsafe:
+          users:
+            - username: "developer"
+              password: "123456"
+              email: "developer@example.com"
+              emailVerified: true
+              roles:
+                - "user"
+    tokenSignature:
+      signAndVerifyKeyRef:
+        name: "authserver-signing-key"
+  ---
+  apiVersion: secretgen.k14s.io/v1alpha1
+  kind: RSAKey
+  metadata:
+    name: authserver-signing-key
+  spec:
+    secretTemplate:
+      type: Opaque
+      stringData:
+        key.pem: \$(privateKey)
+        pub.pem: \$(publicKey)
+  EOF
+clear: true
+```
+
+The `metadata.labels` uniquely identify the AuthServer. They are used as selectors by `ClientRegistration`s, to declare from which authorization server a specific client obtains tokens.
+
+The `sso.apps.tanzu.vmware.com/allow-client-namespaces` annotation restricts the namespaces in which you can create ClientRegistrations targeting this authorization server
+
+The `tokenSignature` references a private RSA key used to sign ID Tokens, using JSON Web Signatures, and clients use the public key to verify the provenance and integrity of the ID tokens. 
+
+```terminal:execute
+command: |
+  cat <<EOF | kubectl apply -f -
+  apiVersion: sso.apps.tanzu.vmware.com/v1alpha1
+  kind: ClientRegistration
+  metadata:
+    name: client-registration
+  spec:
+    authServerSelector:
+      matchLabels:
+        name: authserver-1
+    redirectURIs:
+    -  https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/frontend/index.html"
+    clientAuthenticationMethod: none
+    authorizationGrantTypes:
+      - "client_credentials"
+      - "authorization_code"
+      - "refresh_token"
+    scopes:
+    - name: openid
+    - name: offline_access
+    - name: email
+    - name: profile
+    - name: roles
+  EOF
+clear: true
+```
+With the `authServerSelector`, a `ClientRegistration` must uniquely identify an AuthServer. 
+The Redirect URLs defined in `redirectURIs` are a critical part of the OAuth flow. They define where the authorization server will redirect the user after successfully authorizing an application.
+
+For this workshop, the redirect URL is targeting a **single-page app acting as an OAuth client** (which is already deployed for you).
+After the single-page app has obtained an access token, it will send it in the HTTP Authorization header 
+of the requests to our services (known as resource servers in OAuth), which can then verify it to determine whether to process the request, find the associated user account, etc.
+
+Public clients like a single-page or mobile app don't require credentials to obtain tokens and instead rely on the Proof Key for Code Exchange (PKCE) Authorization Code flow extension, which is the reason why `clientAuthenticationMethod` is set to `none`.
+
+After applying our ClientRegistration to the cluster, **AppSSO will create a secret containing the credentials that client applications will use**, named after the client registration.
+
+ ```editor:insert-lines-before-line
+file: ~/product-service/pom.xml
+line: 33
+text: |2
+  		<dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+      </dependency>
+```
+
+ ```editor:insert-lines-before-line
+file: ~/product-service/pom.xml
+line: 14
+text: |2
+              .requestMatchers("/api/**").authenticated()
+```
+
+ ```editor:insert-lines-before-line
+file: ~/product-service/pom.xml
+line: 17
+text: |2
+              .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
+```
+
+```editor:insert-value-into-yaml
+file: ~/product-service/src/main/resources/application.yaml
+path: spring
+value:
+  security.oauth2.resourceserver.jwt.jwk-set-uri: ${spring.security.oauth2.client.provider.appsso.issuer-uri}/oauth2/jwks
+```
+
+By configuring a service binding in the Workload, we don't have to care about additional configuration.
+```editor:insert-value-into-yaml
+file: ~/product-service/config/workload.yaml
+path: spec.serviceClaims
+value:
+  - name: auth-client
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      name: auth-client
+```   
+
+
+**TODO Add frontend**
+Now it's finally time to see whether everything works as expected with the **username: `developer`**, and the **password: `123456`** as defined in the `AuthServer`.
+```dashboard:open-url
+url: https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/frontend/
+```
 
 ![Updated architecture with Authorization Server](../images/microservice-architecture-auth.png)
 
