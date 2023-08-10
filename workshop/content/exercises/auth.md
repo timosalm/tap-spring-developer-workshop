@@ -122,7 +122,7 @@ text: |2
 file: ~/product-service/src/main/java/com/example/productservice/WebSecurityConfiguration.java
 line: 17
 text: |2
-            .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
+          .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
 ```
 ```editor:insert-lines-before-line
 file: ~/product-service/src/main/java/com/example/productservice/WebSecurityConfiguration.java
@@ -143,16 +143,16 @@ value:
 As this configuration is not available for our tests, we have to mock it so that they will not fail.
 ```editor:insert-lines-before-line
 file: ~/product-service/src/test/java/com/example/productservice/ApplicationTests.java
-line: 10
+line: 8
 text: |2
+
     @MockBean
     private JwtDecoder jwtDecoder;
 ```
 ```editor:insert-lines-before-line
 file: ~/product-service/src/test/java/com/example/productservice/ApplicationTests.java
-line: 7
+line: 5
 text: |2
-
   import org.springframework.boot.test.mock.mockito.MockBean;
   import org.springframework.security.oauth2.jwt.JwtDecoder;
 ```
@@ -172,7 +172,7 @@ value:
 Let's commit the updated source code and apply the Workload.
 ```terminal:execute
 command: |
-  cd product-service && git add . && git commit -m "Add external configuration support" && git push
+  cd product-service && git add . && git commit -m "Add OAuth support" && git push
   cd ..
 clear: true
 ```
@@ -181,6 +181,7 @@ command: tanzu apps workload apply -f product-service/config/workload.yaml -y
 clear: true
 ```
 **TODO: Create script**
+
 To do the same with the order service, just execute the following script.
 ```terminal:execute
 command: ./samples/add-oauth-to-order-service.sh
@@ -189,7 +190,7 @@ clear: true
 
 We also have to add a route for the frontend to the API gateway, which in this case also sets the required information for the OAuth flow
 ```editor:insert-value-into-yaml
-file: ~/product-service/config/workload.yaml
+file: ~/config/gateway/gateway-route-config.yaml
 path: spec.routes
 value:
   - uri: http://frontend.{{ session_namespace }}
