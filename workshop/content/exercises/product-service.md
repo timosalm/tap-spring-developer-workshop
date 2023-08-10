@@ -236,14 +236,14 @@ clear: true
 ```
 TAP will deploy the application using the source from our local file system. 
 
-We can use `watch` in the terminal to see the steps TAP will take (which you will learn about in subsiquent sections of this workshop) to deploy our application.
+We can use `watch` in the terminal to see once our app is deployed by watching `kubectl get service.serving.knative.dev product-service`.
 
 ```terminal:execute
 session: 2
 command: |
   watch -n 1 kubectl get service.serving.knative.dev product-service
 ```
-The deployment has finished once there is a service listed under the Knative Services section with a URL.
+The deployment has finished once the the KNative service is marked `Ready`.
 
 ![](../images/product-service-ready.png)
 
