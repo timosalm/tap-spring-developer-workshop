@@ -241,11 +241,11 @@ We can use `watch` in the terminal to see the steps TAP will take (which you wil
 ```terminal:execute
 session: 2
 command: |
-  watch -n 1 tanzu apps workloads get product-service
+  watch -n 1 kubectl get service.serving.knative.dev product-service
 ```
 The deployment has finished once there is a service listed under the Knative Services section with a URL.
 
-![](../images/pipeline-terminal.png)
+![](../images/product-service-ready.png)
 
 We can now test our endpoint to see if it works.  Stop the `watch` command and execute the following `curl` request.
 
