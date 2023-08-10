@@ -12,4 +12,6 @@ modules:
     - exercises/more-factors
     - exercises/graalvm
     - exercises/beyond-12-factors
+    - exercises/api-first
+    - exercises/auth
     - workshop-summary

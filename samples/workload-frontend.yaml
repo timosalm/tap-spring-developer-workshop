@@ -11,10 +11,10 @@ metadata:
 spec:
   source:
     git:
-      url: https://github.com/tsalm-pivotal/spring-cloud-demo-tap.git
+      url: https://github.com/tap-spring-developer-workshop.git
       ref:
         branch: main
-    subPath: frontend
+    subPath: setup/frontend
   build:
     env:
     - name: BP_NODE_RUN_SCRIPTS
@@ -25,3 +25,9 @@ spec:
       value: dist/frontend
     - name: BP_WEB_SERVER_ENABLE_PUSH_STATE
       value: "true"
+  serviceClaims:
+  - name: auth-client
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      name: auth-client

@@ -28,6 +28,12 @@ modules:
         exit_sign: Three More Factors
     exercises/beyond-12-factors:
         name: Beyond the Twelve-Factor App
+        exit_sign: API first
+    exercises/api-first:
+        name: "Factor: API first"
+        exit_sign: Auth
+    exercises/auth:
+        name: "Factor: Authentication and Authorization"
         exit_sign: Summary
     workshop-summary:
         name: Workshop Summary
