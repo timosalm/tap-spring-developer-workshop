@@ -10,7 +10,9 @@ management:
   endpoint.restart.enabled: true
   endpoints.web.exposure.include: "*"
   zipkin.tracing.endpoint:
-
+server:
+  error:
+    include-message: always
 order:
   exchange-name: order-delivered-exchange
   shipping-exchange-name: order-shipping-exchange
