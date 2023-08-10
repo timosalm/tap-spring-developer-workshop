@@ -118,13 +118,13 @@ line: 14
 text: |2
               .requestMatchers("/api/**").authenticated()
 ```
- ```editor:insert-lines-before-line
+```editor:insert-lines-before-line
 file: ~/product-service/src/main/java/com/example/productservice/WebSecurityConfiguration.java
 line: 17
 text: |2
-              .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
+            .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
 ```
- ```editor:insert-lines-before-line
+```editor:insert-lines-before-line
 file: ~/product-service/src/main/java/com/example/productservice/WebSecurityConfiguration.java
 line: 7
 text: |2
