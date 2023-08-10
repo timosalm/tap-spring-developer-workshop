@@ -243,12 +243,15 @@ Let's see how we can make our application even more **resilient to backing servi
 
 ##### Circuit Breaker
 
-In distributed systems like microservices, requests might time out or fail completely.
-If for example a request to the product service to fetch the product list fails, with a so-called Circuit Breaker, we are able to define a fallback that will be called for all further calls to the product service until a variable amount of time, to allow the product service to recover and prevent a network or service failure from cascading to other services.
+When we have several distributed apps with logs of dependencies on each other there are bound to be issues.  Sometimes these issues are out of our control.  For example if the cloud provider we are running our apps on has a network outage, there is nothing we can really do about that.  To better insulate ourselves from failures that are bound to happen in distributed apps we can use a circuit breaker.  
 
-[Spring Cloud Circuit Breaker](https://spring.io/projects/spring-cloud-circuitbreaker) supports the two open-source options Resilience4J, and Spring Retry. We'll now integrate Resilience4J in the order service.
+To make this more concrete take for example our order service's request to the product service.  We can wrap that request in a circuit breaker and if for whatever reason the request fails past a certain threshold, the circuit breaker will "trip" and the request will no longer be made for a defined period of time.  
 
-First, we have to add the required library to our `pom.xml`.
+This gives the product service (or the underlying infrastructure) some time to recover while at the same time preventing a cascade of failures up the dependency chain of apps that could bring our entire system to a hault.
+
+[Spring Cloud Circuit Breaker](https://spring.io/projects/spring-cloud-circuitbreaker) provides an abstraction over different circuit breaker implementations.  For this workshop we will use the [Resilience4J](https://resilience4j.readme.io/) implementation.
+
+First, we have to add the required dependency to our `pom.xml`.
 ```editor:insert-lines-before-line
 file: ~/order-service/pom.xml
 line: 47
@@ -259,7 +262,13 @@ text: |2
           </dependency>
 ```
 
-To create a circuit breaker in your code, you can use the CircuitBreakerFactory.
+To create a circuit breaker in your code, you can use a CircuitBreakerFactory.
+
+The `ProductService` class within the order service is where we use `RestTemplate` to make a request to the product service.
+We can wrap the request in a circuit breaker to provide some fault tolerance in our application.
+
+To do this using Spring Cloud CircuitBreaker we can use a `CircuiBreakerFactor`.  An instance of `CircuitBreakerFactory` is configured for use via auto-configuration by placing the starter on our classpath so all we need to do is use it in our `ProductService`.
+
 ```editor:select-matching-text
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
 text: "ProductService(RestTemplate restTemplate) {"
@@ -272,7 +281,19 @@ text: |2
           this.circuitBreakerFactory = circuitBreakerFactory;
 ```
 
-`CircuitBreakerFactory.create` will create a `CircuitBreaker` instance that provides a run method that accepts a `Supplier` and a `Function` as an argument. 
+The `CircuitBreakerFactory.create` will create a `CircuitBreaker` instance that provides a run method that accepts a `Supplier` and a `Function` as an argument. 
+
+THe following commands will wrap our request in a circuit breaker and also provide whats known as a fallback so in the case the circuit breaker is tripped we still
+actually provide a response.
+
+```editor:insert-lines-before-line
+file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
+line: 13
+text: |
+    import java.util.Collections;
+    import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
+```
+
 ```editor:select-matching-text
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
 text: "return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(productsApiUrl, Product[].class)));"
@@ -287,13 +308,7 @@ text: |2
               return Collections.emptyList();
           });
 ```
-```editor:insert-lines-before-line
-file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
-line: 13
-text: |
-    import java.util.Collections;
-    import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
-```
+
 The `Supplier` is the code that you are going to wrap in a circuit breaker. The `Function` is the fallback that will be executed if the circuit breaker is tripped. In our case, the fallback just returns an empty product list. The function will be passed the Throwable that caused the fallback to be triggered. You can optionally exclude the fallback if you do not want to provide one.
 
 After pushing our changes to Git, the updated source code will be automatically deployed to production. 
