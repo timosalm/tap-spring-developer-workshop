@@ -27,5 +27,5 @@ sed -i 's~NAMESPACE~'"$SESSION_NAMESPACE"'~g' order-service.yaml
 git init -b $SESSION_NAMESPACE && git remote add origin $GITEA_BASE_URL/externalized-configuration.git && git add . && git commit -m "Initial implementation" && git push -u origin $SESSION_NAMESPACE -f
 cd ~
 
-kubectl apply -f samples/workload-frontend.yaml
-kubectl apply -f samples/workload-payment-service-native.yaml
+kubectl apply -f samples/workload-frontend-image.yaml
+kubectl apply -f samples/workload-payment-service-native-image.yaml

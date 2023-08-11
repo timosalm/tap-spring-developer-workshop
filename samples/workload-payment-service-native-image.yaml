@@ -21,3 +21,9 @@ spec:
       value: "true"
     - name: SERVER_PORT
       value: "8080"
+  serviceClaims:
+  - name: config-server
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      name: product-config-server-claim
