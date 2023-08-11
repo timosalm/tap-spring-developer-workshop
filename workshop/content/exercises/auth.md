@@ -189,7 +189,6 @@ clear: true
 ```
 
 We also have to add a route for the frontend to the API gateway, which in this case also sets the required information for the OAuth flow
-{% raw %}
 ```editor:insert-value-into-yaml
 file: ~/config/gateway/gateway-route-config.yaml
 path: spec.routes
@@ -201,7 +200,6 @@ value:
     - StripPrefix=1
     - RewriteResponseBody=ISSUER_VALUE:http://authserver-1-{{ session_namespace }}.{{ ENV_TAP_INGRESS }},CLIENT_ID_VALUE:{{ session_namespace }}_client-registration
 ``` 
-{% endraw %}
 ```terminal:execute
 command: kubectl apply -f config/gateway/
 clear: true
