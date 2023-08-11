@@ -549,7 +549,7 @@ order-service-00006-deployment-5fb6d6d645-jfwkv[workload] 2023-08-11T15:02:38.85
 Lets interrupt our terminals before moving on.
 
 ```terminal:interrupt
-session: 2
+session: 1
 ```
 Our updated architecture diagram is below.
 ![Updated architecture with Circuit Breaker and Caching](../images/microservice-architecture-cb.png)
