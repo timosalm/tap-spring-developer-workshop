@@ -364,19 +364,20 @@ Next we will move on to adding some caching to our application.
 
 ##### Caching
 
-Traditional databases, for example, are often too brittle or unreliable for use with microservices. That's why every modern distributed architecture needs a cache!
-The [Spring Framework provides support for transparently adding caching](https://docs.spring.io/spring-framework/reference/integration/cache.html#page-title) to an application. 
-The cache abstraction **does not provide an actual store**. Examples of Cache providers that are supported out of the box are **EhCache, Hazelcast, Couchbase, Redis and Caffeine**. Part of the VMware Tanzu portfolio is also an in-memory data grid called **VMware Tanzu Gemfire** that is powered by Apache Geode and can be used with minimal configuration.
+As we talked about in the previous section on circuit breakers failures are part of building distributed systems, this includes failures at the data layer of our application as well.  If the PostreSQL database the order service is unreachable what are we to do?  One thing we can do to mitigate a failure at the data layer is to use a cache. 
+[Spring Framework provides support for transparently adding caching](https://docs.spring.io/spring-framework/reference/integration/cache.html#page-title) to an application. 
 
-To **improve the reliability and performance of our calls from the order service to its relational database via JDBC and the product service via REST**, let's add a distributed caching solution, in this case, **Redis**.
-With Spring Boot's autoconfiguration, Caching abstraction, and in this case Spring Data Redis, it's very easy to add Caching to the **order-service**.
+The caching layer provided by the Spring Framework is just an abstraction allowing you as the developer to pick the caching implementation you would like to use. Examples of cache providers that are supported out of the box are **EhCache, Hazelcast, Couchbase, Redis and Caffeine**.
 
-Let's first claim the pre-installed Bitnami Redis service to obtain an instance for the service ...
+To make the order service more resilient to failures at the data layer lets take advantage of Spring Frameworks caching abstraction and add caching to our application.
+In this example we will use **Redis** as our caching implementation.
+
+Let's first claim the pre-installed Bitnami Redis service to obtain an instance for the service.
 ```terminal:execute
 command: tanzu service class-claim create redis-1 --class redis-unmanaged --parameter storageGB=0.5
 clear: true
 ```
-... and add a service binding to our Workload.
+Now we can add a service binding to our Workload to bind the order service to the Redis instance.
 ```editor:insert-value-into-yaml
 file: ~/order-service/config/workload.yaml
 path: spec.serviceClaims
@@ -403,7 +404,8 @@ text: |2
           </dependency>
 ```
 
-After adding required libraries to our `pom.xml`, caching, and related annotations have to be declaratively enabled via the `@EnableCaching` annotation on a @Configuration class or alternatively via XML configuration.
+We need to enable Spring Framework's caching abstraction by adding the `@EnableCaching` annotation on a @Configuration class.  Lets add this annotation to `OrderServiceApplication`.
+
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
 line: 10
@@ -417,7 +419,8 @@ text: |
     @EnableCaching
 ```
 
-For the REST call to the product service, caching can be added to the related method with the `@Cacheable` annotation and a name for the associated cache.
+First lets add a cache for the HTTP request to the product service. We can do this by adding `@Cacheable` to the `fetchProducts` method.  Within the `@Cachable` annotation we specify a name for the cache, in this case `Products`.
+
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
 line: 13
@@ -434,7 +437,7 @@ text: |2
       @Cacheable("Products")
 ```
 
-For caching of the calls to its relational database, we first have to override all the used methods of the JpaRepository to be able to add related annotations. 
+We can also add a cache for the data from the PostreSQL database the order service uses.  To do this we first have to override all the used methods of the `JpaRepository` to be able to add related annotations. 
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
 line: 8
@@ -457,7 +460,7 @@ text: |
      import org.springframework.cache.annotation.Cacheable;
 ```
 
-The cache abstraction not only allows populating caches but also allows removing the cached data with the `@CacheEvict`, which makes for example sense for the save method, that adds a new order to the database.
+The cache abstraction not only allows populating caches but also allows removing the cached data with the `@CacheEvict` annotation.  When we save a new order it makes sense to evict the orders and order caches as they are now invalid.
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
 line: 6
@@ -471,7 +474,7 @@ text: |2
       @CacheEvict(cacheNames = {"Order", "Orders"}, allEntries = true)
 ```
 
-To apply the changes, we have to update the Workload in the environment and commit the updated source code.
+Lets deploy a new version of the order service which now has support for caching.  To do this lets commit the code to our Git repo. In addition we need to update the order service's workload because we added a new service binding.
 ```terminal:execute
 command: |
   cd order-service && git add . && git commit -m "Add caching" && git push
@@ -482,8 +485,14 @@ clear: true
 command: tanzu apps workload apply -f order-service/config/workload.yaml -y
 clear: true
 ```
+Just as before we can tail the logs of the order service to monitor the deployment of our new order service.
 
-As soon as our outdated application and service binding is applied ...
+```terminal:execute
+command: tanzu apps workload tail order-service --since 1h
+clear: true
+```
+
+Alternatively you can also watch the rollout in the supply chain UI.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/order-service
 ```
