@@ -193,7 +193,7 @@ clear: true
 We also have to add a route for the frontend to the API gateway, which in this case also sets the required information for the OAuth flow
 ```editor:append-lines-to-file
 file: ~/config/gateway/gateway-route-config.yaml
-text: |
+text: |2
       - uri: http://frontend.{{ session_namespace }}
         predicates:
         - Path=/frontend/**
