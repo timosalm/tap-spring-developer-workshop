@@ -21,6 +21,7 @@ text: |
     annotations:
       sso.apps.tanzu.vmware.com/allow-client-namespaces: "{{ session_namespace }}"
       sso.apps.tanzu.vmware.com/allow-unsafe-identity-provider: ""
+      sso.apps.tanzu.vmware.com/allow-unsafe-cors: ""
   spec:
     replicas: 1
     tls:
@@ -40,6 +41,8 @@ text: |
     tokenSignature:
       signAndVerifyKeyRef:
         name: "authserver-signing-key"
+    cors:
+      allowAllOrigins: true
   ---
   apiVersion: secretgen.k14s.io/v1alpha1
   kind: RSAKey
