@@ -2,7 +2,7 @@ export const environment = {
   production: true,
   baseHref: '/frontend/',
   authConfig: {
-    issuer: 'ISSUER_VALUE',
+    issuer: 'ISSUER_SCHEME://ISSUER_HOST',
     clientId: 'CLIENT_ID_VALUE'
   },
   endpoints: {

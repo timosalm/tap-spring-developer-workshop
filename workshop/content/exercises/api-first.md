@@ -70,6 +70,7 @@ text: |
         zipkin:
           enabled: true
           url: http://zipkin:9411/api/v2/spans
+    java-opts: "-Dspring.codec.max-in-memory-size=-1" # Required for a later applied response body filter
 ```
 
 Now it's time to define our route configuration with a `SpringCloudGatewayRouteConfig` custom resource.
