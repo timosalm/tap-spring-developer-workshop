@@ -374,9 +374,16 @@ In this example we will use **Redis** as our caching implementation.
 
 Let's first claim the pre-installed Bitnami Redis service to obtain an instance for the service.
 ```terminal:execute
-command: tanzu service class-claim create redis-1 --class redis-unmanaged --parameter storageGB=0.5
+command: tanzu service class-claim create redis-1 --class redis-unmanaged --parameter storageGB=1
 clear: true
 ```
+As with the other service claims we want to make sure the Redis service is maked as Ready before moving on.  Execute the following command to check the Ready status.  If it is `False` wait a moment and check again.
+```terminal:execute
+command: tanzu services class-claims get redis-1
+clear: true
+```
+
+
 Now we can add a service binding to our Workload to bind the order service to the Redis instance.
 ```editor:insert-value-into-yaml
 file: ~/order-service/config/workload.yaml
@@ -497,21 +504,52 @@ Alternatively you can also watch the rollout in the supply chain UI.
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/order-service
 ```
 
-... let's check whether the caching works via the application logs and sending two requests to the API.
+The order service has `TRACE` level logging enabled for Spring Frameworks caching abstraction in it's `application.yaml`.
+{% raw %}
+```
+logging.level.org.springframework.cache: TRACE
+```
+{% endraw %}
+
+We can use this `TRACE` logging to see the caching in action in the order service.
+If we make a request to `/api/v1/orders` the first time after the aplication has been deployed we should see that there is no cache present for `Orders`.
+
 ```terminal:execute
-command: curl https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
+session: 2
+command: curl -s https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders | jq .
 clear: true
 ```
-```execute-2
-kubectl logs -l serving.knative.dev/service=order-service -f
+In the logs generated from the above request you will see `No cache entry for key 'SimpleKey []' in cache(s) [Orders]`.
+
+{% raw %}
 ```
+order-service-00006-deployment-5fb6d6d645-jfwkv[workload] 2023-08-11T15:00:19.975Z TRACE 1 --- [nio-8080-exec-7] o.s.c.a.AnnotationCacheOperationSource   : Adding cacheable method 'findAll' with attribute: [Builder[public final java.util.List jdk.proxy2.$Proxy146.findAll()] caches=[Orders] | key='' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false']
+order-service-00006-deployment-5fb6d6d645-jfwkv[workload] 2023-08-11T15:00:19.982Z TRACE 1 --- [nio-8080-exec-7] o.s.c.a.AnnotationCacheOperationSource   : Adding cacheable method 'findAll' with attribute: [Builder[public abstract java.util.List com.example.orderservice.order.OrderRepository.findAll()] caches=[Orders] | key='' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false']
+order-service-00006-deployment-5fb6d6d645-jfwkv[workload] 2023-08-11T15:00:19.991Z TRACE 1 --- [nio-8080-exec-7] o.s.cache.interceptor.CacheInterceptor   : Computed cache key 'SimpleKey []' for operation Builder[public abstract java.util.List com.example.orderservice.order.OrderRepository.findAll()] caches=[Orders] | key='' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false'
+order-service-00006-deployment-5fb6d6d645-jfwkv[workload] 2023-08-11T15:00:20.038Z TRACE 1 --- [nio-8080-exec-7] o.s.cache.interceptor.CacheInterceptor   : No cache entry for key 'SimpleKey []' in cache(s) [Orders]
+order-service-00006-deployment-5fb6d6d645-jfwkv[workload] 2023-08-11T15:00:20.038Z TRACE 1 --- [nio-8080-exec-7] o.s.cache.interceptor.CacheInterceptor   : Computed cache key 'SimpleKey []' for operation Builder[public abstract java.util.List com.example.orderservice.order.OrderRepository.findAll()] caches=[Orders] | key='' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false'
+```
+{% endraw %}
+
+Now if we make the same request again we should see that there was a cache hit (`Cache entry for key 'SimpleKey []' found in cache 'Orders'`), and the cached orders are returned.
+
 ```terminal:execute
-command: curl https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
+session: 2
+command: curl -s https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders | jq .
 clear: true
 ```
+
+{% raw %}
+```
+order-service-00006-deployment-5fb6d6d645-jfwkv[workload] 2023-08-11T15:02:38.850Z TRACE 1 --- [nio-8080-exec-1] o.s.cache.interceptor.CacheInterceptor   : Computed cache key 'SimpleKey []' for operation Builder[public abstract java.util.List com.example.orderservice.order.OrderRepository.findAll()] caches=[Orders] | key='' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false'
+order-service-00006-deployment-5fb6d6d645-jfwkv[workload] 2023-08-11T15:02:38.854Z TRACE 1 --- [nio-8080-exec-1] o.s.cache.interceptor.CacheInterceptor   : Cache entry for key 'SimpleKey []' found in cache 'Orders'
+```
+{% endraw %}
+
+Lets interrupt our terminals before moving on.
 
 ```terminal:interrupt
 session: 2
 ```
-
+Our updated architecture diagram is below.
 ![Updated architecture with Circuit Breaker and Caching](../images/microservice-architecture-cb.png)
