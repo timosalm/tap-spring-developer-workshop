@@ -456,8 +456,8 @@ line: 5
 text: |
      import org.springframework.cache.annotation.Cacheable;
 
-    import java.util.List;
-    import java.util.Optional;
+     import java.util.List;
+     import java.util.Optional;
 ```
 
 The cache abstraction not only allows populating caches but also allows removing the cached data with the `@CacheEvict` annotation.  When we save a new order it makes sense to evict the orders and order caches as they are now invalid.
