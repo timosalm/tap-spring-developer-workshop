@@ -20,12 +20,13 @@ text: |
       namespace: {{ session_namespace }}
     annotations:
       sso.apps.tanzu.vmware.com/allow-client-namespaces: "{{ session_namespace }}"
-      sso.apps.tanzu.vmware.com/allow-unsafe-issuer-uri: ""
       sso.apps.tanzu.vmware.com/allow-unsafe-identity-provider: ""
   spec:
     replicas: 1
     tls:
-      deactivated: true
+      issuerRef:
+        name: tap-ingress-selfsigned
+        kind: ClusterIssuer  
     identityProviders:
       - name: "internal"
         internalUnsafe:
@@ -71,6 +72,7 @@ text: |
     authServerSelector:
       matchLabels:
         name: authserver-1
+        namespace: {{ session_namespace }}
     redirectURIs:
     -  https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/frontend/index.html"
     clientAuthenticationMethod: none
@@ -197,13 +199,13 @@ text: |
         - Path=/frontend/**
         filters: 
         - 'StripPrefix=1'
-        - RewriteResponseBody=ISSUER_SCHEME:http,ISSUER_HOST:authserver-1-{{ session_namespace }}.{{ ENV_TAP_INGRESS }},CLIENT_ID_VALUE:{{ session_namespace }}_client-registration
+        - RewriteResponseBody=ISSUER_SCHEME:https,ISSUER_HOST:authserver-1-{{ session_namespace }}.{{ ENV_TAP_INGRESS }},CLIENT_ID_VALUE:{{ session_namespace }}_client-registration
 ``` 
 ```terminal:execute
 command: kubectl apply -f config/gateway/
 clear: true
 ```
-
+ 
 Now it's finally time to see whether everything works as expected with the **username: `developer`**, and the **password: `123456`** as defined in the `AuthServer`.
 ```dashboard:open-url
 url: https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/frontend/

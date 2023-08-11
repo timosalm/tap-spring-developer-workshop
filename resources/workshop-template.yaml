@@ -359,3 +359,21 @@ spec:
           apiVersion: sso.apps.tanzu.vmware.com/v1alpha1
           kind: ClientRegistration
           name: client-registration
+    - apiVersion: projectcontour.io/v1
+      kind: HTTPProxy
+      metadata:
+        name: authserver-1
+      spec:
+        routes:
+        - services:
+          - name: authserver-1-auth-server
+            port: 80
+        virtualhost:
+          corsPolicy:
+            allowMethods:
+            - '*'
+            allowOrigin:
+            - '*'
+          fqdn: #@ "authserver-1-$(session_namespace).{}".format(data.values.tap.ingress_domain)
+          tls:
+            secretName: #@ data.values.tap.ingress_wildcard_cert
