@@ -196,9 +196,7 @@ value:
   - uri: http://frontend.{{ session_namespace }}
     predicates:
     - Path=/frontend/**
-    filters:
-    - StripPrefix=1
-    - RewriteResponseBody=ISSUER_VALUE:http://authserver-1-{{ session_namespace }}.{{ ENV_TAP_INGRESS }},CLIENT_ID_VALUE:{{ session_namespace }}_client-registration
+    filters: [StripPrefix=1, RewriteResponseBody=ISSUER_VALUE:http://authserver-1-{{ session_namespace }}.{{ ENV_TAP_INGRESS }},CLIENT_ID_VALUE:{{ session_namespace }}_client-registration]
 ``` 
 ```terminal:execute
 command: kubectl apply -f config/gateway/
