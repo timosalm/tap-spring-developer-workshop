@@ -7,10 +7,9 @@ name: The Twelve Factors
 ####  Factor 8: Concurrency
 **Factor eight**, concurrency, advises us that **cloud-native applications should scale out using the process model**. There was a time when, if an application reached the limit of its capacity, the solution was adding CPUs, RAM, and other resources (virtual or physical), which is called **vertical scaling**.
 
-A much more **modern approach**, one ideal for the kind of elastic scalability that the cloud supports, is to **scale out, or horizontally** where you create multiple instances of your application and then distribute the load among those.
-TAP includes a serverless application runtime for Kubernetes, which provides **configurable horizontal auto-scaling** and **scale to zero** called **Knative**.
+A much more **modern approach**, one ideal for the kind of elastic scalability that the cloud supports, is to **scale horizontally** where you create multiple instances of your application and then distribute the load among those instances.
+TAP includes a serverless application runtime for Kubernetes, which provides **configurable horizontal auto-scaling** and **scale to zero** functionality called **Knative**.
 
-Knative is an open-source community project that provides a simple, consistent layer over Kubernetes that solves common problems of deploying software, connecting disparate systems together, upgrading software, observing software, routing traffic, and scaling automatically.
 ```dashboard:open-url
 url: https://knative.dev/docs/
 ```
@@ -20,8 +19,9 @@ The major **subprojects of Knative** are Serving and Eventing.
 - **Eventing** enables developers to use an event-driven architecture with serverless applications and is **out of the scope of this workshop**
 - **Functions**: Enables developers to easily create, build, and deploy stateless, event-driven functions
 
-**Knative Serving abstracts away a lot of those resources** we usually have to configure to get an application running, like a deployment, service, ingress etc.
+Knative Serving abstracts away a lot of the Kubernetes resources, like a deployment, service, ingress, etc., we usually have to configure to get an application running on Kubernetes.
 In addition to auto-scaling, it offers features like rollbacks, canary and blue-green deployment via revisions, and traffic splitting.
+For this workshop though we will just focus on the scaling feature Knative provides.
 
 By executing the following two commands. You should be able to see how the number of pods will be scaled up based on the generated traffic with the `hey` tool.
 ```execute-2
@@ -39,15 +39,17 @@ clear: true
 ```
 
 ####  Factor 9: Disposability
-A cloud-native **application's processes** are disposable, which means they **can be started or stopped rapidly**. An application cannot scale, deploy, release, or recover rapidly if it cannot start rapidly and shut down gracefully. 
+A cloud-native applications are disposable, which means they **can be started or stopped rapidly**. An application cannot scale, deploy, release, or recover rapidly if it cannot start rapidly and shut down gracefully. 
 
-If we have a look at the application's logs, we can see how long it took until the application was started. Remember this number as a reference for later.
+If we have a look at the application's logs, we can see how long it took our application to start. Remember this number as a reference for later.
 ```terminal:execute
 command: kubectl logs -l serving.knative.dev/service=product-service -c workload | grep "Started"
 clear: true
 ```
-
-Let's find out how you can **improve both the startup time and resource consumption to reduce costs and maximize the robustness of our application!**
+In the case where you may be scaling rapidly and may be running hundres of applications startup time and compute resources become a concern.  If an application start slowly it might mean your app cannot scale fast enough to handle a sudden increase in demand.
+If an application consumes a lot of resources (memory, CPU, etc) and it scales to a large degress that can mean an increase cost.
+Making sure we can optomize both performance (start time) and resource consumption can be a game changer in the cloud.
+Next lets look how Spring lets you do just that!
 
 ##### Just-in-Time vs Ahead-of-Time compilation
 In **traditional** Java applications, **Java code is compiled into Java ‘bytecode’** and packaged into a JAR archive. The Java Virtual Machine **(JVM) then executes the Java program** contained in the Java Archive on the host platform **with a bytecode interpreter**. 
