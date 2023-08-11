@@ -194,12 +194,12 @@ We also have to add a route for the frontend to the API gateway, which in this c
 ```editor:append-lines-to-file
 file: ~/config/gateway/gateway-route-config.yaml
 text: |2
-      - uri: http://frontend.{{ session_namespace }}
-        predicates:
-        - Path=/frontend/**
-        filters: 
-        - 'StripPrefix=1'
-        - RewriteResponseBody=ISSUER_SCHEME:https,ISSUER_HOST:authserver-1-{{ session_namespace }}.{{ ENV_TAP_INGRESS }},CLIENT_ID_VALUE:{{ session_namespace }}_client-registration
+    - uri: http://frontend.{{ session_namespace }}
+      predicates:
+      - Path=/frontend/**
+      filters: 
+      - 'StripPrefix=1'
+      - RewriteResponseBody=ISSUER_SCHEME:https,ISSUER_HOST:authserver-1-{{ session_namespace }}.{{ ENV_TAP_INGRESS }},CLIENT_ID_VALUE:{{ session_namespace }}_client-registration
 ``` 
 ```terminal:execute
 command: kubectl apply -f config/gateway/
