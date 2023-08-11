@@ -74,7 +74,7 @@ text: |
         name: authserver-1
         namespace: {{ session_namespace }}
     redirectURIs:
-    -  https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/frontend/index.html"
+    -  https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/frontend/index.html
     clientAuthenticationMethod: none
     authorizationGrantTypes:
       - "client_credentials"
