@@ -42,12 +42,12 @@ session: 1
 command: |
   tanzu apps workload tail product-service --since 1h
 ```
-We can also monitor the supply chain with the `watch` command we used in the previous lesson.
+Just like in the previous section we can monitor the status of the Knative service for the product service.  Once it is marked as `Ready` we know the application has finished being deployed.
 
 ```terminal:execute
 session: 2
 command: |
-  watch -n 1 tanzu apps workload get product-service
+  watch -n 1 kubectl get service.serving.knative.dev product-service
 ```
 
 In addiiton to monitoring the supply chain in the terminal we can also monitor in the Tanzu Developer Portal.
