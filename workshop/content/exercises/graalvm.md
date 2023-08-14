@@ -160,6 +160,23 @@ command: kubectl top pods -l serving.knative.dev/service=product-service-native 
 clear: true
 ```
 
+You will see something similar to this.
+
+{% raw %}
+```
+$ kubectl logs -l serving.knative.dev/service=product-service-native -c workload | grep "Started"
+2023-08-14T16:04:44.452Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.276 seconds (process running for 0.281)
+2023-08-14T16:04:42.362Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.339 seconds (process running for 0.343)
+2023-08-14T16:04:44.342Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.259 seconds (process running for 0.264)
+2023-08-14T16:04:44.239Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.274 seconds (process running for 0.278)
+2023-08-14T16:04:44.188Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.254 seconds (process running for 0.261)
+2023-08-14T16:04:44.205Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.239 seconds (process running for 0.244)
+2023-08-14T16:04:44.507Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.227 seconds (process running for 0.231)
+```
+{% endraw %}
+
+Notice the drastic reduction in start time compared to the non-native product service.
+
 To provide the configuration to the native-image tool that is needed for the undetected usages of dynamic language features with Spring Boot, there is a `RuntimeHints API`.
 It collects the need for reflection, resource loading, serialization, and JDK proxies at runtime. 
 Several contracts are handled automatically during AOT processing. For cases that the **core container cannot infer**, you can **register such hints programmatically** by implementing the `RuntimeHintsRegistrar` interface. Implementations of this interface can be registered using `@ImportRuntimeHints` on any Spring bean or @Bean factory method.
