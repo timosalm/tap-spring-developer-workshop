@@ -35,6 +35,15 @@ Have a closer look at the CPU and memory consumption of the **`workload` contain
 command: kubectl top pods -l serving.knative.dev/service=product-service --containers
 clear: true
 ```
+You will see something similar to these results.
+{% raw %}
+```
+$ kubectl top pods -l serving.knative.dev/service=product-service --containers
+POD                                                NAME          CPU(cores)   MEMORY(bytes)   
+product-service-00001-deployment-f686bb89f-fc54w   queue-proxy   37m          41Mi            
+product-service-00001-deployment-f686bb89f-fc54w   workload      2m           263Mi
+```
+{% endraw %}
 
 ####  Factor 9: Disposability
 A cloud-native applications are disposable, which means they **can be started or stopped rapidly**. An application cannot scale, deploy, release, or recover rapidly if it cannot start rapidly and shut down gracefully. 
