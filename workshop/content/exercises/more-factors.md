@@ -4,13 +4,13 @@ name: The Twelve Factors
 
 #### Factor 5: Build, release, run
 The **fifth factor** calls for the **strict separation between the build, release, and run stages**. 
-As we already learned, in TAP an open-source solution called [Cartographer](https://cartographer.sh) is used for the automation of the path to production, which is designed to **fulfill this best practice**.
+As we already learned, in TAP uses [Cartographer](https://cartographer.sh) to construct a supply chain with build, release, and run stages.
 
 #### Factor 7: Port binding
 
-A note regarding the seventh factor that **services need to be exposed for external or inter-service access with well-defined ports**.
+Factor 7 states **services need to be exposed for external or inter-service access with well-defined ports**.
 
-[Spring Cloud's Registry interface](https://docs.spring.io/spring-cloud-commons/docs/current/reference/html/#discovery-client) solves this problem and provides client-side libraries for **service registry implementations such as Consul, Zookeeper, Eureka, plus Kubernetes**.
+[Spring Cloud's `ServiceRegistry` interface](https://docs.spring.io/spring-cloud-commons/docs/current/reference/html/#discovery-client) solves this problem and provides client-side libraries for **service registry implementations such as Consul, Zookeeper, Eureka, plus Kubernetes**.
 
 In Kubernetes, each service can interface with another service by using its service name, which is **resolved by Kubernetes DNS support, and the benefit of the Spring Cloud's Registry interface is limited**. 
 
@@ -23,18 +23,7 @@ In Kubernetes, each service can interface with another service by using its serv
 The tenth factor emphasizes the **importance of keeping all of our environments as similar as possible** to minimize potential discrepancies that could lead to unexpected behavior in production.
 **Containers play a crucial role in achieving this** by encapsulating the application and its dependencies, including the operating system, ensuring that it runs consistently across different environments. 
 
-As already mentioned, the most obvious way to create a container image for your application is to write a **Dockerfile**, run `docker build`, and push it to the container registry of your choice via `docker push`.
-
-![](../images/dockerfile.png)
-
-As you can see, in general, it is relatively easy and requires little effort to containerize an application, but whether you should go into production with it is another question because it is hard to create an optimized and secure container image (or Dockerfile).
-
-![Example for a simple vs an optimized container image](../images/simple-vs-optimized-dockerfile.png)
-
-To improve container image creation, **Buildpacks** were conceived by Heroku in 2011. Since then, they have been adopted by Cloud Foundry and other PaaS.
-The new generation of buildpacks, the [Cloud Native Buildpacks](https://buildpacks.io), is an incubating project in the CNCF which was initiated by Pivotal (now part of VMware) and Heroku in 2018.
-
-Cloud Native Buildpacks (CNBs) detect what is needed to compile and run an application based on the application's source code.
+As we have mentioned earlier in this workshop TAP uses Cloud Native Buildpacks (CNBs) detect what is needed to compile and run an application based on the application's source code.
 The application is then compiled and packaged in a container image with best practices in mind by the appropriate buildpack.
 
 The biggest benefits of CNBs are increased security, minimized risk, and increased developer productivity because they don't need to care much about the details of how to build a container.
@@ -47,20 +36,27 @@ The biggest benefits of CNBs are increased security, minimized risk, and increas
 
 With all the benefits of Cloud Native Buildpacks, one of the **biggest challenges with container images still is to keep the operating system, used libraries, etc., up-to-date** in order to minimize attack vectors by CVEs.
 
-With **VMware Tanzu Build Service (TBS)**, which is part of TAP and based on the open source [kpack](https://github.com/buildpacks-community/kpack), it's possible **automatically recreate and push an updated container image to the target registry if there is a new version of the buildpack or the base operating system available** (e.g. due to a CVE).
-With our Supply Chain, it's then possible to deploy security patches automatically.
+With **VMware Tanzu Build Service (TBS)**, which is part of TAP and based on an open source project called [kpack](https://github.com/buildpacks-community/kpack), it's possible **automatically recreate and push an updated container image to the target registry if there is a new version of the buildpack or the base operating system available** (e.g. due to a CVE).
+
+All of this is part of TAP's Supply Chain, making it possible to deploy security patches automatically.
 
 In the details of the Image Provider step in **TAP-GUI**, you're able to see the **logs of the container build and the tag of the produced image**.
+
+It also shows the reason for an image build. In this case, it's due to our configuration change.
+
+You can open the supply chain for the product service using the link below and view all these details.
+
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
 ```
-It also shows the reason for an image build. In this case, it's due to our configuration change. As mentioned, image builds can also be triggered if new operating system or buildpack versions are available.
-This shows the benefit of Cartographer's asynchronous behavior.
+
+![](../images/image-provider-latest-builds.png)
+![](../images/build-reasons.png)
 
 
 ####  Factor 11: Logs
 
-Factor eleven defines that **Logs should be treated as event streams**.
+Factor eleven states that **Logs should be treated as event streams**.
 The key point with logs in a cloud-native application is that it writes all of its log entries to stdout and stderr and the aggregation, processing, and storage of logs is a nonfunctional requirement that is satisfied by your platform or cloud provider.
 
 For developers, TAP-GUI also provides the capability to view the logs of your application.
@@ -72,6 +68,8 @@ command: |
 description: Post link to logs view for the product service in terminal
 clear: true
 ```
+
+We also saw a way of tailing the logs of any workload using `tanzu app workloads tail` CLI command throughout this workshop already.
 
 ####  Factor 12: Admin processes
 
