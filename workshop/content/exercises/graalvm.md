@@ -36,6 +36,7 @@ command: kubectl top pods -l serving.knative.dev/service=product-service --conta
 clear: true
 ```
 You will see something similar to these results.
+
 {% raw %}
 ```
 $ kubectl top pods -l serving.knative.dev/service=product-service --containers
@@ -53,6 +54,15 @@ If we have a look at the application's logs, we can see how long it took our app
 command: kubectl logs -l serving.knative.dev/service=product-service -c workload | grep "Started"
 clear: true
 ```
+You will see something similar to this.
+
+{% raw %}
+```
+$ kubectl logs -l serving.knative.dev/service=product-service -c workload | grep "Started"
+2023-08-14T19:08:47.891Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 3.357 seconds (process running for 3.771)
+````
+{% endraw %}
+
 In the case where you may be scaling rapidly and may be running hundres of applications startup time and compute resources become a concern.  If an application start slowly it might mean your app cannot scale fast enough to handle a sudden increase in demand.
 If an application consumes a lot of resources (memory, CPU, etc) and it scales to a large degress that can mean an increase cost.
 Making sure we can optomize both performance (start time) and resource consumption can be a game changer in the cloud.
@@ -153,13 +163,6 @@ The startup time is dramatically reduced compared to the same application runnin
 command: kubectl logs -l serving.knative.dev/service=product-service-native -c workload | grep "Started"
 clear: true
 ```
-
-... and the memory and CPU consumption of the `workload` is also reduced.
-```terminal:execute
-command: kubectl top pods -l serving.knative.dev/service=product-service-native --containers
-clear: true
-```
-
 You will see something similar to this.
 
 {% raw %}
@@ -172,6 +175,37 @@ $ kubectl logs -l serving.knative.dev/service=product-service-native -c workload
 2023-08-14T16:04:44.188Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.254 seconds (process running for 0.261)
 2023-08-14T16:04:44.205Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.239 seconds (process running for 0.244)
 2023-08-14T16:04:44.507Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.227 seconds (process running for 0.231)
+```
+{% endraw %}
+
+... and the memory and CPU consumption of the `workload` is also reduced.
+```terminal:execute
+command: kubectl top pods -l serving.knative.dev/service=product-service-native --containers
+clear: true
+```
+
+You will see something similar to this.
+
+{% raw %}
+```
+$ kubectl top pods -l serving.knative.dev/service=product-service-native --containers
+POD                                                        NAME          CPU(cores)   MEMORY(bytes)   
+product-service-native-00003-deployment-6469688668-5slj6   queue-proxy   1m           5Mi             
+product-service-native-00003-deployment-6469688668-5slj6   workload      1m           60Mi            
+product-service-native-00003-deployment-6469688668-6x4z8   queue-proxy   1m           6Mi             
+product-service-native-00003-deployment-6469688668-6x4z8   workload      1m           60Mi            
+product-service-native-00003-deployment-6469688668-gmk5b   queue-proxy   1m           65Mi            
+product-service-native-00003-deployment-6469688668-gmk5b   workload      1m           145Mi           
+product-service-native-00003-deployment-6469688668-jfs77   queue-proxy   1m           5Mi             
+product-service-native-00003-deployment-6469688668-jfs77   workload      1m           60Mi            
+product-service-native-00003-deployment-6469688668-mcx6s   queue-proxy   1m           5Mi             
+product-service-native-00003-deployment-6469688668-mcx6s   workload      1m           60Mi            
+product-service-native-00003-deployment-6469688668-pkt5q   queue-proxy   1m           5Mi             
+product-service-native-00003-deployment-6469688668-pkt5q   workload      1m           60Mi            
+product-service-native-00003-deployment-6469688668-sngnx   queue-proxy   1m           6Mi             
+product-service-native-00003-deployment-6469688668-sngnx   workload      1m           60Mi            
+product-service-native-00003-deployment-6469688668-vw7s5   queue-proxy   1m           5Mi             
+product-service-native-00003-deployment-6469688668-vw7s5   workload      1m           60Mi  
 ```
 {% endraw %}
 
