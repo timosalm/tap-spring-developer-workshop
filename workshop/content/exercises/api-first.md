@@ -1,19 +1,22 @@
 The API-first approach prioritizes the design and development of the application programming interface (API) before any other aspects of the application. 
-This approach enables for example the consumers of an API to work more independently from its provider, and providers are able to facilitate discussions with stakeholders well before they might have coded themselves past the point of no return.
+This approach enables the consumers of an API to work more independently from its provider, and providers are able to facilitate discussions with stakeholders well before they might have coded themselves past the point of no return.
 
 ###### Discover API documentation and more in Tanzu Developer Portal
 
 Tanzu Developer Portal helps you to find documentation for APIs available in your organization and try them out before integrating them in your applications.
 
-A core feature of Tanzu Developer Portal and the Cloud Native Computing Foundation’s project [Backstage](https://backstage.io), on which it's based on, is the **Software Catalog**. A centralized system that keeps track of ownership and metadata for all the applications in your organization's ecosystem. The catalog is built around the concept of metadata YAML files stored together with the code, which are then harvested and visualized.
+A core feature of Tanzu Developer Portal is the **Software Catalog**. The Software Catalog is a centralized system that keeps track of metadata for all the applications in your organization's ecosystem. The catalog is built around the concept of metadata YAML files stored together with the code, which are then harvested and visualized.
+Here is an exmaple of the YAML file from the product service.
 ```dashboard:open-url
 url: {{ ENV_GITEA_BASE_URL }}/product-service/catalog/component.yaml
 ```
+Lets open the Software Catalog.
+
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog
 ```
 
-If you **switch the kind from "Component" to "System"** and select `sc-architecture-system` you can see lists of all the services, backing services, and also a graph visualizing their relationships defined by metadata YAML files.
+If you **switch the kind from "Component" to "System"** and select `sc-architecture-system` you can see lists of all the services, backing services, and also a graph visualizing their relationships.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/system/sc-architecture-system
 ```
@@ -37,22 +40,11 @@ url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/component/product-ser
 
 With so many APIs in a microservices application, developers need an API Gateway that they can control!
 
-[Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) is a **library that can be used to create an API gateway** to expose endpoints for application services written in any programming language.
-It aims to provide a simple and effective way to route to APIs and provides features related to security and resiliency to them.
-
-The best way to create a gateway for your microservices application with Spring Cloud Gateway from scratch is to go to [start.spring.io](https://start.spring.io), add the `spring-cloud-starter-gateway` dependency, and additional dependencies based on your needs for security, distributed tracing, externalized configuration etc.
-
-The main building blocks of Spring Cloud Gateway are: 
-- **Routes**: Defined by an ID, a destination URI, a collection of predicates, and a collection of filters.
-- **Predicates**: Used for matching on anything from the HTTP request, such as headers or parameters.
-- **Filters**: Used for modifications of requests and responses before or after sending the downstream request
-Spring Cloud Gateway already provides Predicates and Filters for most of the common use cases, but it's also [possible to build your own](https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/#developer-guide).
-
-Routes can be configured in a number of ways, like via the Java API provided by the Gateway, or configuration properties stored in a Git repository.
-
-**VMware Spring Cloud Gateway for Kubernetes** is an **API gateway created for developers** based on the open-source Spring Cloud Gateway project, along with integrating other Spring ecosystem projects such as Spring Security, Spring Session, and more. It automates the deployment of an API gateway service via the [Kubernetes Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) pattern, and includes several other [commercial features](https://docs.vmware.com/en/VMware-Spring-Cloud-Gateway-for-Kubernetes/2.0/scg-k8s/GUID-index.html#key-features) like simple Single Sign-On (SSO) configuration, and OpenAPI version 3 documentation auto-generation.
+**VMware Spring Cloud Gateway for Kubernetes** is an **API gateway created for developers** based on the open-source [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway), along with integrating other Spring ecosystem projects such as Spring Security, Spring Session, and more. It automates the deployment of an API gateway service via the [Kubernetes Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) pattern, and includes several other [commercial features](https://docs.vmware.com/en/VMware-Spring-Cloud-Gateway-for-Kubernetes/2.0/scg-k8s/GUID-index.html#key-features) like simple Single Sign-On (SSO) configuration, and OpenAPI version 3 documentation auto-generation.
 
 ![VMware Spring Cloud Gateway for Kubernetes](../images/scg-for-k8s.png)
+
+Lets create an instance of Spring Cloud Gateway for our application.
 
 First, we have to configure a gateway instance via the `SpringCloudGateway` Kubernetes custom resource.
 ```editor:append-lines-to-file
@@ -73,7 +65,12 @@ text: |
     java-opts: "-Dspring.codec.max-in-memory-size=-1" # Required for a later applied response body filter
 ```
 
-Now it's time to define our route configuration with a `SpringCloudGatewayRouteConfig` custom resource.
+In the commercial version of Spring Cloud Gateway we define routes in a Kubernetes resource called `SpringCloudGatewayRouteConfig`.  
+Lets define routes for both the product and order services.
+
+These routes are simple in that they just have a path predicte to define what path to the gateway will route the requests to the services and then uses a filter to strip those
+paths from the request before its routed to the downstream services.
+
 ```editor:append-lines-to-file
 file: ~/config/gateway/gateway-route-config.yaml
 text: |
@@ -95,7 +92,8 @@ text: |
       - StripPrefix=2
 ```
 
-The last step is to link our route configuration to the gateway instance with a `SpringCloudGatewayMapping` custom resource, which allows using a route configuration with multiple gateway instances, and apply everything to the cluster.
+The last step is to link our route configuration to the gateway instance with a custom resource named `SpringCloudGatewayMapping`. 
+
 ```editor:append-lines-to-file
 file: ~/config/gateway/gateway-route-mapping.yaml
 text: |
@@ -109,12 +107,14 @@ text: |
     routeConfigRef:
       name: supply-chain-app-route-config
 ```
+
+Lets apply everything to the cluster to create the gateway, route configuration, and then connect the two with the mapping.
 ```terminal:execute
 command: kubectl apply -f ~/config/gateway/
 clear: true
 ```
 
-Having the gateway as the single entry point to our application, we shouldn't expose the order and product service directly anymore. This can be done by setting the `networking.knative.dev/visibility: cluster-local` label on your Workloads. 
+With the gateway as the single entry point to our application, we shouldn't need to expose the order and product service directly anymore. This can be done by setting the `networking.knative.dev/visibility: cluster-local` label on your Workloads. 
 
 *Hint: Even if this also works with the default installation of TAP, for production a second ingress controller has to be configured with service type ClusterIP and configured in Knative, so that the services are really not reachable from the outside.*
 
