@@ -2,8 +2,6 @@
 name: The Twelve Factors
 ```
 
-**TODO: Use maybe Shipping service as example**
-
 ####  Factor 8: Concurrency
 **Factor eight**, concurrency, advises us that **cloud-native applications should scale out using the process model**. There was a time when, if an application reached the limit of its capacity, the solution was adding CPUs, RAM, and other resources (virtual or physical), which is called **vertical scaling**.
 
