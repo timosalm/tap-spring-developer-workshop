@@ -14,7 +14,7 @@ Spring Boot ships auto-configuration for the following tracers:
 - OpenTelemetry with Zipkin, Wavefront, or OTLP
 - OpenZipkin Brave with Zipkin or Wavefront
 
-Wavefront is now known as **Aria Operations for Applications**, our full-stack observability solution from infrastructure to applications.
+Wavefront is now known as **Aria Operations for Applications**, VMware's full-stack observability solution from infrastructure to applications.
 
 For this workshop, you will use Zipkin as our trace backend to collect and visualize the traces, already running in the cluster.
 
@@ -47,8 +47,25 @@ text: |
 ```
 
 To configure reporting to Zipkin we can use the `management.zipkin.tracing.*` configuration properties.
-In our case, we would like to **set the required configuration automatically via a ServiceBinding**. Unfortunately, the [spring-cloud-bindings](https://github.com/spring-cloud/spring-cloud-bindings) library, which will be automatically added by the Spring Boot Buildpack, doesn't support it yet. 
-But it's possible to add additional bindings by registering additional implementations of the `BindingsPropertiesProcessor`.
+Normally when using an external service like Zipkin we would expect to find to that service using service bindings as we did with PostreSQL, Redis, and RabbitMQ in the order service. Unfortunately, [spring-cloud-bindings](https://github.com/spring-cloud/spring-cloud-bindings), which will be automatically added by the Spring Boot Buildpack when an app is deployed to TAP, doesn't support Zipkin yet. 
+
+To work around this we can add additional bindings by creating our own `BindingsPropertiesProcessor` for Zipkin.
+
+First we must add the `spring-cloud-bindings` dependency to our classpath.
+
+```editor:insert-lines-before-line
+file: ~/product-service/pom.xml
+line: 33
+text: |2
+          <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-bindings</artifactId>
+            <version>2.0.1</version>
+          </dependency>
+```
+
+Now we can create a new class called `ZipkinBindingsPropertiesProcessor` which implements `BindingsPropertiesProcessor`.
+
 ```editor:append-lines-to-file
 file: ~/product-service/src/main/java/com/example/productservice/ZipkinBindingsPropertiesProcessor.java
 text: |
@@ -70,16 +87,8 @@ text: |
     }
   } 
 ```
-```editor:insert-lines-before-line
-file: ~/product-service/pom.xml
-line: 33
-text: |2
-          <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-bindings</artifactId>
-            <version>2.0.1</version>
-          </dependency>
-```
+Finally we must register our new `BindingsPropertiesProcessor` within `spring.factories` so it actually processes the bindings.
+
 You must also add an entry in `META_INF/spring.factories` so that the custom processor can be discovered.
 ```terminal:execute
 command: mkdir ~/product-service/src/main/resources/META-INF
@@ -92,7 +101,8 @@ text: |
     com.example.productservice.ZipkinBindingsPropertiesProcessor
 ```
 
-Last but not least, the service binding has to be configured in the Workload and the changes pushed to Git and applied to the environment.
+As we have done already with servic bindings we need to add a service claim to our workload.yaml for the Zipkin service.
+
 ```editor:insert-value-into-yaml
 file: ~/product-service/config/workload.yaml
 path: spec.serviceClaims
@@ -116,19 +126,38 @@ command: tanzu apps workload apply -f product-service/config/workload.yaml -y
 clear: true
 ```
 
-As soon as our outdated application and service binding is applied ...
+As we have done before we can view the deployment of our application in the supply chain GUI or by tailing the logs.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
 ```
-... we can send a request to the order service, and have a look at the ZipKin UI to view the traces.
+
+```terminal:execute
+session: 2
+command: |
+  tanzu apps workload tail order-service --since 1h
+clear: true
+```
+Now that the new version of the product service is sending tracing data to Zipkin lets create a new order in the order service and see the tracing of that request in Zipkin.  (The order service
+was already configured to send tracing data to Zipkin so we don't need to repeat what we have done for that service.)
+
 ```terminal:execute
 command: |
-  curl -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders
+  curl -s -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders | jq .
 clear: true
 ```
 
 ```dashboard:open-url
-url: https://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
+url: https://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/?serviceName=order-service&annotationQuery=method%3DPOST&lookback=12h&endTs=1692042417857&limit=100
 ```
+
+There should be a request that took a bit longer to make, this request is the one that was made before we cached any data.
+
+![](../images/order-service-zipkin.png)
+
+If you select Show on that trace you can see the tracing details of the request from the order service to the product service.
+
+![](../images/zipkin-details.png)
+
+Below is an updated diagram of our applications architecture.
 
 ![Updated architecture with Observability](../images/microservice-architecture-tracing.png)
