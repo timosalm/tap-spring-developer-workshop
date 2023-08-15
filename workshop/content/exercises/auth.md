@@ -208,6 +208,15 @@ value:
       kind: ResourceClaim
       name: auth-client
 ```
+**WORKAROUD**
+```editor:insert-value-into-yaml
+file: ~/order-service/config/workload.yaml
+path: spec
+value:
+  env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: auth
+```
 ```terminal:execute
 command: tanzu apps workload apply -f order-service/config/workload.yaml -y
 clear: true
