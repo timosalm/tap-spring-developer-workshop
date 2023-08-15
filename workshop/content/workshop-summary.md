@@ -6,6 +6,7 @@ The goal of this interactive workshop was to learn how to mitigate the challenge
 description: Archive sample code for download
 command: |
   mkdir /tmp/tap-spring-developer-workshop-sample
+  cp -a config /tmp/tap-spring-developer-workshop-sample/
   cp -a order-service /tmp/tap-spring-developer-workshop-sample/
   cp -a product-service /tmp/tap-spring-developer-workshop-sample/
   cp -a shipping-service /tmp/tap-spring-developer-workshop-sample/

@@ -92,8 +92,7 @@ value:
 To apply the changes, commit the updated source code and update the Workload for the product-service deployed to TAP
 ```terminal:execute
 command: |
-  cd product-service && git add . && git commit -m "Add external configuration support" && git push
-  cd ..
+  (cd product-service && git add . && git commit -m "Add external configuration support" && git push)
 clear: true
 ```
 ```terminal:execute

@@ -317,8 +317,7 @@ The `Supplier` is the code that you are going to wrap in a circuit breaker. The 
 After pushing our changes to Git, the updated source code will be automatically deployed to production. 
 ```terminal:execute
 command: |
-  cd order-service && git add . && git commit -m "Add circuit-breaker" && git push
-  cd ..
+  (cd order-service && git add . && git commit -m "Add circuit-breaker" && git push)
 clear: true
 ```
 Since TAP is monitoring changes in the order service Git repo pushing the changes in the above command will cause a new build and deploy of the order service to take place.
@@ -488,8 +487,7 @@ text: |2
 Lets deploy a new version of the order service which now has support for caching.  To do this lets commit the code to our Git repo. In addition we need to update the order service's workload because we added a new service binding.
 ```terminal:execute
 command: |
-  cd order-service && git add . && git commit -m "Add caching" && git push
-  cd ..
+  (cd order-service && git add . && git commit -m "Add caching" && git push)
 clear: true
 ```
 ```terminal:execute

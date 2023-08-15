@@ -101,7 +101,7 @@ text: |
     com.example.productservice.ZipkinBindingsPropertiesProcessor
 ```
 
-As we have done already with servic bindings we need to add a service claim to our workload.yaml for the Zipkin service.
+As we have done already with service bindings we need to add a service claim to our workload.yaml for the Zipkin service.
 
 ```editor:insert-value-into-yaml
 file: ~/product-service/config/workload.yaml
@@ -117,8 +117,7 @@ value:
 Let's commit the updated source code and wait until the deployment is updated.
 ```terminal:execute
 command: |
-  cd product-service && git add . && git commit -m "Add external configuration support" && git push
-  cd ..
+  (cd product-service && git add . && git commit -m "Add external configuration support" && git push)
 clear: true
 ```
 ```terminal:execute
@@ -134,11 +133,10 @@ url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespac
 ```terminal:execute
 session: 2
 command: |
-  tanzu apps workload tail order-service --since 1h
+  tanzu apps workload tail product-service --since 1h
 clear: true
 ```
-Now that the new version of the product service is sending tracing data to Zipkin lets create a new order in the order service and see the tracing of that request in Zipkin.  (The order service
-was already configured to send tracing data to Zipkin so we don't need to repeat what we have done for that service.)
+As the order service was already configured to send tracing data to Zipkin, we can now send a new order to it and see the tracing information of that request and the related ones the order service is for example sending to the product service in Zipkin.
 
 ```terminal:execute
 command: |

@@ -126,7 +126,7 @@ clear: true
 ```
 We can also use ZipKin UI to see the new request flow.
 ```dashboard:open-url
-url: https://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
+url: https://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/?serviceName=api-gateway-1&annotationQuery=method%3DPOST&lookback=12h&endTs=1692042417857&limit=100
 ```
 
 ![Updated architecture with API Gateway](../images/microservice-architecture-gateway.png)

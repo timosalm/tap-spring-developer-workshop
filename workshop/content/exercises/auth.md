@@ -230,6 +230,15 @@ text: |2
 command: kubectl apply -f config/gateway/
 clear: true
 ```
+
+Run the following command to see when the OAuth-enabled version of the product service is deployed based on the HTTP response status code change from 200 to 401 due to the missing, now required, Authentication header including a valid token.
+```terminal:execute
+command: watch -n 1 'curl -I https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/services/product-service/api/v1/products'
+clear: true
+```
+```terminal:interrupt
+session: 2
+```
  
 Now it's finally time to see whether everything works as expected with the **username: `developer`**, and the **password: `123456`** as defined in the `AuthServer`.
 ```dashboard:open-url
