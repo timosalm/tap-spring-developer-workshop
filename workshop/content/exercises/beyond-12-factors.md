@@ -144,6 +144,8 @@ command: |
 clear: true
 ```
 
+Open the Zipkin UI using the URL below.  Once the Zipkin UI opens click the Run Query button and you should see at least 1 request in the query results.
+
 ```dashboard:open-url
 url: https://zipkin-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/?serviceName=order-service&annotationQuery=method%3DPOST&lookback=12h&endTs=1692042417857&limit=100
 ```
@@ -155,6 +157,10 @@ There should be a request that took a bit longer to make, this request is the on
 If you select Show on that trace you can see the tracing details of the request from the order service to the product service.
 
 ![](../images/zipkin-details.png)
+
+Lets interrupt the terminals before moving on.
+```terminal:interrupt-all
+```
 
 Below is an updated diagram of our applications architecture.
 
