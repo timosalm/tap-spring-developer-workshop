@@ -180,19 +180,36 @@ value:
 Let's commit the updated source code and apply the Workload.
 ```terminal:execute
 command: |
-  cd product-service && git add . && git commit -m "Add OAuth support" && git push
-  cd ..
+  (cd product-service && git add . && git commit -m "Add OAuth support" && git push)
 clear: true
 ```
 ```terminal:execute
 command: tanzu apps workload apply -f product-service/config/workload.yaml -y
 clear: true
 ```
-**TODO: Create script**
 
-To do the same with the order service, just execute the following script.
+To configure the order service for OAuth, we only have to activate a profile that configures it in the same way as the product service and add the service binding.
+```editor:append-lines-to-file
+file: ~/samples/externalized-configuration/order-service.yaml
+text: |
+  spring.profiles.active: oauth
+```
 ```terminal:execute
-command: ./samples/add-oauth-to-order-service.sh
+command: (cd samples/externalized-configuration && git add . && git commit -m "Enable OAuth for order service" && git push)
+clear: true
+```
+```editor:insert-value-into-yaml
+file: ~/order-service/config/workload.yaml
+path: spec.serviceClaims
+value:
+  - name: auth-client
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      name: auth-client
+```
+```terminal:execute
+command: tanzu apps workload apply -f order-service/config/workload.yaml -y
 clear: true
 ```
 
