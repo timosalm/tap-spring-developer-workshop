@@ -2,8 +2,8 @@ spring:
   application.name: order-service # for config server
   jpa.hibernate.ddl-auto: update
   config.import: "optional:configtree:${SERVICE_BINDING_ROOT}/config-server/"
-  # https://github.com/spring-cloud/spring-cloud-bindings/issues/87
- 
+  cache.redis.time-to-live: 300000 # 5 min
+
 logging.level.org.springframework.cache: TRACE
 management:
   tracing.sampling.probability: 1.0
