@@ -19,4 +19,4 @@ spec:
   build:
     env:
     - name: BP_JVM_VERSION
-      value: JAVA_VERSION
+      value: "JAVA_VERSION"
