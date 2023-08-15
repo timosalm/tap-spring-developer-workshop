@@ -3,6 +3,7 @@ spring:
   jpa.hibernate.ddl-auto: update
   config.import: "optional:configtree:${SERVICE_BINDING_ROOT}/config-server/"
   cache.redis.time-to-live: 300000 # 5 min
+  security.oauth2.resourceserver.jwt.jwk-set-uri: '${spring.security.oauth2.client.provider.appsso.issuer-uri}/oauth2/jwks'
 
 logging.level.org.springframework.cache: TRACE
 management:
