@@ -213,7 +213,9 @@ command: tanzu apps workload apply -f order-service/config/workload.yaml -y
 clear: true
 ```
 
-We also have to add a route for the frontend to the API gateway, which in this case also sets the required information for the OAuth flow
+We also have to add a route for the frontend to the API gateway. 
+In most cases, configuration of single-page applications for different environments is bundled with code - which is contrary to factor 3 for cloud-native applications. 
+As we are not able to provide configuration for the OAuth flow for all possible workshop sessions and the related auth server urls at build time, there are [placeholders in the frontend source code](https://github.com/timosalm/tap-spring-developer-workshop/blob/main/setup/frontend/src/environments/environment.prod.ts) that will be replaced by the Gateway with the `RewriteResponseBody` filter. 
 ```editor:append-lines-to-file
 file: ~/config/gateway/gateway-route-config.yaml
 text: |2
