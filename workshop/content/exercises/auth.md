@@ -1,12 +1,14 @@
 Security is a vital part of any application and cloud environment!
 **OAuth 2 is an authorization framework** granting clients access to protected resources via an authorization server.
-To make the application secure, you can simply add Spring Security as a dependency. **By adding the Spring Security OAuth 2 Client, it will secure your app with OAuth 2** by default.
+To make the application secure, you can simply add Spring Security as a dependency. **By adding the Spring Security OAuth 2 Client, it will secure your app with OAuth 2** by default.  However we need an OAuth 2 authorization server to use with the client application.
 
 **Spring Authorization Server delivers OAuth 2 Authorization Server** support to the Spring community.
 
-**Application Single Sign-On for VMware Tanzu** (commonly called AppSSO) is based on the Spring Authorization Server project provides APIs for curating and consuming a "Single Sign-On as a service" offering on Tanzu Application Platform. 
+**Application Single Sign-On for VMware Tanzu** (commonly called AppSSO) is based on the Spring Authorization.  Our apps running on TAP can use AppSSO as an OAuth 2 authorization server.
 
-The first step is to create an Authorization Server along with an RSAKey key for signing tokens. This AuthServer example uses an unsafe testing-only identity provider which should never be used in production environments! Information on how to configure external identity providers is available [here](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/app-sso-how-to-guides-service-operators-identity-providers.html).
+To use AppSSO we first need to create an Authorization Server along with an RSAKey key for signing tokens. This AuthServer example uses an **unsafe testing-only identity provider which should never be used in production environments!** Information on how to configure external identity providers for real world use cases is available [here](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/app-sso-how-to-guides-service-operators-identity-providers.html).
+
+Execute the following commands to create the YAML files needed to deploy the AppSSO server and the RSAKey it needs.
 
 ```editor:append-lines-to-file
 file: ~/config/auth/authserver.yaml
@@ -58,11 +60,13 @@ text: |
 
 The `metadata.labels` uniquely identify the AuthServer. They are used as selectors by `ClientRegistration`s, to declare from which authorization server a specific client obtains tokens.
 
-The `sso.apps.tanzu.vmware.com/allow-client-namespaces` annotation restricts the namespaces in which you can create ClientRegistrations targeting this authorization server
+The `sso.apps.tanzu.vmware.com/allow-client-namespaces` annotation restricts the namespaces in which you can create ClientRegistrations targeting this authorization server.
 
-The `tokenSignature` references a private RSA key used to sign ID Tokens, using JSON Web Signatures, and clients use the public key to verify the provenance and integrity of the ID tokens. 
+The `tokenSignature` references a private RSA key used to sign ID Tokens, using JSON Web Signatures. Clients use the public key to verify the provenance and integrity of the ID tokens. 
 
 To request client credentials for the AuthServer, we have to configure a `ClientRegistration`.
+Execute the following command to creat the YAML for our `ClientRegistration`.
+
 ```editor:append-lines-to-file
 file: ~/config/auth/clientregistration.yaml
 text: |
@@ -90,7 +94,7 @@ text: |
     - name: profile
     - name: roles
 ```
-With the `authServerSelector`, a `ClientRegistration` must uniquely identify an AuthServer. 
+In `spec.authServerSelector`, a `ClientRegistration` will uniquely identify an AuthServer. 
 The Redirect URLs defined in `redirectURIs` are a critical part of the OAuth flow. They define where the authorization server will redirect the user after successfully authorizing an application.
 
 For this workshop, the redirect URL is targeting a **single-page app acting as an OAuth client** (which is already deployed for you).
@@ -137,7 +141,6 @@ text: |2
 ```
 
 The access token provided in the HTTP Authorization header of requests will be decoded, verified, and validated with a `JwtDecoder` bean, that will be automatically created based on the following configuration.
-The decodes String tokens into validated instances of JwtDecoder
 ```editor:insert-value-into-yaml
 file: ~/product-service/src/main/resources/application.yaml
 path: spring
