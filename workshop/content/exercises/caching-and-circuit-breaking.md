@@ -13,7 +13,7 @@ To demonstrate how a Spring Boot app can use backing services on TAP lets use th
 
 ![Order Microservice](../images/microservice-architecture-cache.png)
 
-To modify the order service to use services on TAP lets first import it into our IDE's workshpace.
+To modify the order service to use services on TAP lets first import it into our IDE's workspace.
 
 Open the Explorer view in the IDE.
 
@@ -301,11 +301,15 @@ text: "return Arrays.asList(Objects.requireNonNull(restTemplate.getForObject(pro
 ```editor:replace-text-selection
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
 text: |2
-        return Arrays.asList(Objects.requireNonNull(circuitBreakerFactory.create("products").run(() -> 
-        restTemplate.getForObject(productsApiUrl, Product[].class), t -> {
-            log.error("Call to product service failed, using empty product list as fallback");
-            return new Product[]{};
-        })));
+      return Arrays.asList(Objects.requireNonNull(
+            circuitBreakerFactory.create("products").run(
+                () -> restTemplate.getForObject(productsApiUrl, Product[].class), 
+                t -> {
+                    log.error("Call to product service failed, using empty product list as fallback");
+                    return new Product[]{};
+                }
+            )
+        ));
 ```
 
 The `Supplier` is the code that you are going to wrap in a circuit breaker. The `Function` is the fallback that will be executed if the circuit breaker is tripped. In our case, the fallback just returns an empty product array. The function will be passed the Throwable that caused the fallback to be triggered. You can optionally exclude the fallback if you do not want to provide one.
