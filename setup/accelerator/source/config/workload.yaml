@@ -5,6 +5,7 @@ metadata:
   namespace: NAMESPACE
   annotations:
     autoscaling.knative.dev/min-scale: "1"
+    autoscaling.knative.dev/target: "100"
   labels:
     app.kubernetes.io/part-of: ARTIFACT_NAME
     apps.tanzu.vmware.com/workload-type: web
