@@ -215,7 +215,7 @@ path: spec
 value:
   env:
   - name: SPRING_PROFILES_ACTIVE
-    value: auth
+    value: oauth
 ```
 ```terminal:execute
 command: tanzu apps workload apply -f order-service/config/workload.yaml -y
