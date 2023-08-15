@@ -22,5 +22,5 @@ spec:
     - ./resources/zipkin-resource.yaml
     - ./resources/postgres-resource.yaml
     - ./resources/rabbit-resource.yaml
-    - ./apis/system-api.yaml
+    #- ./apis/system-api.yaml
     
