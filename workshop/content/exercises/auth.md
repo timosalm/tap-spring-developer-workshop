@@ -4,7 +4,7 @@ To make the application secure, you can simply add Spring Security as a dependen
 
 **Spring Authorization Server delivers OAuth 2 Authorization Server** support to the Spring community.
 
-**Application Single Sign-On for VMware Tanzu** (commonly called AppSSO) is based on the Spring Authorization.  Our apps running on TAP can use AppSSO as an OAuth 2 authorization server.
+**Application Single Sign-On for VMware Tanzu** (commonly called AppSSO) is based on the Spring Authorization Server.  Our apps running on TAP can use AppSSO as an OAuth 2 authorization server.
 
 To use AppSSO we first need to create an Authorization Server along with an RSAKey key for signing tokens. This AuthServer example uses an **unsafe testing-only identity provider which should never be used in production environments!** Information on how to configure external identity providers for real world use cases is available [here](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/app-sso-how-to-guides-service-operators-identity-providers.html).
 
