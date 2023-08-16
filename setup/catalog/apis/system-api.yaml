@@ -8,4 +8,4 @@ spec:
   lifecycle: production
   owner: team1@example.com
   definition:
-    $text: http://scg-operator.tap-install/openapi 
+    $text: https://gateway-dev-space.emea.end2end.link/v3/api-docs

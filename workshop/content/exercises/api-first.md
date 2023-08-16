@@ -16,19 +16,23 @@ Let's open the Software Catalog.
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog
 ```
 
+![Tanzu Developer Portal - Software Catalog](../images/dev-portal-catalog.png)
+
 If you **switch the kind from "Component" to "System"** and select `sc-architecture-system` you can see lists of all the services, backing services, and also a graph visualizing their relationships.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/system/sc-architecture-system
 ```
+![Tanzu Developer Portal - Software Catalog](../images/dev-portal-system.png)
 In addition to a link to jump to the related source code, there is also one to access the **technical documentation**, which can be written in Markdown format in a source-code repository and displayed alongside the relevant catalog entries.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/docs/default/System/sc-architecture-system
 ```
 
-APIs provided by the components can be discovered via the **API documentation plug-in**. 
+APIs provided by the components can be discovered via the **API documentation plug-in**. Navigate back to  the system view by clicking on the action, and **click on the only item's name in the APIs section**. If you **then switch from the Overview to the Definition tab**, you get a swagger-like experience to discover APIs like in the picture below.
 ```dashboard:open-url
-url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/api/gateway-{{ ENV_TAP_INGRESS }}/definition
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/system/sc-architecture-system
 ```
+![Tanzu Developer Portal - API documentation plug-in](../images/dev-portal-api.png)
 With a feature called **API Auto Registration**, TAP can automatically register your APIs in Tanzu Developer Portal.
 
 From the different components in the Software Catalog, you can also jump to the **Runtime Resources** view and have a closer look at the resources running on Kubernetes for your applications. Click the link below to see the workloads for the product service.
@@ -36,7 +40,7 @@ From the different components in the Software Catalog, you can also jump to the 
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/component/product-service/workloads
 ```
 
-If you select a Pod you're able to see the logs and information provided by **App Live View**.
+If you select a Pod, you're able to see the logs and information provided by **App Live View**.
 ![](../images/product-service-pod.png)
 ![](../images/pod-logs.png)
 ![](../images/app-live-view.png)
@@ -73,7 +77,7 @@ text: |
 In the commercial version of Spring Cloud Gateway we define routes in a Kubernetes resource called `SpringCloudGatewayRouteConfig`.  
 Let's define routes for both the product and order services.
 
-These routes are simple in that they just have a path predicate to define what path to the gateway will route the requests to the services and then uses a filter to strip those paths from the request before it'ss routed to the downstream services.
+These routes are simple in that they just have a path predicate to define what path to the gateway will route the requests to the services and then uses a filter to strip those paths from the request before it's routed to the downstream services.
 
 ```editor:append-lines-to-file
 file: ~/config/gateway/gateway-route-config.yaml
