@@ -2,7 +2,7 @@ apiVersion: carto.run/v1alpha1
 kind: Workload
 metadata:
   annotations:
-    autoscaling.knative.dev/maxScale: "3"
+    autoscaling.knative.dev/max-scale: "3"
   labels:
     apps.tanzu.vmware.com/workload-type: web
   name: product-service-native

@@ -171,10 +171,6 @@ $ kubectl logs -l serving.knative.dev/service=product-service-native -c workload
 2023-08-14T16:04:44.452Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.276 seconds (process running for 0.281)
 2023-08-14T16:04:42.362Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.339 seconds (process running for 0.343)
 2023-08-14T16:04:44.342Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.259 seconds (process running for 0.264)
-2023-08-14T16:04:44.239Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.274 seconds (process running for 0.278)
-2023-08-14T16:04:44.188Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.254 seconds (process running for 0.261)
-2023-08-14T16:04:44.205Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.239 seconds (process running for 0.244)
-2023-08-14T16:04:44.507Z  INFO 1 --- [           main] com.example.productservice.Application   : Started Application in 0.227 seconds (process running for 0.231)
 ```
 {% endraw %}
 
@@ -195,17 +191,7 @@ product-service-native-00003-deployment-6469688668-5slj6   workload      1m     
 product-service-native-00003-deployment-6469688668-6x4z8   queue-proxy   1m           6Mi             
 product-service-native-00003-deployment-6469688668-6x4z8   workload      1m           60Mi            
 product-service-native-00003-deployment-6469688668-gmk5b   queue-proxy   1m           65Mi            
-product-service-native-00003-deployment-6469688668-gmk5b   workload      1m           145Mi           
-product-service-native-00003-deployment-6469688668-jfs77   queue-proxy   1m           5Mi             
-product-service-native-00003-deployment-6469688668-jfs77   workload      1m           60Mi            
-product-service-native-00003-deployment-6469688668-mcx6s   queue-proxy   1m           5Mi             
-product-service-native-00003-deployment-6469688668-mcx6s   workload      1m           60Mi            
-product-service-native-00003-deployment-6469688668-pkt5q   queue-proxy   1m           5Mi             
-product-service-native-00003-deployment-6469688668-pkt5q   workload      1m           60Mi            
-product-service-native-00003-deployment-6469688668-sngnx   queue-proxy   1m           6Mi             
-product-service-native-00003-deployment-6469688668-sngnx   workload      1m           60Mi            
-product-service-native-00003-deployment-6469688668-vw7s5   queue-proxy   1m           5Mi             
-product-service-native-00003-deployment-6469688668-vw7s5   workload      1m           60Mi  
+product-service-native-00003-deployment-6469688668-gmk5b   workload      1m           145Mi            
 ```
 {% endraw %}
 
