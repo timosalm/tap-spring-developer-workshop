@@ -4,7 +4,7 @@ name: The Twelve Factors
 
 #### Factor 5: Build, release, run
 The **fifth factor** calls for the **strict separation between the build, release, and run stages**. 
-As we already learned, in TAP uses [Cartographer](https://cartographer.sh) to construct a supply chain with build, release, and run stages.
+As we already learned, TAP uses [Cartographer](https://cartographer.sh) to construct a supply chain with build, release, and run stages.
 
 #### Factor 7: Port binding
 
@@ -23,7 +23,7 @@ In Kubernetes, each service can interface with another service by using its serv
 The tenth factor emphasizes the **importance of keeping all of our environments as similar as possible** to minimize potential discrepancies that could lead to unexpected behavior in production.
 **Containers play a crucial role in achieving this** by encapsulating the application and its dependencies, including the operating system, ensuring that it runs consistently across different environments. 
 
-As we have mentioned earlier in this workshop TAP uses Cloud Native Buildpacks (CNBs) detect what is needed to compile and run an application based on the application's source code.
+As we have mentioned earlier in this workshop, TAP uses Cloud Native Buildpacks (CNBs) to detect what is needed to compile and run an application based on the application's source code.
 The application is then compiled and packaged in a container image with best practices in mind by the appropriate buildpack.
 
 The biggest benefits of CNBs are increased security, minimized risk, and increased developer productivity because they don't need to care much about the details of how to build a container.
@@ -36,7 +36,7 @@ The biggest benefits of CNBs are increased security, minimized risk, and increas
 
 With all the benefits of Cloud Native Buildpacks, one of the **biggest challenges with container images still is to keep the operating system, used libraries, etc., up-to-date** in order to minimize attack vectors by CVEs.
 
-With **VMware Tanzu Build Service (TBS)**, which is part of TAP and based on an open source project called [kpack](https://github.com/buildpacks-community/kpack), it's possible **automatically recreate and push an updated container image to the target registry if there is a new version of the buildpack or the base operating system available** (e.g. due to a CVE).
+With **VMware Tanzu Build Service (TBS)**, which is part of TAP and based on an open-source project called [kpack](https://github.com/buildpacks-community/kpack), it's possible **automatically recreate and push an updated container image to the target registry if there is a new version of the buildpack or the base operating system available** (e.g. due to a CVE).
 
 All of this is part of TAP's Supply Chain, making it possible to deploy security patches automatically.
 
@@ -57,7 +57,7 @@ url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespac
 ####  Factor 11: Logs
 
 Factor eleven states that **Logs should be treated as event streams**.
-The key point with logs in a cloud-native application is that it writes all of its log entries to stdout and stderr and the aggregation, processing, and storage of logs is a nonfunctional requirement that is satisfied by your platform or cloud provider.
+The key point with logs in a cloud-native application is that it writes all of its log entries to stdout and stderr, and the aggregation, processing, and storage of logs is a nonfunctional requirement that is satisfied by your platform or cloud provider.
 
 For developers, TAP-GUI also provides the capability to view the logs of your application.
 

@@ -16,7 +16,7 @@ Spring Boot ships auto-configuration for the following tracers:
 
 Wavefront is now known as **Aria Operations for Applications**, VMware's full-stack observability solution from infrastructure to applications.
 
-For this workshop, you will use Zipkin as our trace backend to collect and visualize the traces, already running in the cluster.
+For this workshop, you will use Zipkin as our trace backend to collect and visualize the traces already running in the cluster.
 
 In addition to the `org.springframework.boot:spring-boot-starter-actuator` dependency, we have to add a library that bridges the Micrometer Observation API to either OpenTelemetry or Brave and one that reports traces to the selected solution.
 
@@ -49,9 +49,9 @@ text: |
 To configure reporting to Zipkin we can use the `management.zipkin.tracing.*` configuration properties.
 Normally when using an external service like Zipkin we would expect to find to that service using service bindings as we did with PostreSQL, Redis, and RabbitMQ in the order service. Unfortunately, [spring-cloud-bindings](https://github.com/spring-cloud/spring-cloud-bindings), which will be automatically added by the Spring Boot Buildpack when an app is deployed to TAP, doesn't support Zipkin yet. 
 
-To work around this we can add additional bindings by creating our own `BindingsPropertiesProcessor` for Zipkin.
+To work around this, we can add additional bindings by creating our own `BindingsPropertiesProcessor` for Zipkin.
 
-First we must add the `spring-cloud-bindings` dependency to our classpath.
+First, we must add the `spring-cloud-bindings` dependency to our classpath.
 
 ```editor:insert-lines-before-line
 file: ~/product-service/pom.xml
@@ -87,7 +87,7 @@ text: |
     }
   } 
 ```
-Finally we must register our new `BindingsPropertiesProcessor` within `spring.factories` so it actually processes the bindings.
+Finally, we must register our new `BindingsPropertiesProcessor` within `spring.factories` so it actually processes the bindings.
 
 You must also add an entry in `META_INF/spring.factories` so that the custom processor can be discovered.
 ```terminal:execute
@@ -101,7 +101,7 @@ text: |
     com.example.productservice.ZipkinBindingsPropertiesProcessor
 ```
 
-As we have done already with service bindings we need to add a service claim to our workload.yaml for the Zipkin service.
+As we have already done with service bindings, we need to add a service claim to our workload.yaml for the Zipkin service.
 
 ```editor:insert-value-into-yaml
 file: ~/product-service/config/workload.yaml
@@ -162,6 +162,6 @@ Let's interrupt the terminals before moving on.
 ```terminal:interrupt-all
 ```
 
-Below is an updated diagram of our applications architecture.
+Below is an updated diagram of our application architecture.
 
 ![Updated architecture with Observability](../images/microservice-architecture-tracing.png)

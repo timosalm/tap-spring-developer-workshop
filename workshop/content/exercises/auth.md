@@ -1,12 +1,12 @@
 Security is a vital part of any application and cloud environment!
 **OAuth 2 is an authorization framework** granting clients access to protected resources via an authorization server.
-To make the application secure, you can simply add Spring Security as a dependency. **By adding the Spring Security OAuth 2 Client, it will secure your app with OAuth 2** by default.  However we need an OAuth 2 authorization server to use with the client application.
+To make the application secure, you can simply add Spring Security as a dependency. **By adding the Spring Security OAuth 2 Client, it will secure your app with OAuth 2** by default.  However, we need an OAuth 2 authorization server to use with the client application.
 
 **Spring Authorization Server delivers OAuth 2 Authorization Server** support to the Spring community.
 
 **Application Single Sign-On for VMware Tanzu** (commonly called AppSSO) is based on the Spring Authorization Server.  Our apps running on TAP can use AppSSO as an OAuth 2 authorization server.
 
-To use AppSSO we first need to create an Authorization Server along with an RSAKey key for signing tokens. This AuthServer example uses an **unsafe testing-only identity provider which should never be used in production environments!** Information on how to configure external identity providers for real world use cases is available [here](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/app-sso-how-to-guides-service-operators-identity-providers.html).
+To use AppSSO we first need to create an Authorization Server along with an RSAKey key for signing tokens. This AuthServer example uses an **unsafe testing-only identity provider, which should never be used in production environments!** Information on how to configure external identity providers for real-world use cases is available [here](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/app-sso-how-to-guides-service-operators-identity-providers.html).
 
 Execute the following commands to create the YAML files needed to deploy the AppSSO server and the RSAKey it needs.
 
@@ -65,7 +65,7 @@ The `sso.apps.tanzu.vmware.com/allow-client-namespaces` annotation restricts the
 The `tokenSignature` references a private RSA key used to sign ID Tokens, using JSON Web Signatures. Clients use the public key to verify the provenance and integrity of the ID tokens. 
 
 To request client credentials for the AuthServer, we have to configure a `ClientRegistration`.
-Execute the following command to creat the YAML for our `ClientRegistration`.
+Execute the following command to create the YAML for our `ClientRegistration`.
 
 ```editor:append-lines-to-file
 file: ~/config/auth/clientregistration.yaml
@@ -101,7 +101,7 @@ For this workshop, the redirect URL is targeting a **single-page app acting as a
 After the single-page app has obtained an access token, it will send it in the HTTP Authorization header 
 of the requests to our services (known as resource servers in OAuth), which can then verify it to determine whether to process the request, find the associated user account, etc.
 
-Public clients like a single-page or mobile app don't require credentials to obtain tokens and instead rely on the Proof Key for Code Exchange (PKCE) Authorization Code flow extension, which is the reason why `clientAuthenticationMethod` is set to `none`.
+Public clients like a single page or mobile app don't require credentials to obtain tokens and instead rely on the Proof Key for Code Exchange (PKCE) Authorization Code flow extension, which is the reason why `clientAuthenticationMethod` is set to `none`.
 
 After applying our ClientRegistration to the cluster, **AppSSO will create a secret containing the credentials that client applications will use**, named after the client registration.
 ```terminal:execute
@@ -148,7 +148,7 @@ value:
   security.oauth2.resourceserver.jwt.jwk-set-uri: ${spring.security.oauth2.client.provider.appsso.issuer-uri}/oauth2/jwks
 ```
 
-As this configuration is not available for our tests, we have to mock it so that they will not fail.
+As this configuration is not available for our tests, we have to mock it so they will not fail.
 ```editor:insert-lines-before-line
 file: ~/product-service/src/test/java/com/example/productservice/ApplicationTests.java
 line: 8
@@ -230,7 +230,7 @@ command: kubectl apply -f config/gateway/
 clear: true
 ```
 
-Run the following command to see when the OAuth-enabled version of the product service is deployed based on the HTTP response status code change from 200 to 401 due to the missing, now required, Authentication header including a valid token.
+Run the following command to see when the OAuth-enabled version of the product service is deployed based on the HTTP response status code change from 200 to 401 due to the missing, now required, Authentication header, including a valid token.
 ```terminal:execute
 command: watch -n 1 'curl -I https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/services/product-service/api/v1/products'
 clear: true

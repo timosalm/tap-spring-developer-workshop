@@ -5,8 +5,8 @@ name: The Twelve Factors
 ####  Factor 8: Concurrency
 **Factor eight**, concurrency, advises us that **cloud-native applications should scale out using the process model**. There was a time when, if an application reached the limit of its capacity, the solution was adding CPUs, RAM, and other resources (virtual or physical), which is called **vertical scaling**.
 
-A much more **modern approach**, one ideal for the kind of elastic scalability that the cloud supports, is to **scale horizontally** where you create multiple instances of your application and then distribute the load among those instances.
-TAP includes a serverless application runtime for Kubernetes, which provides **configurable horizontal auto-scaling** and **scale to zero** functionality called **Knative**.
+A much more **modern approach**, one ideal for the kind of elastic scalability that the cloud supports, is to **scale horizontally**, where you create multiple instances of your application and then distribute the load among those instances.
+TAP includes a serverless application runtime for Kubernetes, which provides **configurable horizontal auto-scaling** and **scale-to-zero** functionality called **Knative**.
 
 ```dashboard:open-url
 url: https://knative.dev/docs/
@@ -19,9 +19,9 @@ The major **subprojects of Knative** are Serving and Eventing.
 
 Knative Serving abstracts away a lot of the Kubernetes resources, like a deployment, service, ingress, etc., we usually have to configure to get an application running on Kubernetes.
 In addition to auto-scaling, it offers features like rollbacks, canary and blue-green deployment via revisions, and traffic splitting.
-For this workshop though we will just focus on the scaling feature Knative provides.
+For this workshop though, we will just focus on the scaling feature Knative provides.
 
-By executing the following two commands. You should be able to see how the number of pods will be scaled up based on the generated traffic with the `hey` tool.
+By executing the following two commands, you should be able to see how the number of pods will be scaled up based on the generated traffic with the `hey` tool.
 ```execute-2
 watch kubectl get pods -l serving.knative.dev/service=product-service
 ```
@@ -47,7 +47,7 @@ product-service-00001-deployment-f686bb89f-fc54w   workload      2m           26
 {% endraw %}
 
 ####  Factor 9: Disposability
-A cloud-native applications are disposable, which means they **can be started or stopped rapidly**. An application cannot scale, deploy, release, or recover rapidly if it cannot start rapidly and shut down gracefully. 
+Cloud-native applications are disposable, which means they **can be started or stopped rapidly**. An application cannot scale, deploy, release, or recover rapidly if it cannot start rapidly and shut down gracefully. 
 
 If we have a look at the application's logs, we can see how long it took our application to start. Remember this number as a reference for later.
 ```terminal:execute
@@ -63,10 +63,10 @@ $ kubectl logs -l serving.knative.dev/service=product-service -c workload | grep
 ````
 {% endraw %}
 
-In the case where you may be scaling rapidly and may be running hundres of applications startup time and compute resources become a concern.  If an application start slowly it might mean your app cannot scale fast enough to handle a sudden increase in demand.
-If an application consumes a lot of resources (memory, CPU, etc) and it scales to a large degress that can mean an increase cost.
-Making sure we can optomize both performance (start time) and resource consumption can be a game changer in the cloud.
-Next let's look how Spring let's you do just that!
+In the case where you may scale your apps rapidly and run hundreds of applications, startup time and compute resources become a concern. If an application starts slowly, it might mean your app cannot scale fast enough to handle a sudden increase in demand, and if it consumes a lot of resources (memory, CPU, etc) and scales to a large degree, that means increased cost.
+
+Making sure we can optimize both performance (start time) and resource consumption can be a game changer in the cloud. 
+Let's see how Spring solves this problem for you!
 
 ##### Just-in-Time vs Ahead-of-Time compilation
 In **traditional** Java applications, **Java code is compiled into Java ‘bytecode’** and packaged into a JAR archive. The Java Virtual Machine **(JVM) then executes the Java program** contained in the Java Archive on the host platform **with a bytecode interpreter**. 
@@ -75,16 +75,16 @@ The **execution of Java bytecode by an interpreter is always slower** than the e
 
 A JIT compiler **translates Java bytecode into native machine language while executing the program for parts of a program that are frequently executed**. The translated parts of the program can then be **executed much faster**. This way, a **JIT compiler can significantly speed up the overall execution time**. 
 
-The **downside** is that the JIT compilation **impacts the application startup time** and a Java program running on a Java Virtual Machine is always **more resource consuming than native execution**. 
+The **downside** is that the JIT compilation **impacts the application startup time**, and a Java program running on a Java Virtual Machine is always **more resource-consuming than native execution**. 
 
 With the **ahead-of-time compilation** of the Java code to a standalone executable, called a **native image**, you are able to mitigate these problems and make your **application start faster and consume fewer resources**.
 
 ![](../images/jit-vs-aot.png)
 
 ###### What are native images?
-- Standalone executable of ahead-of-time compiled Java code
+- Standalone executables of ahead-of-time compiled Java code
 - Includes the application classes, classes from its dependencies, runtime library classes, and statically linked native code from JDK
-- Runs without the need of a JVM, necessary components like for memory management, thread scheduling, and so on are included in a runtime system called "Substrate VM" 
+- Runs without the need for a JVM, necessary components like for memory management, thread scheduling, and so on are included in a runtime system called "Substrate VM" 
 - Specific to the OS and machine architecture for which it was compiled
 - Requires fewer resources, is smaller, and faster than regular Java applications running on a JVM
 
@@ -103,9 +103,9 @@ GraalVM offers **three runtime modes**:
 ![](../images/graalvm.png)
 
 ##### Tradeoffs between JVM and native images
-**Native images** are able to **improve both the startup time, and resource-consumption** for your applications deployed on a serverless runtime, but you have to keep in mind that there are some trade-offs compared to the JVM.
+**Native images** are able to **improve both the startup time and resource consumption** for your applications deployed on a serverless runtime, but you have to keep in mind that there are some trade-offs compared to the JVM.
 
-They **offer lower throughput and higher latency** because they can’t optimize hot paths during runtime as much as the JVM can. 
+They **offer lower throughput and higher latency** because they can't optimize hot paths during runtime as much as the JVM can. 
 The **compilation takes much longer and consumes more resources**, which is bad for developer productivity. 
 Finally, the **platform is also less mature**, but it evolves and improves quickly.
 
@@ -113,7 +113,7 @@ Finally, the **platform is also less mature**, but it evolves and improves quick
 
 For GraalVM native images, all the bytecode in the application needs to be **observed** and **analyzed** at **build time**.
 
-One area the analysis process is responsible for is to determine which classes, methods, and fields need to be included in the executable. The **analysis is static**, so it might need some configuration to correctly include the parts of the program that use dynamic features of the language.
+One area the analysis process is responsible for is determining which classes, methods, and fields need to be included in the executable. The **analysis is static**, so it might need some configuration to correctly include the parts of the program that use dynamic features of the language.
 
 However, this analysis cannot always completely predict all usages of the **Java Reflection, Java Native Interface (JNI), Dynamic Proxy objects (java.lang.reflect.Proxy)**, or **classpath** resources (**Class.getResource)**. 
 
@@ -136,7 +136,7 @@ You can **get started** very **easily by using start.spring.io to create a new p
 
 The `spring-boot-starter-parent` declares a `native` profile that configures the executions that need to run to create a native image. You can activate profiles using the `-P` flag on the command line.
 
-Spring Boot includes buildpack support for native images directly for both Maven and Gradle. The resulting image doesn’t contain a JVM, which leads to smaller images.
+Spring Boot includes buildpack support for native images directly for both Maven and Gradle. The resulting image doesn't contain a JVM, which leads to smaller images.
 ```
 ./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=myorg/myapp -Pnative
 ./gradlew bootBuildImage --imageName=myorg/myapp -Pnative

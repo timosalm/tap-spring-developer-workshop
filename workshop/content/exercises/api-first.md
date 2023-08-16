@@ -20,7 +20,7 @@ If you **switch the kind from "Component" to "System"** and select `sc-architect
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/system/sc-architecture-system
 ```
-In addition to a link to jump to the related source code, there is also one to access the **technical documentation** which can be written in Markdown format in a source-code repository and displayed alongside the relevant catalog entries.
+In addition to a link to jump to the related source code, there is also one to access the **technical documentation**, which can be written in Markdown format in a source-code repository and displayed alongside the relevant catalog entries.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/docs/default/System/sc-architecture-system
 ```
@@ -45,7 +45,7 @@ If you select a Pod you're able to see the logs and information provided by **Ap
 
 With so many APIs in a microservices application, developers need an API Gateway that they can control!
 
-**VMware Spring Cloud Gateway for Kubernetes** is an **API gateway created for developers** based on the open-source [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway), along with integrating other Spring ecosystem projects such as Spring Security, Spring Session, and more. It automates the deployment of an API gateway service via the [Kubernetes Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) pattern, and includes several other [commercial features](https://docs.vmware.com/en/VMware-Spring-Cloud-Gateway-for-Kubernetes/2.0/scg-k8s/GUID-index.html#key-features) like simple Single Sign-On (SSO) configuration, and OpenAPI version 3 documentation auto-generation.
+**VMware Spring Cloud Gateway for Kubernetes** is an **API gateway created for developers** based on the open-source [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway), along with integrating other Spring ecosystem projects such as Spring Security, Spring Session, and more. It automates the deployment of an API gateway service via the [Kubernetes Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) pattern, and includes several other [commercial features](https://docs.vmware.com/en/VMware-Spring-Cloud-Gateway-for-Kubernetes/2.0/scg-k8s/GUID-index.html#key-features) like simple Single Sign-On (SSO) configuration and OpenAPI version 3 documentation auto-generation.
 
 ![VMware Spring Cloud Gateway for Kubernetes](../images/scg-for-k8s.png)
 
@@ -73,8 +73,7 @@ text: |
 In the commercial version of Spring Cloud Gateway we define routes in a Kubernetes resource called `SpringCloudGatewayRouteConfig`.  
 Let's define routes for both the product and order services.
 
-These routes are simple in that they just have a path predicte to define what path to the gateway will route the requests to the services and then uses a filter to strip those
-paths from the request before its routed to the downstream services.
+These routes are simple in that they just have a path predicate to define what path to the gateway will route the requests to the services and then uses a filter to strip those paths from the request before it'ss routed to the downstream services.
 
 ```editor:append-lines-to-file
 file: ~/config/gateway/gateway-route-config.yaml
@@ -121,7 +120,7 @@ clear: true
 
 With the gateway as the single entry point to our application, we shouldn't need to expose the order and product service directly anymore. This can be done by setting the `networking.knative.dev/visibility: cluster-local` label on your Workloads. 
 
-*Hint: Even if this also works with the default installation of TAP, for production a second ingress controller has to be configured with service type ClusterIP and configured in Knative, so that the services are really not reachable from the outside.*
+*Hint: Even if this also works with the default installation of TAP, for production, a second ingress controller has to be configured with service type ClusterIP and configured in Knative, so that the services are really not reachable from the outside.*
 
 We can now validate whether our configuration works by sending a request through it to the order service. 
 ```terminal:execute
