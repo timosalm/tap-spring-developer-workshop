@@ -31,7 +31,7 @@ url: https://cartographer.sh/docs/v0.7.0/reference/workload/
 ```
 We will explore some of these throughout the workshop as we continue on.
 
-To create the workload we can use `tanzu apps workload create`.  
+To create the Workload, we can use `tanzu apps workload create`.  
 ```execute
 tanzu apps workload create -f product-service/config/workload.yaml -y
 ```
@@ -42,7 +42,7 @@ session: 1
 command: |
   tanzu apps workload tail product-service --since 1h
 ```
-Just like in the previous section we can monitor the status of the Knative service for the product service.  Once it is marked as `Ready` we know the application has finished being deployed.
+Just like in the previous section, we can monitor the status of the Knative service for the product service.  Once it is marked as `Ready` we know the application has finished being deployed.
 
 ```terminal:execute
 session: 2
@@ -50,16 +50,16 @@ command: |
   watch -n 1 kubectl get service.serving.knative.dev product-service
 ```
 
-In addiiton to monitoring the supply chain in the terminal we can also monitor in the Tanzu Developer Portal.
+In addition to monitoring the supply chain in the terminal, we can also monitor in the Tanzu Developer Portal.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
 ```
 
-After the supply chain completes you will see the logs of the `product-service` application stream to the terminal and you will see the Delivery step marked as completed in the Tanzu Developer Portal.
+After the supply chain completes, you will see the logs of the `product-service` application stream to the terminal, and you will see the Delivery step marked as completed in the Tanzu Developer Portal.
 
 ![Delivery Tanzu Developer Portal](../images/delivery-tap-gui.png)
 
-At this point the application is up and running so we can test it out by making a request to the `/api/v1/products` endpoint.
+At this point, the application is up and running so we can test it out by making a request to the `/api/v1/products` endpoint.
 
 ```terminal:interrupt
 session: 2
@@ -71,7 +71,7 @@ command: |
   curl -s https://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
 ```
 
-When you execute the `curl` command you should see the following response
+When you execute the `curl` command, you should see the following response
 
 ```
 [
@@ -88,7 +88,7 @@ If you are still tailing the logs from the `product-service` you will also notic
 product-service-00001-deployment-57bb88c6f7-xn42x[workload] 2023-08-03T15:56:28.015314355Z 2023-08-03T15:56:28.014Z  INFO 1 --- [nio-8080-exec-9] c.e.p.product.ProductApplicationService  : Fetch products called
 ```
 
-Lets stop tailing the logs from the `product-service` and move on to the next step of the workshop.
+Let's stop tailing the logs from the `product-service` and move on to the next step of the workshop.
 
 ```terminal:interrupt
 session: 1

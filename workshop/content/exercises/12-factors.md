@@ -16,7 +16,7 @@ url: {{ ENV_GITEA_BASE_URL }}/product-service/src/{{ session_namespace }}
 ```
 
 #### Factor 2: Dependencies
-**Maven and Gradle** are two of the most popular tools in the Java ecosystem that allow us to **declare and manager dependencies**. As we have already seen, the product service is using Maven.
+**Maven and Gradle** are two of the most popular tools in the Java ecosystem that allow us to **declare and manage dependencies**. As we have already seen, the product service is using Maven.
 
 ```editor:open-file
 file: ~/product-service/pom.xml

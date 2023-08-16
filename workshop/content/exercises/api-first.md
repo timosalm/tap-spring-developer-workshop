@@ -10,7 +10,7 @@ Here is an example of the YAML file from the product service.
 ```dashboard:open-url
 url: {{ ENV_GITEA_BASE_URL }}/product-service/src/branch/{{ session_namespace }}/catalog/component.yaml
 ```
-Lets open the Software Catalog.
+Let's open the Software Catalog.
 
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog
@@ -49,7 +49,7 @@ With so many APIs in a microservices application, developers need an API Gateway
 
 ![VMware Spring Cloud Gateway for Kubernetes](../images/scg-for-k8s.png)
 
-Lets create an instance of Spring Cloud Gateway for our application.
+Let's create an instance of Spring Cloud Gateway for our application.
 
 First, we have to configure a gateway instance via the `SpringCloudGateway` Kubernetes custom resource.
 ```editor:append-lines-to-file
@@ -71,7 +71,7 @@ text: |
 ```
 
 In the commercial version of Spring Cloud Gateway we define routes in a Kubernetes resource called `SpringCloudGatewayRouteConfig`.  
-Lets define routes for both the product and order services.
+Let's define routes for both the product and order services.
 
 These routes are simple in that they just have a path predicte to define what path to the gateway will route the requests to the services and then uses a filter to strip those
 paths from the request before its routed to the downstream services.
@@ -113,7 +113,7 @@ text: |
       name: supply-chain-app-route-config
 ```
 
-Lets apply everything to the cluster to create the gateway, route configuration, and then connect the two with the mapping.
+Let's apply everything to the cluster to create the gateway, route configuration, and then connect the two with the mapping.
 ```terminal:execute
 command: kubectl apply -f ~/config/gateway/
 clear: true

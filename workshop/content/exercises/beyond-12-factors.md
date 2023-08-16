@@ -158,7 +158,7 @@ If you select Show on that trace you can see the tracing details of the request 
 
 ![](../images/zipkin-details.png)
 
-Lets interrupt the terminals before moving on.
+Let's interrupt the terminals before moving on.
 ```terminal:interrupt-all
 ```
 

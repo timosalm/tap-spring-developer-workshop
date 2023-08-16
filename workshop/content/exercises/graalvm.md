@@ -66,7 +66,7 @@ $ kubectl logs -l serving.knative.dev/service=product-service -c workload | grep
 In the case where you may be scaling rapidly and may be running hundres of applications startup time and compute resources become a concern.  If an application start slowly it might mean your app cannot scale fast enough to handle a sudden increase in demand.
 If an application consumes a lot of resources (memory, CPU, etc) and it scales to a large degress that can mean an increase cost.
 Making sure we can optomize both performance (start time) and resource consumption can be a game changer in the cloud.
-Next lets look how Spring lets you do just that!
+Next let's look how Spring let's you do just that!
 
 ##### Just-in-Time vs Ahead-of-Time compilation
 In **traditional** Java applications, **Java code is compiled into Java ‘bytecode’** and packaged into a JAR archive. The Java Virtual Machine **(JVM) then executes the Java program** contained in the Java Archive on the host platform **with a bytecode interpreter**. 
