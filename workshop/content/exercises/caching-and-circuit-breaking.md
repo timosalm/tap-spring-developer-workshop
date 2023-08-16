@@ -213,6 +213,10 @@ Since the `/env`` and `/configprops` endpoints can contain sensitive values, sta
 ```
 {% endraw %}
 
+Let's interrupt the `watch` and `tail` commands.
+```terminal:interrupt-all
+```
+
 ##### Application Live View
 
 You can also leverage TAP's powerful Application Live View, to view the information provided by the actuator endpoints. 
@@ -231,10 +235,6 @@ There is a lot more information, like resource consumption or incoming API reque
 ![App Live View](../images/app-live-view-memory.png)
 
 Some functionality such as **editing environment variables, downloading heap dump data, and changing log levels for applications**, is not available by default and **has to be enabled by the platform operators for specific users or groups**.
-
-Let's interrupt the `watch` and `tail` commands.
-```terminal:interrupt-all
-```
 
 Finally, we can test our order service by making a request to the endpoint.
 
