@@ -189,14 +189,13 @@ clear: true
 ```
 
 To configure the order service for OAuth, we only have to activate a profile that configures it in the same way as the product service and add the service binding.
-```editor:append-lines-to-file
-file: ~/samples/externalized-configuration/order-service.yaml
-text: |
-  spring.profiles.active: oauth
-```
-```terminal:execute
-command: (cd samples/externalized-configuration && git add . && git commit -m "Enable OAuth for order service" && git push)
-clear: true
+```editor:insert-value-into-yaml
+file: ~/order-service/config/workload.yaml
+path: spec
+value:
+  env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: oauth
 ```
 ```editor:insert-value-into-yaml
 file: ~/order-service/config/workload.yaml
@@ -207,15 +206,6 @@ value:
       apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ResourceClaim
       name: auth-client
-```
-**WORKAROUD**
-```editor:insert-value-into-yaml
-file: ~/order-service/config/workload.yaml
-path: spec
-value:
-  env:
-  - name: SPRING_PROFILES_ACTIVE
-    value: oauth
 ```
 ```terminal:execute
 command: tanzu apps workload apply -f order-service/config/workload.yaml -y
