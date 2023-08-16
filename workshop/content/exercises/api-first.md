@@ -1,7 +1,7 @@
 The API-first approach prioritizes the design and development of the application programming interface (API) before any other aspects of the application. 
 This approach enables the consumers of an API to work more independently from its provider, and providers are able to facilitate discussions with stakeholders well before they might have coded themselves past the point of no return.
 
-###### Discover API documentation and more in Tanzu Developer Portal
+###### Discover API Documentation And More In Tanzu Developer Portal
 
 Tanzu Developer Portal helps you to find documentation for APIs available in your organization and try them out before integrating them in your applications.
 
@@ -31,10 +31,15 @@ url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/api/gateway-{{ ENV_TA
 ```
 With a feature called **API Auto Registration**, TAP can automatically register your APIs in Tanzu Developer Portal.
 
-From the different components in the Software Catalog, you can also jump to the **Runtime Resources** view and have a closer look at the resources running on Kubernetes for your applications. If you select a Pod you're able to see the logs, and if it's running one of our services, also information provided by **App Live View**.
+From the different components in the Software Catalog, you can also jump to the **Runtime Resources** view and have a closer look at the resources running on Kubernetes for your applications. Click the link below to see the workloads for the product service.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/component/product-service/workloads
 ```
+
+If you select a Pod you're able to see the logs and information provided by **App Live View**.
+![](../images/product-service-pod.png)
+![](../images/pod-logs.png)
+![](../images/app-live-view.png)
 
 ###### API Gateway
 
@@ -121,7 +126,7 @@ With the gateway as the single entry point to our application, we shouldn't need
 We can now validate whether our configuration works by sending a request through it to the order service. 
 ```terminal:execute
 command: |
-  curl -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/services/order-service/api/v1/orders
+  curl -s -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/services/order-service/api/v1/orders | jq .
 clear: true
 ```
 We can also use ZipKin UI to see the new request flow.
