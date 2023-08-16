@@ -166,51 +166,71 @@ command: watch -n 1 "curl -s https://order-service-{{ session_namespace }}.{{ EN
 clear: true
 ```
 Once the new version of the order service is deployed, you should see the following JSON.
+Since the `/env`` and `/configprops` endpoints can contain sensitive values, starting with Spring Boot 3, all values are always masked by default. Like in our case, [this can be configured](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide#actuator-endpoints-sanitization).
 {% raw %}
 ```
 {
   "name": "kubernetesServiceBindingSpecific",
   "properties": {
     "spring.datasource.driver-class-name": {
-      "value": "******"
+      "value": "org.postgresql.Driver"
     },
     "spring.rabbitmq.password": {
-      "value": "******"
+      "value": "OBcxed..."
     },
     "spring.datasource.username": {
-      "value": "******"
+      "value": "postgres"
     },
     "spring.rabbitmq.port": {
-      "value": "******"
+      "value": "5672"
     },
     "spring.datasource.url": {
-      "value": "******"
+      "value": "jdbc:postgresql://10.100.74.154:5432/postgres-1-rndgv"
     },
     "management.zipkin.tracing.endpoint": {
-      "value": "******"
+      "value": "http://zipkin:9411/api/v2/spans"
     },
     "spring.rabbitmq.host": {
-      "value": "******"
+      "value": "10.100.221.162"
     },
     "spring.r2dbc.password": {
-      "value": "******"
+      "value": "hQoSBrY..."
     },
     "spring.r2dbc.url": {
-      "value": "******"
+      "value": "r2dbc:postgresql://10.100.74.154:5432/postgres-1-rndgv"
     },
     "spring.r2dbc.username": {
-      "value": "******"
+      "value": "postgres"
     },
     "spring.rabbitmq.username": {
-      "value": "******"
+      "value": "rabbitmq"
     },
     "spring.datasource.password": {
-      "value": "******"
+      "value": "hQoSBrY..."
     }
   }
 }
 ```
 {% endraw %}
+
+##### Application Live View
+
+You can also leverage TAP's powerful Application Live View, to view the information provided by the actuator endpoints. 
+App Live View is currently available for pods running Spring Boot or .NET Steeltoe applications under the "Runtime Resources" tab. It **doesn't store any of that data** for further analysis or historical views. 
+
+Execute the following command and click on the link in the terminal to open it for the order service in a new tab. 
+```terminal:execute
+command: |
+  echo LINK TO APP LIVE VIEW: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/Component/order-service/workloads/pods/$(kubectl get pods -l serving.knative.dev/service=order-service -o jsonpath='{.items[0].metadata.uid}')
+```
+
+**Scroll down to the "Live view" box** and **choose an "Information Category" in the drop-down** - for example the "Environment" category to see the same information as before with the terminal command.
+
+![App Live View](../images/app-live-view-env.png)
+There is a lot more information, like resource consumption or incoming API requests available.
+![App Live View](../images/app-live-view-memory.png)
+
+Some functionality such as **editing environment variables, downloading heap dump data, and changing log levels for applications**, is not available by default and **has to be enabled by the platform operators for specific users or groups**.
 
 Let's interrupt the `watch` and `tail` commands.
 ```terminal:interrupt-all

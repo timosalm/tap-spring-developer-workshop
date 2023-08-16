@@ -40,7 +40,7 @@ With **VMware Tanzu Build Service (TBS)**, which is part of TAP and based on an 
 
 All of this is part of TAP's Supply Chain, making it possible to deploy security patches automatically.
 
-In the details of the Image Provider step in **TAP-GUI**, you're able to see the **logs of the container build and the tag of the produced image**.
+In the details of the Image Provider step in **Tanzu Developer Portal**, you're able to see the **logs of the container build and the tag of the produced image**.
 
 It also shows the reason for an image build. In this case, it's due to our configuration change.
 
@@ -59,7 +59,7 @@ url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespac
 Factor eleven states that **Logs should be treated as event streams**.
 The key point with logs in a cloud-native application is that it writes all of its log entries to stdout and stderr, and the aggregation, processing, and storage of logs is a nonfunctional requirement that is satisfied by your platform or cloud provider.
 
-For developers, TAP-GUI also provides the capability to view the logs of your application.
+For developers, Tanzu Developer Portal also provides the capability to view the logs of your application.
 
 Execute the following command and click on the link in the terminal to open the logs view for the product service in a new tab. 
 ```terminal:execute

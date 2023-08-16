@@ -7,7 +7,9 @@ spring:
 logging.level.org.springframework.cache: TRACE
 management:
   tracing.sampling.probability: 1.0
-  endpoint.restart.enabled: true
+  endpoint:
+    restart.enabled: true
+    env.show-values: ALWAYS
   endpoints.web.exposure.include: "*"
   zipkin.tracing.endpoint:
 server:

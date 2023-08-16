@@ -125,7 +125,7 @@ command: tanzu apps workload apply -f product-service/config/workload.yaml -y
 clear: true
 ```
 
-As we have done before we can view the deployment of our application in the supply chain GUI or by tailing the logs.
+As we have done before we can view the deployment of our application in Tanzu Developer Portal's supply chain view or by tailing the logs.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service
 ```
