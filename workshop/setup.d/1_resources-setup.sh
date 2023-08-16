@@ -6,5 +6,5 @@ kubectl annotate namespace ${SESSION_NAMESPACE} secretgen.carvel.dev/excluded-fr
 kubectl label namespaces ${SESSION_NAMESPACE} apps.tanzu.vmware.com/tap-ns=""
 kubectl patch serviceaccount default -p '{"secrets": [{"name": "registry-credentials"}], "imagePullSecrets": [{"name": "registry-credentials"}]}'
 
-cp -a samples/spring-cloud-demo/. .
+cp -a -R samples/spring-cloud-demo/. .
 rm -rf samples/spring-cloud-demo
