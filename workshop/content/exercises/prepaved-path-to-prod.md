@@ -87,6 +87,10 @@ When you execute the `curl` command, you should see the following response
   {
     "id": 1,
     "name": "VMware Tanzu Application Platform"
+  },
+  {
+    "id": 2,
+    "name": "VMware Spring Runtime"
   }
 ]
 ```
