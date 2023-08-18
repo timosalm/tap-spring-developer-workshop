@@ -19,7 +19,7 @@ path: tap-spring-developer-workshop-sample.zip
 ```
 
 If you would like to continue to learn about TAP you can request a hosted instance to continue your exploration by scanning the QR code below
-![Reusable CI/CD](../images/bit.ly_TanzuDevTry.png)
+![](images/bit.ly_TanzuDevTry.png)
 
 For any questions, reach out to your VMware or VMware Tanzu sales contact or use the contact form on our website.
 ```dashboard:open-url
