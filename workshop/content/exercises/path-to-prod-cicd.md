@@ -70,7 +70,7 @@ For image scans to happen, **scan policies** must be defined on a namespace leve
 
 Let's go back to the visualization of the supply chain and **click on the policy name in the detail view of the Image Scanner**.
 
-Our image step didn't fail because the `notAllowedSeverities` configuration in the scan policy is only set to `["UnknownSeverity"]`. If that would be different, it's also possible to whitelist CVEs with the `ignoreCves` configuration.
+Our image step didn't fail because the `notAllowedSeverities` configuration in the scan policy is only set to `["UnknownSeverity"]`. It's also possible to whitelist CVEs with the `ignoreCves` configuration.  You can read more about possible scan policy configuration in the [TAP documentation](https://docs.vmware.com/en/VMware-Tanzu-Application-Platform/1.6/tap/scst-scan-policies.html).
 
 The **container image includes the full stack** required to run the application, which includes more information than just running a source code scan (**for source code scans, most of the CVE scanners don't download the dependencies, which leads often to false positives or missed CVEs**).
 
