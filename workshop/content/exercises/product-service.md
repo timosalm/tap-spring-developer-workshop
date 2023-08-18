@@ -38,11 +38,7 @@ Let's start building out the product service.
 
 Before adding any code, though, we'll have a look at what the accelerator created for us.
 
-First, head back to the IDE by clicking the command below.
-
-```editor:execute-command
-command: workbench.view.explorer
-```
+Lets start by looking at the dependencies of our app.
 
 ```editor:open-file
 file: product-service/pom.xml
