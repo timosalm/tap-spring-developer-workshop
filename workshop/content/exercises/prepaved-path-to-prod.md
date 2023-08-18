@@ -31,6 +31,15 @@ url: https://cartographer.sh/docs/v0.7.0/reference/workload/
 ```
 We will explore some of these throughout the workshop as we continue on.
 
+Before we can deploy the workload to TAP we first need to commit the code to a Git repo.
+Execute the command below to initialize the Git repo for the product service and push it to a remote Git repo which is pointed to in the `workload.yaml`.
+
+```terminal:execute
+command: (cd product-service && git init -b {{ session_namespace }} && git remote add origin {{ ENV_GITEA_BASE_URL}}/product-service.git && git add . && git commit -m "Initial implementation" && git push -u origin {{ session_namespace }} -f)
+description: Create a Git repository and commit generated code
+clear: true
+```
+
 To create the Workload, we can use `tanzu apps workload create`.  
 ```execute
 tanzu apps workload create -f product-service/config/workload.yaml -y
