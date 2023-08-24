@@ -94,22 +94,18 @@ spec:
 {% endraw %}
 
 TAP mounts each property within the configuration file(s) as a file, with the contents being 
-the value of the configuration property.  Spring Boot can load all these "file values" pairs in a given directory using the `configtree` prefix in `spring.config.import`.  Let's add a `spring.config.import` statement to the product-service's
-`application.yaml`.
+the value of the configuration property.  Spring Boot can load all these "file values" pairs in a given directory using the `configtree` prefix in `spring.config.import`.  Let's add a `SPRING_CONFIG_IMPORT` environment property to the product-service's `workload.yaml`.
 
 ```editor:insert-value-into-yaml
-file: ~/product-service/src/main/resources/application.yaml
-path: spring
+file: ~/product-service/config/workload.yaml
+path: spec
 value:
-  config.import: "optional:configtree:${SERVICE_BINDING_ROOT}/config-server/"
+  env:
+  - name: SPRING_CONFIG_IMPORT
+    value: "optional:configtree:${SERVICE_BINDING_ROOT}/config-server/"   
 ```
 
-To apply the changes, commit the updated source code and update the Workload for the product-service deployed to TAP
-```terminal:execute
-command: |
-  (cd product-service && git add . && git commit -m "Add external configuration support" && git push)
-clear: true
-```
+To apply the changes, update the Workload for the product-service deployed to TAP
 ```terminal:execute
 command: tanzu apps workload apply -f product-service/config/workload.yaml -y
 clear: true
