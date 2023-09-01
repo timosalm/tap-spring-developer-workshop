@@ -16,23 +16,6 @@ spec:
   content:
     image: #@ "{}".format(data.values.workshop_container_image)
     files: #@ "github.com/{}/tap-spring-developer-workshop?ref={}".format(data.values.workshop_git.username,data.values.workshop_git.branch)
-  environment:
-    objects:
-    - apiVersion: apis.apps.tanzu.vmware.com/v1alpha1
-      kind: APIDescriptor
-      metadata:
-        name: gateway
-        namespace: default
-      spec:
-        description: A set of API endpoints to manage the resources within the Spring Cloud
-          Architecture app.
-        location:
-          baseURL:
-            url: https://gateway-dev-space.emea.end2end.link
-          path: /v3/api-docs
-        owner: team-vmware-tanzu-se
-        system: sc-architecture-system
-        type: openapi
   session:
     namespaces:
       budget: custom
