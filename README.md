@@ -11,6 +11,12 @@ The Application Accelerator used for this application can be registered in the T
 kubectl apply -f https://raw.githubusercontent.com/timosalm/tap-spring-developer-workshop/main/setup/accelerator/accelerator-resource.yaml
 ```
 
+## API Docs
+
+To have API docs for the application available in TAP Developer Portal run the following command. Our commercial Spring Cloud currently doesn't support API aggregation (will be released soon), therefore we are using the following workaround, and consume an OpenAPI spec from another TAP instance.
+```
+kubectl apply -f https://raw.githubusercontent.com/timosalm/tap-spring-developer-workshop/main/setup/api-docs.yaml
+```
 ## Workshop installation
 This repository includes a GitHub Actions workflow that builds a container image based on this [Dockerfile](Dockerfile) and publishes it as a package [here](https://github.com/timosalm/tap-spring-developer-workshop/pkgs/container/tap-spring-developer-workshop).
 The correct image tag for this image is already set in the `values-example.yaml`.
