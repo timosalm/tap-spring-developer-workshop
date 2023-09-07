@@ -432,7 +432,7 @@ text: |
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
-line: 12
+line: 15
 text: |
     @EnableCaching
 ```
