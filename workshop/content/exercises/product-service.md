@@ -16,7 +16,7 @@ product-service
 ```
 - **Git base url:**
 ```copy
-{{ ENV_GITEA_BASE_URL}}
+{{ git_protocol }}://{{ git_host}}
 ```
 - **Git branch and Deployment namespace:**
 ```copy

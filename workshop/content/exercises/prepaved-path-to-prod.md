@@ -35,7 +35,7 @@ Before we can deploy the workload to TAP we first need to commit the code to a G
 Execute the command below to initialize the Git repo for the product service and push it to a remote Git repo which is pointed to in the `workload.yaml`.
 
 ```terminal:execute
-command: (cd product-service && git init -b {{ session_namespace }} && git remote add origin {{ ENV_GITEA_BASE_URL}}/product-service.git && git add . && git commit -m "Initial implementation" && git push -u origin {{ session_namespace }} -f)
+command: (cd product-service && git init -b {{ session_namespace }} && git remote add origin {{ git_protocol }}://{{ git_host}}/product-service.git && git add . && git commit -m "Initial implementation" && git push -u origin {{ session_namespace }} -f)
 description: Create a Git repository and commit generated code
 clear: true
 ```

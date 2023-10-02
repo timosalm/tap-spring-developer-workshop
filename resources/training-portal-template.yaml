@@ -3,7 +3,7 @@
 apiVersion: learningcenter.tanzu.vmware.com/v1beta1
 kind: TrainingPortal
 metadata:
-  name: tap-spring-developer-workshops
+  name: tap-spring-dev-workshops
   annotations:
     kapp.k14s.io/update-strategy: always-replace
 spec:
@@ -20,7 +20,7 @@ spec:
       maximum: 40
     reserved: 0
   workshops:
-    - name: tap-spring-developer-workshops
+    - name: tap-spring-dev-workshop
       capacity: 40
       reserved: 1
       expires: 4h

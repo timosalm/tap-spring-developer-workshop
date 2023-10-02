@@ -2,10 +2,10 @@
 #@ load("@ytt:base64", "base64")
 #@ load("@ytt:json", "json")
 ---
-apiVersion: learningcenter.tanzu.vmware.com/v1beta1
+apiVersion: training.educates.dev/v1beta1
 kind: Workshop
 metadata:
-  name: tap-spring-developer-workshops
+  name: tap-spring-dev-workshop
 spec:
   title: TAP for Spring Developers
   description: A workshop that demonstrates capabilities of VMware Tanzu Application Platform for Spring developers.
@@ -26,15 +26,11 @@ spec:
         layout: split
       editor:
         enabled: true
+      git:
+        enabled: true
     env: 
     - name: TAP_INGRESS
       value: #@ data.values.tap.ingress_domain
-    - name: GITEA_BASE_URL
-      value: #@ data.values.gitea.base_url
-    - name: GITEA_USERNAME
-      value: #@ data.values.gitea.basic_auth_username
-    - name: GITEA_PASSWORD
-      value: #@ data.values.gitea.basic_auth_password
     ingresses:
     - name: twelve-factors
       protocol: https

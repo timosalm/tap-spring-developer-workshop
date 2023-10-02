@@ -11,7 +11,7 @@ TAP provides the **Application Configuration Service for VMware Tanzu** which is
 To use the Application Configuration Service we first need a Git repository to store our configuration in.  For this workshop, we have already set-up a Git repo for you.
 
 ```dashboard:open-url
-url: {{ ENV_GITEA_BASE_URL }}/externalized-configuration/src/{{ session_namespace }}
+url: {{ git_protocol }}://{{ git_host }}/externalized-configuration/src/{{ session_namespace }}
 ```
 
 If you are familiar with Spring Cloud Config, certain concepts of the Application Configuration Service will feel very familiar while others are a bit different.
@@ -32,7 +32,7 @@ command: |
     spec:
       backends:
         - type: git
-          uri: {{ ENV_GITEA_BASE_URL }}/externalized-configuration
+          uri: {{ git_protocol }}://{{ git_host }}/externalized-configuration
           defaultLabel: {{ session_namespace }}
   EOF
 clear: true
@@ -42,7 +42,7 @@ As a next step, you have to create a `ConfigurationSlice` that references this c
 In this case, we just have a single file (`product-service.yaml`) we would like to use to configure the product-service.
 
 ```dashboard:open-url
-url: {{ ENV_GITEA_BASE_URL }}/externalized-configuration/src/{{ session_namespace }}/product-service.yaml
+url: {{ git_protocol }}://{{ git_host }}/externalized-configuration/src/{{ session_namespace }}/product-service.yaml
 ```
 
 To create the `ConfigurationSlice` execute the following command.
