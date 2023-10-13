@@ -14,24 +14,7 @@ gpgkey=https://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-RSA-KEY.pub '
 RUN yum install -y tanzu-cli
 RUN yes | tanzu plugin install --group vmware-tap/default:v1.6.4
 
-
-# Install Tanzu Dev Tools
-ADD tanzu-vscode-extension.vsix /tmp
-ADD tanzu-app-accelerator.vsix /tmp
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=4.17.1
-RUN mkdir -p /opt/code-server/ && cp -rf /usr/lib/code-server/* /opt/code-server/
-RUN rm -rf /usr/lib/code-server /usr/bin/code-server
-
-RUN code-server --install-extension /tmp/tanzu-vscode-extension.vsix
-RUN code-server --install-extension /tmp/tanzu-app-accelerator.vsix
-
 RUN curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash 
-RUN chown -R eduk8s:users /home/eduk8s/.tilt-dev
-
-RUN chown -R eduk8s:users /home/eduk8s/.cache
-RUN chown -R eduk8s:users /home/eduk8s/.local
-RUN chown -R eduk8s:users /home/eduk8s/.config
-
 
 RUN curl -L -o /usr/local/bin/hey https://hey-release.s3.us-east-2.amazonaws.com/hey_linux_amd64 && \
     chmod 755 /usr/local/bin/hey
@@ -61,9 +44,8 @@ RUN chmod 775 -R $HOME/.krew
 # Utilities
 RUN yum install moreutils wget ruby -y
 
-RUN chown -R eduk8s:users /home/eduk8s/.config
-
-RUN rm -rf /tmp/*
+RUN chown -R eduk8s:users /home/eduk8s/*
+RUN chown -R eduk8s:users /opt
 
 USER 1001
 
