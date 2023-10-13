@@ -2,7 +2,7 @@ FROM ghcr.io/vmware-tanzu-labs/educates-jdk17-environment:2.6.16
 
 COPY --chown=1001:0 . /home/eduk8s/
 
-RUN mv /home/eduk8s/workshop /opt/workshop
+RUN mkdir /opt/workshop
 
 USER root
 
