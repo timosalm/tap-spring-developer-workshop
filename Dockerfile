@@ -19,7 +19,7 @@ RUN yes | tanzu plugin install --group vmware-tap/default:v1.6.4
 ADD tanzu-vscode-extension.vsix /tmp
 ADD tanzu-app-accelerator.vsix /tmp
 RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=4.17.1
-RUN cp -rf /usr/lib/code-server/* /opt/code-server/
+RUN mkdir -p /opt/code-server/ && cp -rf /usr/lib/code-server/* /opt/code-server/
 RUN rm -rf /usr/lib/code-server /usr/bin/code-server
 
 RUN code-server --install-extension /tmp/tanzu-vscode-extension.vsix
