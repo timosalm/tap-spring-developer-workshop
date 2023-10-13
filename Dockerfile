@@ -48,6 +48,8 @@ RUN chmod 775 -R $HOME/.krew
 # Utilities
 RUN yum install moreutils wget ruby -y
 
+RUN fix-permissions /home/eduk8s
+RUN fix-permissions /opt
+
 USER 1001
 
-RUN fix-permissions /home/eduk8s
