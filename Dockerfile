@@ -44,7 +44,7 @@ RUN chmod 775 -R $HOME/.krew
 # Utilities
 RUN yum install moreutils wget ruby -y
 
-RUN chown -R eduk8s:users /home/eduk8s/*
+RUN chown -R eduk8s:users /home/eduk8s
 RUN chown -R eduk8s:users /opt
 
 USER 1001
