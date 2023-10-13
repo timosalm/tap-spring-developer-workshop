@@ -1,21 +1,24 @@
-FROM registry.tanzu.vmware.com/tanzu-application-platform/tap-packages@sha256:c184e9399d2385807833be0a9f1718c40caa142b6e1c3ddf64fa969716dcd4e3
+FROM ghcr.io/vmware-tanzu-labs/educates-jdk17-environment:2.6.16
 
 USER root
 
 # Tanzu CLI
-RUN apt-get install -y ca-certificates curl gpg
-RUN curl -fsSL https://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-RSA-KEY.pub | sudo gpg --dearmor -o /etc/apt/keyrings/tanzu-archive-keyring.gpg
-RUN echo "deb [signed-by=/etc/apt/keyrings/tanzu-archive-keyring.gpg] https://storage.googleapis.com/tanzu-cli-os-packages/apt tanzu-cli-jessie main" | sudo tee /etc/apt/sources.list.d/tanzu.list
-RUN apt-get update
-RUN apt-get install -y tanzu-cli 
-RUN tanzu config set env.TANZU_CLI_ADDITIONAL_PLUGIN_DISCOVERY_IMAGES_TEST_ONLY projects.registry.vmware.com/tanzu_cli_stage/plugins/plugin-inventory:latest 
-RUN yes | tanzu plugin install --group vmware-tap/default:v1.6.0-rc.2 
+RUN echo $' \n\
+[tanzu-cli] \n\
+name=Tanzu CLI \n\
+baseurl=https://storage.googleapis.com/tanzu-cli-os-packages/rpm/tanzu-cli \n\
+enabled=1 \n\
+gpgcheck=1 \n\
+repo_gpgcheck=1 \n\
+gpgkey=https://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-RSA-KEY.pub ' >> /etc/yum.repos.d/tanzu-cli.repo
+RUN yum install -y tanzu-cli
+RUN yes | tanzu plugin install --group vmware-tap/default:v1.6.4
 
 
 # Install Tanzu Dev Tools
 ADD tanzu-vscode-extension.vsix /tmp
 ADD tanzu-app-accelerator.vsix /tmp
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=4.16.1
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=4.17.1
 RUN cp -rf /usr/lib/code-server/* /opt/code-server/
 RUN rm -rf /usr/lib/code-server /usr/bin/code-server
 
@@ -34,7 +37,7 @@ RUN curl -L -o /usr/local/bin/hey https://hey-release.s3.us-east-2.amazonaws.com
     chmod 755 /usr/local/bin/hey
 
 # TBS
-RUN curl -L -o /usr/local/bin/kp https://github.com/vmware-tanzu/kpack-cli/releases/download/v0.10.0/kp-linux-amd64-0.10.0 && \
+RUN curl -L -o /usr/local/bin/kp https://github.com/buildpacks-community/kpack-cli/releases/download/v0.12.0/kp-linux-amd64-0.12.0 && \
   chmod 755 /usr/local/bin/kp
 
 # Install krew
@@ -54,11 +57,9 @@ ENV KUBECTL_VERSION=1.25
 RUN kubectl krew install tree
 RUN kubectl krew install eksporter
 RUN chmod 775 -R $HOME/.krew
-RUN apt update
-RUN apt install ruby-full -y
 
 # Utilities
-RUN apt-get update && apt-get install -y unzip moreutils openjdk-17-jdk
+RUN yum install moreutils wget ruby -y
 
 RUN chown -R eduk8s:users /home/eduk8s/.config
 
