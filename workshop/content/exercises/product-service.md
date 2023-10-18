@@ -190,23 +190,16 @@ file: ~/product-service/src/test/resources/application.yaml
 text: "product-service.product-names: VMware Tanzu Application Platform"
 ```
 
-We can use a utility called [Tilt](https://tilt.dev) to deploy our code to TAP from our IDE. In addition, Tilt will port forward port `8080` for us to the running container.
+With the use of the Tanzu Developer Tools' **Live Update** extension, which is facilitated by [Tilt](https://tilt.dev), we can deploy our code to TAP once, save changes to the code, and see those changes reflected in the workload running on the cluster within seconds.
 
-The Tanzu CLI has a developer-friendly feature called live update which allows us to modify our code in the IDE and instantly replace the code running in the container with the modified code, allowing us to instantly see the changes we made.  
 This will feel very familiar if you are using [Spring Developer Tools](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.devtools) locally.
 
 The accelerator we used already created a `Tiltfile` for us, which instructs Tilt what to do.
-
 ```editor:open-file
 file: product-service/Tiltfile
 ```
 
-We can start the TAP's live update functionality via the context menu item `Tanzu: Live Update Start` with the `tilt up` command in the terminal.
-```terminal:execute
-command: |
-  tilt up --file ./product-service/Tiltfile --stream
-clear: true
-```
+We can start the TAP's live update functionality via the context menu item `Tanzu: Live Update Start`.
 TAP will deploy the application using the source from our local file system. 
 
 We can use `watch` in the terminal to see once our app is deployed in this case as a Knative Service, which you'll learn later more about.
@@ -230,9 +223,7 @@ command: |
   curl -s https://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
 ```
 
-Tilt using the underlying Tanzu CLI's live update feature allows us to make changes to our code, and take the newly compiled code and replace it in the running container on TAP.
-
-To test this out, add an additional product to `product-service.product-name`.
+Let's test the Live Update functionality by adding an additional product to `product-service.product-name`.
 
 ```editor:select-matching-text
 file: ~/product-service/src/main/resources/application.yaml
@@ -242,10 +233,8 @@ text: "product-service.product-names: VMware Tanzu Application Platform"
 file: ~/product-service/src/main/resources/application.yaml
 text: "product-service.product-names: VMware Tanzu Application Platform, VMware Spring Runtime"
 ```
-In the terminal, you should see the application restart in the logs that are streamed.
 
-If you do not, you can run `./mvnw compile` to make sure the app was recompiled to trigger the update in the container.
-
+Run `./mvnw compile` to make sure the app was recompiled to trigger the update in the container.
 ```terminal:execute
 session: 2
 command: |
@@ -260,11 +249,7 @@ command: |
 ```
 After the basic implementation of our product service, we will now configure a continuous path to production.
 
-Let's stop Tilt, and run `tilt down` to delete the product service.
+**Click the trash can button in the terminal pane to stop the Live Update process.**
+When Live Update stops, your application continues to run on the cluster, but future changes in the editor will not be applied to it, unless you start the Live Update again.
 ```terminal:interrupt
-```
-```terminal:execute
-command: |
-  tilt down --file ./product-service/Tiltfile 
-clear: true
 ```
