@@ -15,4 +15,4 @@ code-server --install-extension vscjava.vscode-java-dependency@0.23.1
 code-server --install-extension vscjava.vscode-java-test@0.39.1
 code-server --install-extension vmware.vscode-spring-boot@1.49.0
 
-jq ". + { \"java.server.launchMode\": \"Standard\", \"redhat.telemetry.enabled\": false, \"vs-kubernetes.ignore-recommendations\": true, \"tanzu-app-accelerator.tanzuApplicationPlatformGuiUrl\": \"https://tap-gui.${TAP_INGRESS}\", \"tanzu.sourceImage\": \"harbor.learningcenter.tap.ryanjbaxter.com/s1-2023-workshop/${session_namespace}\",  \"files.exclude\": { \"**/.**\": true} }" /home/eduk8s/.local/share/code-server/User/settings.json | sponge /home/eduk8s/.local/share/code-server/User/settings.json
+jq ". + { \"java.server.launchMode\": \"Standard\", \"redhat.telemetry.enabled\": false, \"vs-kubernetes.ignore-recommendations\": true, \"tanzu-app-accelerator.tanzuApplicationPlatformGuiUrl\": \"https://tap-gui.${TAP_INGRESS}\", \"tanzu.sourceImage\": \"${REGISTRY_HOST}/vs-code-source-image\",  \"files.exclude\": { \"**/.**\": true} }" /home/eduk8s/.local/share/code-server/User/settings.json | sponge /home/eduk8s/.local/share/code-server/User/settings.json
