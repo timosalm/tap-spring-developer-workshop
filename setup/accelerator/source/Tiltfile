@@ -21,4 +21,4 @@ k8s_custom_deploy(
 k8s_resource('ARTIFACT_NAME', port_forwards=["8080:8080"],
   extra_pod_selectors=[{'carto.run/workload-name': 'ARTIFACT_NAME', 'app.kubernetes.io/component':'run'}])
 
-allow_k8s_contexts('eduk8s')
+allow_k8s_contexts('educates')
