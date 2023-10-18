@@ -16,6 +16,7 @@ gpgcheck=1 \n\
 repo_gpgcheck=1 \n\
 gpgkey=https://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-RSA-KEY.pub ' >> /etc/yum.repos.d/tanzu-cli.repo
 RUN yum install -y tanzu-cli
+RUN yes | tanzu plugin install --group vmware-tanzucli/essentials:v1.0.0
 RUN yes | tanzu plugin install --group vmware-tap/default:v1.6.4
 
 RUN curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash 
