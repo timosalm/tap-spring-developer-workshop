@@ -24,7 +24,7 @@ With the help of Spring Boot and Cloud, it's possible to mitigate a lot of chall
 
 **VMware Tanzu Application Platform** (informally known as TAP) provides development teams a **pre-paved path to production** to get code running on any compliant public cloud or on-premises Kubernetes cluster, enabling security and scale. It is **modular**, so you can customize it based on your organization’'s preferences.
 
-![TAP provides a repeatable, end-to-end DevSecOps experience](images/tap-conceptual.svg)
+![TAP provides a repeatable, end-to-end DevSecOps experience](images/tap-conceptual.png)
 
 TAP is an **application-aware platform** that abstracts away all platform and infrastructure specifics 
 and gives development teams an interface where they only have to define the requirements of the applications they want to run on the platform. 
