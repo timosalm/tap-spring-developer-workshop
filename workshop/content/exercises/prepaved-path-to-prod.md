@@ -42,7 +42,7 @@ clear: true
 
 To create the Workload, we can use `tanzu apps workload create`.  
 ```execute
-tanzu apps workload create -f product-service/config/workload.yaml -y
+tanzu apps workload apply -f product-service/config/workload.yaml -y
 ```
 
 We can monitor the supply chain for the `product-service` in the terminal by using the `tanzu apps workload tail` command.
