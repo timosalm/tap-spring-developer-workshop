@@ -12,7 +12,7 @@ The code of our sample **application is already tracked in source control**.
 
 The source code for the product service can be found here.
 ```dashboard:open-url
-url: {{ git_protocol }}://{{ git_host }}/product-service/src/{{ session_namespace }}
+url: {{ git_protocol }}://{{ git_host }}/product-service
 ```
 
 #### Factor 2: Dependencies

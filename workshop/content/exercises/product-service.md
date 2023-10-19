@@ -10,7 +10,7 @@ command: workbench.view.extension.tanzu-app-accelerator
 ```
 
 Select the **Spring Microservice** accelerator from the list, and change the following values in the form:
-- **Name:** 
+- **Project name:** 
 ```copy
 product-service
 ```
@@ -18,12 +18,10 @@ product-service
 ```copy
 {{ git_protocol }}://{{ git_host}}
 ```
-- **Git branch and Deployment namespace:**
+- **Deployment namespace:**
 ```copy
 {{ session_namespace }}
 ```
-
-![](../images/accelerator-config.png)
 
 - Press **Next Step**
 - Press **Generate Project**. When you click on **Generate Project** there will be a popup window that opens at the top of the Editor with the path `/home/eduk8s/`, click **OK** to accept the defaults.
