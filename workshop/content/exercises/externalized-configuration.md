@@ -42,6 +42,9 @@ command: |
         - type: git
           uri: {{ git_protocol }}://{{ git_host }}/externalized-configuration
           defaultLabel: main
+          secretRef:
+            name: git-https
+            namespace: {{ session_namespace }}
   EOF
 clear: true
 ```
@@ -49,8 +52,9 @@ clear: true
 As a next step, you have to create a `ConfigurationSlice` that references this configuration source (`spec.configurationSource` in the below YAML) and the related configuration file(s) for the product-service (`spec.content` in the below YAML).
 In this case, we just have a single file (`product-service.yaml`) we would like to use to configure the product-service.
 
-```dashboard:open-url
-url: {{ git_protocol }}://{{ git_host }}/externalized-configuration/src/{{ session_namespace }}/product-service.yaml
+```dashboard:reload-dashboard
+name: GIT UI
+url: {{ ingress_protocol }}://git-ui-{{ session_name }}.{{ ingress_domain }}?p=externalized-configuration.git;a=blob;f=product-service.yaml
 ```
 
 To create the `ConfigurationSlice` execute the following command.
