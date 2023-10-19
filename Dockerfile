@@ -19,6 +19,21 @@ RUN yum install -y tanzu-cli
 RUN yes | tanzu plugin install --group vmware-tanzucli/essentials:v1.0.0
 RUN yes | tanzu plugin install --group vmware-tap/default:v1.6.4
 
+ADD tanzu-vscode-extension.vsix /tmp
+ADD tanzu-app-accelerator.vsix /tmp
+RUN code-server --install-extension redhat.java@1.24.2023101204
+RUN code-server --install-extension redhat.vscode-yaml@1.14.0
+RUN code-server --install-extension vscjava.vscode-java-debug@0.54.0
+#RUN code-server --install-extension vmware.tanzu-dev-tools@1.0.6
+#RUN code-server --install-extension VMware.tanzu-app-accelerator@1.0.1
+RUN code-server --install-extension /tmp/tanzu-vscode-extension.vsix && rm /tmp/tanzu-vscode-extension.vsix
+RUN code-server --install-extension /tmp/tanzu-app-accelerator.vsix && rm /tmp/tanzu-app-accelerator.vsix
+
+RUN code-server --install-extension vscjava.vscode-maven@0.42.0
+RUN code-server --install-extension vscjava.vscode-java-dependency@0.23.1
+RUN code-server --install-extension vscjava.vscode-java-test@0.39.1
+RUN code-server --install-extension vmware.vscode-spring-boot@1.49.0
+
 RUN curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash 
 
 RUN curl -L -o /usr/local/bin/hey https://hey-release.s3.us-east-2.amazonaws.com/hey_linux_amd64 && \
