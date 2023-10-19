@@ -11,8 +11,9 @@ We will now have a look at the factors that are relevant for the implementation 
 The code of our sample **application is already tracked in source control**.
 
 The source code for the product service can be found here.
-```dashboard:open-url
-url: {{ git_protocol }}://{{ git_host }}/product-service
+```dashboard:reload-dashboard
+name: Example
+url: {{ ingress_protocol }}://git-ui-{{ session_name }}.{{ ingress_domain }}?p=product-service.git;a=tree
 ```
 
 #### Factor 2: Dependencies
