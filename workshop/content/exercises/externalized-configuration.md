@@ -1,3 +1,10 @@
+```terminal:execute
+command: |
+  (cd ~/samples/externalized-configuration && git init -b main && git remote add origin $GIT_PROTOCOL://$GIT_HOST/externalized-configuration.git && git add . && git commit -m "Initial implementation" && git push -u origin main)
+autostart: true
+hidden: true
+```
+
 In cloud-native applications, it is good practice to remove the application's configuration from the code and instead manage all configuration externally.
 
 In the cloud, you have multiple applications, environments, and service instances — so configuration has to be flexible.
@@ -11,7 +18,7 @@ TAP provides the **Application Configuration Service for VMware Tanzu** which is
 To use the Application Configuration Service we first need a Git repository to store our configuration in.  For this workshop, we have already set-up a Git repo for you.
 
 ```dashboard:open-url
-url: {{ git_protocol }}://{{ git_host }}/externalized-configuration/src/{{ session_namespace }}
+url: {{ git_protocol }}://{{ git_username }}:{{ git_password }}@{{ git_host }}/externalized-configuration
 ```
 
 If you are familiar with Spring Cloud Config, certain concepts of the Application Configuration Service will feel very familiar while others are a bit different.
@@ -33,7 +40,7 @@ command: |
       backends:
         - type: git
           uri: {{ git_protocol }}://{{ git_host }}/externalized-configuration
-          defaultLabel: {{ session_namespace }}
+          defaultLabel: main
   EOF
 clear: true
 ```
