@@ -47,7 +47,7 @@ RUN kubectl krew install eksporter
 RUN chmod 775 -R $HOME/.krew
 
 # Utilities
-RUN yum install moreutils wget ruby -y
+RUN yum install moreutils wget ruby git-instaweb -y
 
 RUN fix-permissions /home/eduk8s
 RUN fix-permissions /opt
