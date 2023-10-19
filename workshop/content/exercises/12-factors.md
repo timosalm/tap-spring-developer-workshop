@@ -12,7 +12,7 @@ The code of our sample **application is already tracked in source control**.
 
 The source code for the product service can be found here.
 ```dashboard:reload-dashboard
-name: Example
+name: GIT UI
 url: {{ ingress_protocol }}://git-ui-{{ session_name }}.{{ ingress_domain }}?p=product-service.git;a=tree
 ```
 
