@@ -64,7 +64,7 @@ RUN chmod 775 -R $HOME/.krew
 # Utilities
 RUN yum install moreutils wget ruby git-instaweb -y
 
-RUN curl -L -o /etc/gitweb.css https://raw.githubusercontent.com/kogakure/gitweb-theme/master/gitweb.css && echo '$stylesheet = "/etc/gitweb.css"' >> /etc/gitweb.conf
+RUN wget -O /var/www/git/static/gitweb.css https://raw.githubusercontent.com/kogakure/gitweb-theme/master/gitweb.css
 
 RUN fix-permissions /home/eduk8s
 RUN fix-permissions /opt
