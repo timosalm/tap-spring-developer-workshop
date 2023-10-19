@@ -5,14 +5,7 @@ set +e
 mkdir -p config/gateway
 mkdir -p config/auth
 
-cat <<EOT >> .netrc
-machine $(echo $GIT_PROTOCOL://$GIT_HOST | awk -F/ '{print $3}')
-       login $GIT_USERNAME
-       password $GIT_PASSWORD
-EOT
-
-git config --global user.email "$GIT_USERNAME@example.com"
-git config --global user.name "$GIT_USERNAME"
+while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' $GIT_PROTOCOL://$GIT_HOST)" != "401" ]]; do sleep 5; done
 
 for serviceName in order-service shipping-service; do
     (cd $serviceName && git init -b $SESSION_NAMESPACE && git remote add origin $GIT_PROTOCOL://$GIT_HOST/${serviceName}.git && git add . && git commit -m "Initial implementation" && git push -u origin $SESSION_NAMESPACE -f)
