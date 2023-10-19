@@ -11,6 +11,9 @@ spec:
       url: SOURCE_GIT_URL
       ref:
         branch: SOURCE_GIT_BRANCH
+  params:
+  - name: gitops_ssh_secret
+    value: git-https
   serviceClaims:
   - name: rmq
     ref:

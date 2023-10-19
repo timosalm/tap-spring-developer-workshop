@@ -21,3 +21,6 @@ spec:
     env:
     - name: BP_JVM_VERSION
       value: "JAVA_VERSION"
+  params:
+  - name: gitops_ssh_secret
+    value: git-https
