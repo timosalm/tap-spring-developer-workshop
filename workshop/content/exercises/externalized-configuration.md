@@ -1,6 +1,6 @@
 ```terminal:execute
 command: |
-  (cd ~/samples/externalized-configuration && git init -b main && git remote add origin $GIT_PROTOCOL://$GIT_HOST/externalized-configuration.git && git add . && git commit -m "Initial implementation" && git push -u origin main)
+  (cd ~/samples/externalized-configuration && git init -b main && git remote add origin $GIT_PROTOCOL://$GIT_HOST/externalized-configuration.git && git add . && git commit -m "Initial implementation" && git push -u origin main && clear)
 autostart: true
 hidden: true
 ```

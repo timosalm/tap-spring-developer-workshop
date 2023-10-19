@@ -53,4 +53,3 @@ RUN fix-permissions /home/eduk8s
 RUN fix-permissions /opt
 
 USER 1001
-
