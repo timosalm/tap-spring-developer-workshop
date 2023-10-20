@@ -1,3 +1,10 @@
+```terminal:execute
+command: |
+  (cd ~/order-service && [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" != "true" ] && git init -b main && git remote add origin $GIT_PROTOCOL://$GIT_HOST/order-service.git && git add . && git commit -m "Initial implementation" && git push -u origin main && tanzu apps workload apply -f config/workload.yaml -y && clear)
+autostart: true
+hidden: true
+```
+
 The **fourth and sixth factor** implies that any **data** that needs to be persisted must be **stored in a stateful backing service**, such as a database, because the processes are stateless and share-nothing.
 A backing service is any service that your application needs for its functionality. Examples of the different types of backing services are data stores, messaging systems, and also services that provide business functionality.
 
@@ -166,7 +173,7 @@ command: watch -n 1 "curl -s https://order-service-{{ session_namespace }}.{{ EN
 clear: true
 ```
 Once the new version of the order service is deployed, you should see the following JSON.
-Since the `/env`` and `/configprops` endpoints can contain sensitive values, starting with Spring Boot 3, all values are always masked by default. Like in our case, [this can be configured](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide#actuator-endpoints-sanitization).
+Since the `/env` and `/configprops` endpoints can contain sensitive values, starting with Spring Boot 3, all values are always masked by default. Like in our case, [this can be configured](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide#actuator-endpoints-sanitization).
 {% raw %}
 ```
 {

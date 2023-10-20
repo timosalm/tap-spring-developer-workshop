@@ -12,7 +12,7 @@ spec:
     git:
       url: SOURCE_GIT_URL
       ref:
-        branch: SOURCE_GIT_BRANCH
+        branch: main
   build:
     env:
     - name: BP_JVM_VERSION
@@ -26,8 +26,3 @@ spec:
       apiVersion: services.apps.tanzu.vmware.com/v1alpha1
       kind: ResourceClaim
       name: order-config-server-claim
-  - name: tracing
-    ref:
-      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
-      kind: ResourceClaim
-      name: zipkin-1

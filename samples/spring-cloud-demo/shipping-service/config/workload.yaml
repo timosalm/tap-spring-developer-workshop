@@ -10,7 +10,7 @@ spec:
     git:
       url: SOURCE_GIT_URL
       ref:
-        branch: SOURCE_GIT_BRANCH
+        branch: main
   params:
   - name: gitops_ssh_secret
     value: git-https
