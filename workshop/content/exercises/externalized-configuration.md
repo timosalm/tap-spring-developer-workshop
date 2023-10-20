@@ -40,7 +40,7 @@ command: |
     spec:
       backends:
         - type: git
-          uri: {{ git_protocol }}://{{ git_host }}/externalized-configuration
+          uri: {{ git_protocol }}://{{ git_host }}/externalized-configuration.git
           defaultLabel: main
           secretRef:
             name: git-https

@@ -4,9 +4,9 @@ The first step in the path to production **watches** the **repository with the s
 
 ##### Source Tester
  
-The Source Tester uses [Tekton](https://tekton.dev) by default to execute tests part as part of the pipeline.
+The Source Tester uses [Tekton](https://tekton.dev) by default to run a pipeline that executes tests part of the application's source code. Depending on how much flexibility you need, you can define it or operators can provide it with the rest of the supply chain.
 
-TAP ships with an out-of-the-box test pipeline for Spring Boot applications.  We can see the test pipeline definition by running the following command.
+In our case, there is already a very basic example that just works for Spring Boot applications using Maven applied to the cluster.
 ```execute
 kubectl eksporter Pipeline --keep metadata.labels
 ```
