@@ -7,6 +7,7 @@ metadata:
   labels:
     app.kubernetes.io/part-of: frontend
     apps.tanzu.vmware.com/workload-type: web
+    apps.tanzu.vmware.com/no-scan: "true"
     networking.knative.dev/visibility: cluster-local
 spec:
   image: harbor.emea.end2end.link/tap-workshop/frontend

@@ -14,4 +14,3 @@ done
 (cd ~/samples/externalized-configuration && sed -i 's~NAMESPACE~'"$SESSION_NAMESPACE"'~g' order-service.yaml)
 
 #kubectl apply -f samples/workload-frontend-image.yaml
-#kubectl apply -f samples/workload-payment-service-native-image.yaml

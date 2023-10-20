@@ -1,3 +1,9 @@
+```terminal:execute
+command: |
+  kubectl apply -f ~/samples/workload-product-service-native-image.yaml
+autostart: true
+hidden: true
+```
 ```dashboard:open-dashboard
 name: The Twelve Factors
 ```

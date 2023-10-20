@@ -5,9 +5,11 @@ metadata:
     autoscaling.knative.dev/max-scale: "3"
   labels:
     apps.tanzu.vmware.com/workload-type: web
+    apps.tanzu.vmware.com/no-scan: "true"
+    app.kubernetes.io/part-of: product-service-native
   name: product-service-native
 spec:
-  image: harbor.emea.end2end.link/tap-workshop/product-service-native
+  image: ghcr.io/timosalm/tap-spring-developer-workshop:product-service-native
   env:
     - name: MANAGEMENT_SERVER_PORT
       value: "8081"
