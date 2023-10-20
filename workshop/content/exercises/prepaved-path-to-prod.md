@@ -1,12 +1,12 @@
 ```terminal:execute
-command: |
+command: |2
   cat <<EOL >> product-service/config/workload.yaml
-  params:
-  - name: gitops_ssh_secret
-    value: git-https
-  - name: registry
-    value:
-      server: $REGISTRY_HOST
+    params:
+    - name: gitops_ssh_secret
+      value: git-https
+    - name: registry
+      value:
+        server: $REGISTRY_HOST
   EOL
   clear
 autostart: true
