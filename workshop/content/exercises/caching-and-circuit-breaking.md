@@ -194,27 +194,7 @@ Since the `/env` and `/configprops` endpoints can contain sensitive values, star
     "spring.datasource.url": {
       "value": "jdbc:postgresql://10.100.74.154:5432/postgres-1-rndgv"
     },
-    "management.zipkin.tracing.endpoint": {
-      "value": "http://zipkin:9411/api/v2/spans"
-    },
-    "spring.rabbitmq.host": {
-      "value": "10.100.221.162"
-    },
-    "spring.r2dbc.password": {
-      "value": "hQoSBrY..."
-    },
-    "spring.r2dbc.url": {
-      "value": "r2dbc:postgresql://10.100.74.154:5432/postgres-1-rndgv"
-    },
-    "spring.r2dbc.username": {
-      "value": "postgres"
-    },
-    "spring.rabbitmq.username": {
-      "value": "rabbitmq"
-    },
-    "spring.datasource.password": {
-      "value": "hQoSBrY..."
-    }
+    ...
   }
 }
 ```

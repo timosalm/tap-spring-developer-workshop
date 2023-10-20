@@ -67,6 +67,7 @@ command: |
   metadata:
     name: product-config-slice
   spec:
+    interval: 30s
     configurationSource: config-source
     content:
     - product-service
