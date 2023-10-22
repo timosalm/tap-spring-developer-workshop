@@ -7,6 +7,7 @@ command: |2
     - name: registry
       value:
         server: $REGISTRY_HOST
+        repository: workloads
   EOL
   clear
 autostart: true
