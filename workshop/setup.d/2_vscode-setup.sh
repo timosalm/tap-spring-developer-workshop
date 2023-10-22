@@ -24,5 +24,3 @@ cat <<EOL >> spring-cloud-demo.code-workspace
   ]
 }
 EOL
-
-code-server spring-cloud-demo.code-workspace
