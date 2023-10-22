@@ -1,6 +1,7 @@
 ```terminal:execute
 command: |2
   cat <<EOL >> product-service/config/workload.yaml
+  
     params:
     - name: gitops_ssh_secret
       value: git-https
