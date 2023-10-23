@@ -1,3 +1,27 @@
+```examiner:execute-test
+name: test-product-workload-file-exists
+timeout: 5
+retries: .INF
+autostart: true
+cascade: true
+```
+```terminal:execute
+command: |2
+  if ! grep -q gitops_ssh_secret "product-service/config/workload.yaml"; then
+  cat <<EOL >> product-service/config/workload.yaml
+  
+    params:
+    - name: gitops_ssh_secret
+      value: git-https
+    - name: registry
+      value:
+        server: $REGISTRY_HOST
+        repository: workloads
+  EOL
+  fi
+  clear
+```
+
 Before we have a closer look at the challenges of our typical microservice application, let's **implement** one of the services from scratch - in this case, the **product service**.
 
 The easiest way to get started you're probably familiar with, is visiting [start.spring.io](https://start.spring.io), and selecting your Spring Boot version and the dependencies you want to use.
@@ -186,29 +210,11 @@ Since we also have an `application.yaml` in `product-service/src/test/resources`
 ```editor:append-lines-to-file
 file: ~/product-service/src/test/resources/application.yaml
 text: "product-service.product-names: VMware Tanzu Application Platform"
-cascade: true
 ```
 
 With the use of the Tanzu Developer Tools' **Live Update** extension, which is facilitated by [Tilt](https://tilt.dev), we can deploy our code to TAP once, save changes to the code, and see those changes reflected in the workload running on the cluster within seconds.
 
 This will feel very familiar if you are using [Spring Developer Tools](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.devtools) locally.
-
-```terminal:execute
-command: |2
-  if ! grep -q gitops_ssh_secret "product-service/config/workload.yaml"; then
-  cat <<EOL >> product-service/config/workload.yaml
-  
-    params:
-    - name: gitops_ssh_secret
-      value: git-https
-    - name: registry
-      value:
-        server: $REGISTRY_HOST
-        repository: workloads
-  EOL
-  fi
-  clear
-```
 
 The accelerator we used already created a `Tiltfile` for us, which instructs Tilt what to do.
 ```editor:open-file
