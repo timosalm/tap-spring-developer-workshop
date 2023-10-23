@@ -1,5 +1,6 @@
 ```examiner:execute-test
 name: test-product-workload-file-exists
+title: verify that product service workload
 timeout: 5
 retries: .INF
 autostart: true
