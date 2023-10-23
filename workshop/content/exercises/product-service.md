@@ -186,6 +186,7 @@ Since we also have an `application.yaml` in `product-service/src/test/resources`
 ```editor:append-lines-to-file
 file: ~/product-service/src/test/resources/application.yaml
 text: "product-service.product-names: VMware Tanzu Application Platform"
+cascade: true
 ```
 
 With the use of the Tanzu Developer Tools' **Live Update** extension, which is facilitated by [Tilt](https://tilt.dev), we can deploy our code to TAP once, save changes to the code, and see those changes reflected in the workload running on the cluster within seconds.
@@ -207,7 +208,6 @@ command: |2
   EOL
   fi
   clear
-autostart: true
 ```
 
 The accelerator we used already created a `Tiltfile` for us, which instructs Tilt what to do.
