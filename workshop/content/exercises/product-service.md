@@ -198,6 +198,7 @@ file: product-service/Tiltfile
 ```
 
 We can **start the TAP's live update functionality via the context menu item `Tanzu: Live Update Start`**.
+
 TAP will deploy the application using the source from our local file system. 
 
 We can use `watch` in the terminal to see once our app is deployed in this case as a Knative Service, which you'll learn later more about.

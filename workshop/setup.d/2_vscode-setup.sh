@@ -12,14 +12,8 @@ cat <<EOL >> spring-cloud-demo.code-workspace
       "path": "order-service"
     },
     {
-      // Docs and release notes
       "name": "Shipping Service",
       "path": "shipping-service"
-    },
-    {
-      // Yeoman extension generator
-      "name": "Product Service",
-      "path": "product-service"
     }
   ]
 }
