@@ -205,10 +205,9 @@ command: |2
         server: $REGISTRY_HOST
         repository: workloads
   EOL
-  clear
   fi
+  clear
 autostart: true
-hidden: true
 ```
 
 The accelerator we used already created a `Tiltfile` for us, which instructs Tilt what to do.
