@@ -192,6 +192,25 @@ With the use of the Tanzu Developer Tools' **Live Update** extension, which is f
 
 This will feel very familiar if you are using [Spring Developer Tools](https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.devtools) locally.
 
+```terminal:execute
+command: |2
+  if ! grep -q gitops_ssh_secret "product-service/config/workload.yaml"; then
+  cat <<EOL >> product-service/config/workload.yaml
+  
+    params:
+    - name: gitops_ssh_secret
+      value: git-https
+    - name: registry
+      value:
+        server: $REGISTRY_HOST
+        repository: workloads
+  EOL
+  clear
+  fi
+autostart: true
+hidden: true
+```
+
 The accelerator we used already created a `Tiltfile` for us, which instructs Tilt what to do.
 ```editor:open-file
 file: product-service/Tiltfile
@@ -201,7 +220,7 @@ We can **start the TAP's live update functionality** via the **context menu item
 ```editor:execute-command
 command: tanzu.liveUpdateStart
 ```
-Accept the hint that the `Namespace must be watched by Tanzu Workloads panel to perform actions`.
+**Accept the hint** that the `Namespace must be watched by Tanzu Workloads panel to perform actions`.
 
 TAP will deploy the application using the source from our local file system. 
 
