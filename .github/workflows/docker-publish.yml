@@ -39,9 +39,6 @@ jobs:
           # tanzu-vscode-extension-*.vsix
           pivnet download-product-files --product-slug='tanzu-developer-tools-for-vscode' --release-version='1.0.6' --product-file-id=1562308
           mv $(find . -name 'tanzu-vscode-extension-*' -print0) tanzu-vscode-extension.vsix
-          # tanzu-cli-linux-amd64*.tar
-          pivnet download-product-files --product-slug='tanzu-application-platform' --release-version='1.6.1' --product-file-id=1539749
-          mv $(find . -name 'tanzu-cli-linux-amd64*' -print0) tanzu-cli-linux-amd64.tar
 
       # Workaround: https://github.com/docker/build-push-action/issues/461
       - name: Setup Docker buildx
