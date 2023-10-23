@@ -1,11 +1,3 @@
-```editor:execute-command
-command: vscode.openFolder
-args:
-- spring-cloud-demo.code-workspace
-autostart: true
-hidden: true
-```
-
 The picture shows a typical microservice application for a supply chain.
 
 ![A typical modern app architecture](images/microservice-architecture.png)
