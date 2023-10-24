@@ -2,8 +2,8 @@
 
 set -x
 
-if [ ! -f ~/product-service/config/workload.yaml ]; then
-    exit 1
+if [ -e "~/product-service/config/workload.yaml" ]; then
+    exit 0
 fi
 
-exit 0
+exit 1
