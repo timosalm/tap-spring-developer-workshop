@@ -2,9 +2,7 @@
 
 set -x
 
-kubectl get pod/one -o name
-
-if [ "$?" == "0" ]; then
+if [ ! -f ~/product-service/config/workload.yaml ]; then
     exit 1
 fi
 
