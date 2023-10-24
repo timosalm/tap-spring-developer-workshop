@@ -75,7 +75,7 @@ text: |
         zipkin:
           enabled: true
           url: http://zipkin:9411/api/v2/spans
-    java-opts: "-Dspring.codec.max-in-memory-size=-1" # Required for a later applied response body filter
+    java-opts: "-Dmanagement.tracing.sampling.probability=1.0 -Dspring.codec.max-in-memory-size=-1" # Required for a later applied response body filter
 ```
 
 In the commercial version of Spring Cloud Gateway we define routes in a Kubernetes resource called `SpringCloudGatewayRouteConfig`.  
