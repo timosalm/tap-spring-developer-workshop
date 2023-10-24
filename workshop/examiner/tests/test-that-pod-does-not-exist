@@ -2,9 +2,9 @@
 
 set -x
 
-kubectl get pod/$1 -o name
+test -f "config/workload.yaml"
 
-if [ "$?" == "0" ]; then
+if [ "$?" != "0" ]; then
     exit 1
 fi
 
