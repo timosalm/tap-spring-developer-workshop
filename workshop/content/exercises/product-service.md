@@ -1,27 +1,3 @@
-```examiner:execute-test
-name: test-product-workload-file-exists
-title: Verify that product service workload exists
-delay: 5
-retries: .INF
-autostart: true
-```
-```terminal:execute
-command: |2
-  if ! grep -q gitops_ssh_secret "product-service/config/workload.yaml"; then
-  cat <<EOL >> product-service/config/workload.yaml
-  
-    params:
-    - name: gitops_ssh_secret
-      value: git-https
-    - name: registry
-      value:
-        server: $REGISTRY_HOST
-        repository: workloads
-  EOL
-  fi
-  clear
-```
-
 Before we have a closer look at the challenges of our typical microservice application, let's **implement** one of the services from scratch - in this case, the **product service**.
 
 The easiest way to get started you're probably familiar with, is visiting [start.spring.io](https://start.spring.io), and selecting your Spring Boot version and the dependencies you want to use.
@@ -210,6 +186,22 @@ Since we also have an `application.yaml` in `product-service/src/test/resources`
 ```editor:append-lines-to-file
 file: ~/product-service/src/test/resources/application.yaml
 text: "product-service.product-names: VMware Tanzu Application Platform"
+cascade: true
+```
+```terminal:execute
+command: |2
+  if ! grep -q gitops_ssh_secret "product-service/config/workload.yaml"; then
+  cat <<EOL >> product-service/config/workload.yaml
+  
+    params:
+    - name: gitops_ssh_secret
+      value: git-https
+    - name: registry
+      value:
+        server: $REGISTRY_HOST
+        repository: workloads
+  EOL
+  fi
 ```
 
 With the use of the Tanzu Developer Tools' **Live Update** extension, which is facilitated by [Tilt](https://tilt.dev), we can deploy our code to TAP once, save changes to the code, and see those changes reflected in the workload running on the cluster within seconds.
