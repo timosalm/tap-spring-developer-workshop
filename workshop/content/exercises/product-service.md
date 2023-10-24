@@ -202,6 +202,7 @@ command: |2
         repository: workloads
   EOL
   fi
+  clear
 ```
 
 With the use of the Tanzu Developer Tools' **Live Update** extension, which is facilitated by [Tilt](https://tilt.dev), we can deploy our code to TAP once, save changes to the code, and see those changes reflected in the workload running on the cluster within seconds.
