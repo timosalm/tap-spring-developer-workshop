@@ -1,3 +1,11 @@
-#!/bin/bash 
+#!/bin/bash
+
+set -x
 
 test -f "config/workload.yaml"
+
+if [ "$?" == "0" ]; then
+    exit 1
+fi
+
+exit 0
