@@ -14,6 +14,10 @@ spec:
   params:
   - name: gitops_ssh_secret
     value: git-https
+  - name: registry
+    value:
+      server: REGISTRY_HOST
+      repository: workloads
   serviceClaims:
   - name: rmq
     ref:

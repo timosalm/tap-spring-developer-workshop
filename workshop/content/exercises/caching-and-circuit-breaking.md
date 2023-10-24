@@ -416,6 +416,7 @@ file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplica
 line: 10
 text: |
     import org.springframework.cache.annotation.EnableCaching;
+cascade: true
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
@@ -431,6 +432,7 @@ file: ~/order-service/src/main/java/com/example/orderservice/order/ProductServic
 line: 13
 text: |
     import org.springframework.cache.annotation.Cacheable;
+cascade: true
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/ProductService.java
@@ -454,6 +456,7 @@ text: |2
 
       @Override
       <S extends Order> S save(S order);
+cascade: true
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java

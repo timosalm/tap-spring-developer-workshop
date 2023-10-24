@@ -1,6 +1,7 @@
 ```terminal:execute
 command: |
   kubectl apply -f ~/samples/workload-product-service-native-image.yaml
+  clear
 autostart: true
 hidden: true
 ```
