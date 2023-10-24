@@ -1,10 +1,9 @@
 ```examiner:execute-test
-name: test-product-workload-file-exists
+name: test-that-pod-does-not-exist
 title: Verify that product service workload exists
 delay: 5
 retries: .INF
 autostart: true
-cascade: true
 ```
 ```terminal:execute
 command: |2
