@@ -1,26 +1,11 @@
 ```examiner:execute-test
-name: test-product-workload-file-exists
-title: verify that product service workload
-timeout: 5
+name: test-that-pod-does-not-exist
+title: Verify that pod named "one" does not exist.
+args:
+- one
 retries: .INF
+delay: 1
 autostart: true
-cascade: true
-```
-```terminal:execute
-command: |2
-  if ! grep -q gitops_ssh_secret "product-service/config/workload.yaml"; then
-  cat <<EOL >> product-service/config/workload.yaml
-  
-    params:
-    - name: gitops_ssh_secret
-      value: git-https
-    - name: registry
-      value:
-        server: $REGISTRY_HOST
-        repository: workloads
-  EOL
-  fi
-  clear
 ```
 
 Before we have a closer look at the challenges of our typical microservice application, let's **implement** one of the services from scratch - in this case, the **product service**.
