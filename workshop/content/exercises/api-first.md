@@ -7,6 +7,10 @@ Tanzu Developer Portal helps you to find documentation for APIs available in you
 
 A core feature of Tanzu Developer Portal is the **Software Catalog**. The Software Catalog is a centralized system that keeps track of metadata for all the applications in your organization's ecosystem. The catalog is built around the concept of metadata YAML files stored together with the code, which are then harvested and visualized.
 Here is an example of the YAML file from the product service.
+```dashboard:reload-dashboard
+name: GIT UI
+url: {{ ingress_protocol }}://git-ui-{{ session_name }}.{{ ingress_domain }}?p=product-service.git;a=blob;f=catalog/component.yaml;hb=refs/heads/main
+```
 ```dashboard:open-url
 url: {{ git_protocol }}://{{ git_host }}/product-service/src/branch/{{ session_namespace }}/catalog/component.yaml
 ```

@@ -1,3 +1,11 @@
+```terminal:execute
+command: |
+  kubectl apply -f ~/samples/workload-frontend-image.yaml
+  clear
+autostart: true
+hidden: true
+```
+
 Security is a vital part of any application and cloud environment!
 **OAuth 2 is an authorization framework** granting clients access to protected resources via an authorization server.
 To make the application secure, you can simply add Spring Security as a dependency. **By adding the Spring Security OAuth 2 Client, it will secure your app with OAuth 2** by default.  However, we need an OAuth 2 authorization server to use with the client application.

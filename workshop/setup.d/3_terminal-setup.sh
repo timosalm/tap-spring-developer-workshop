@@ -13,5 +13,3 @@ for serviceName in order-service shipping-service; do
 done
 
 (cd ~/samples/externalized-configuration && sed -i 's~NAMESPACE~'"$SESSION_NAMESPACE"'~g' order-service.yaml)
-
-#kubectl apply -f samples/workload-frontend-image.yaml
