@@ -1,5 +1,5 @@
 ```examiner:execute-test
-name: test-that-pod-does-not-exist
+name: test-product-workload-file-exists
 title: Verify that product service workload exists
 delay: 5
 retries: .INF
