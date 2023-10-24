@@ -43,11 +43,10 @@ class WebSecurityConfiguration {
     RestTemplate oauthRestTemplate(RestTemplateBuilder restTemplateBuilder) {
         return restTemplateBuilder.additionalInterceptors(Collections.singletonList(
                 (request, body, execution) -> {
-                  var response = execution.execute(request, body);
                   var authentication = SecurityContextHolder.getContext().getAuthentication();
                   var token = (AbstractOAuth2Token) authentication.getCredentials();
-                  response.getHeaders().setBearerAuth(token.getTokenValue());
-                  return response;
+                  request.getHeaders().setBearerAuth(token.getTokenValue());
+                  return execution.execute(request, body);
                 }
         )).build();
     }
