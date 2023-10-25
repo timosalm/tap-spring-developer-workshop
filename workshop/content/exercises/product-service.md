@@ -41,6 +41,10 @@ Lets start by looking at the dependencies of our app.
 
 ```editor:open-file
 file: product-service/pom.xml
+cascade: true
+```
+```editor:execute-command
+command: workbench.view.explorer
 ```
 In the `pom.xml` file, you will see we are using Java 17, Spring Boot 3.1.5, Spring Cloud 2022.0.4, and also including the dependencies `spring-boot-starter-web`, `spring-boot-starter-actuator`, and `spring-boot-starter-security`.
 
