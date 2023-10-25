@@ -219,7 +219,11 @@ file: product-service/Tiltfile
 We can **start the TAP's live update functionality** via the **context menu item** `Tanzu: Live Update Start` **Or**, we can click on the command below to accomplish the same thing.
 ```editor:execute-command
 command: tanzu.liveUpdateStart
+args:
+- vscode.Uri: /home/eduk8s/product-service/Tiltfile
 ```
+
+vscode.Uri
 **Accept the hint** that the `Namespace must be watched by Tanzu Workloads panel to perform actions`.
 
 TAP will deploy the application using the source from our local file system. 
