@@ -35,7 +35,7 @@ public class Order implements Serializable { // Serializable required for Redis 
 
     void validate(List<Product> products) {
         if (products.stream().noneMatch(product -> product.getId().equals(productId))) {
-            throw new ProductNotFoundException("Unknown product with id: " + productId);
+            throw new ProductNotFoundException("The product with id " + productId + " is currently not available for orders");
         }
     }
 

@@ -1,9 +1,7 @@
 package com.example.orderservice.order;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -29,13 +27,8 @@ class OrderResource {
 
     @PostMapping
     public ResponseEntity<Order> createOrder(@NotNull @Valid @RequestBody CreateOrderData createOrderData) {
-        try {
-            final Order order = orderApplicationService.createOrder(createOrderData);
-            final URI orderUri = URI.create(String.format("%s/%s", BASE_URI, order.getId()));
-            return ResponseEntity.created(orderUri).body(order);
-        } catch (Exception e) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "New order not created, there was an error", e);
-        }
+      final Order order = orderApplicationService.createOrder(createOrderData);
+      final URI orderUri = URI.create(String.format("%s/%s", BASE_URI, order.getId()));
+      return ResponseEntity.created(orderUri).body(order);
     }
 }
