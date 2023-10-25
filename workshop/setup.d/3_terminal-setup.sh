@@ -4,6 +4,7 @@ set +e
 
 mkdir -p config/gateway
 mkdir -p config/auth
+mkdir -p config/config-server
 
 (cd /opt/git/repositories && git init && git config --global --add safe.directory /opt/git/repositories && git instaweb)
 

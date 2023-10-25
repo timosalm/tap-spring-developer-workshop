@@ -29,25 +29,23 @@ For example, you can configure the Application Configuration Service to use a `d
 
 Our commercial product provides a Kubernetes-native experience for the configuration via a `ConfigurationSource` resource.
 
-Let's create the `ConfigurationSource` with our `defaultLabel` pointing at our Git repo.
-
-```terminal:execute
-command: |
-  cat <<EOF | kubectl apply -f -
-    apiVersion: "config.apps.tanzu.vmware.com/v1alpha4"
-    kind: ConfigurationSource
-    metadata:
-      name: config-source
-    spec:
-      backends:
-        - type: git
-          uri: {{ git_protocol }}://{{ git_host }}/externalized-configuration.git
-          defaultLabel: main
-          secretRef:
-            name: git-https
-            namespace: {{ session_namespace }}
-  EOF
-clear: true
+Let's create the `ConfigurationSource` resource configuration pointing at our Git repo.
+```editor:append-lines-to-file
+file: ~/config/config-server/configuration-source.yaml
+description: Create ConfigurationSource
+text: |
+  apiVersion: "config.apps.tanzu.vmware.com/v1alpha4"
+  kind: ConfigurationSource
+  metadata:
+    name: config-source
+  spec:
+    backends:
+      - type: git
+        uri: {{ git_protocol }}://{{ git_host }}/externalized-configuration.git
+        defaultLabel: main
+        secretRef:
+          name: git-https
+          namespace: {{ session_namespace }}
 ```
 
 As a next step, you have to create a `ConfigurationSlice` that references this configuration source (`spec.configurationSource` in the below YAML) and the related configuration file(s) for the product-service (`spec.content` in the below YAML).
@@ -58,11 +56,12 @@ name: GIT UI
 url: {{ ingress_protocol }}://git-ui-{{ session_name }}.{{ ingress_domain }}?p=externalized-configuration.git;a=blob;f=product-service.yaml
 ```
 
-To create the `ConfigurationSlice` execute the following command.
+To create the `ConfigurationSlice` resource configuration execute the following command.
 
-```terminal:execute
-command: |
-  cat <<EOF | kubectl apply -f -
+```editor:append-lines-to-file
+file: ~/config/config-server/configuration-slice.yaml
+description: Create ConfigurationSlice
+text: |
   apiVersion: "config.apps.tanzu.vmware.com/v1alpha4"
   kind: ConfigurationSlice
   metadata:
@@ -72,7 +71,10 @@ command: |
     configurationSource: config-source
     content:
     - product-service
-  EOF
+```
+Let's apply everything to the cluster.
+```terminal:execute
+command: kubectl apply -f ~/config/config-server/
 clear: true
 ```
 
@@ -155,18 +157,7 @@ The result of the `curl` command should eventually look like this.
     "id": 3,
     "name": "VMware Tanzu for Kubernetes Operations"
   },
-  {
-    "id": 4,
-    "name": "VMware Tanzu Application Service"
-  },
-  {
-    "id": 5,
-    "name": "VMware Data Services"
-  },
-  {
-    "id": 6,
-    "name": "VMware Application Catalog"
-  }
+  ...
 ]
 ```
 
