@@ -220,7 +220,7 @@ We can **start the TAP's live update functionality** via the **context menu item
 ```editor:execute-command
 command: tanzu.liveUpdateStart
 args:
-- vscode.Uri: /home/eduk8s/product-service/Tiltfile
+- /home/eduk8s/product-service/Tiltfile
 ```
 
 vscode.Uri
