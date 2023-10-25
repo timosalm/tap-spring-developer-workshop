@@ -1,7 +1,7 @@
 package com.example.orderservice;
 
-import java.util.Collections;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +16,8 @@ import org.springframework.security.config.Customizer;
 
 @Configuration
 class WebSecurityConfiguration {
+
+    private static final Logger log = LoggerFactory.getLogger(WebSecurityConfiguration.class);
 
     @Profile("!oauth")
     @Bean
@@ -41,13 +43,14 @@ class WebSecurityConfiguration {
     @Primary
     @Bean
     RestTemplate oauthRestTemplate(RestTemplateBuilder restTemplateBuilder) {
-        return restTemplateBuilder.additionalInterceptors(Collections.singletonList(
-                (request, body, execution) -> {
-                  var authentication = SecurityContextHolder.getContext().getAuthentication();
-                  var token = (AbstractOAuth2Token) authentication.getCredentials();
-                  request.getHeaders().setBearerAuth(token.getTokenValue());
-                  return execution.execute(request, body);
-                }
-        )).build();
+        return restTemplateBuilder.additionalInterceptors((request, body, execution) -> {
+            var authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null) {
+                var token = (AbstractOAuth2Token) authentication.getCredentials();
+                request.getHeaders().setBearerAuth(token.getTokenValue());
+                log.info("Adding authentication header to outgoing request");
+            }
+            return execution.execute(request, body);
+        }).build();
     }
 }
