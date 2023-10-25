@@ -29,9 +29,9 @@ accelerator:
       choices:
       - value: 2.7.13
         text: 2.7.13
-      - value: 3.1.2
-        text: 3.1.2
-      defaultValue: "3.1.2"
+      - value: 3.1.5
+        text: 3.1.5
+      defaultValue: "3.1.5"
       required: true
     - name: gitRepositoryBaseUrl
       label: Git base url

@@ -24,11 +24,12 @@ product-service
 ```
 
 - Press **Next Step**
+- Press **Skip** at the *Set up Repository* step
 - Press **Generate Project**. When you click on **Generate Project** there will be a popup window that opens at the top of the Editor with the path `/home/eduk8s/`, click **OK** to accept the defaults.
 
 ![](../images/accelerator-path-ok.png)
 
-- The accelerator has now generated the code.  You will see a pop-up in the bottom right-hand corner of the IDE asking if you want to open the project in a new tab.  Click **No** to open the new project in the current window.
+- The accelerator has now generated the code.  You will see a pop-up in the bottom right-hand corner of the IDE asking if you want to open the project in a new tab. Click **YES** to open the new project in a new browser tab, and **close the tab** and continue to work on the IDE integrated into the workshop UI.
 
 ![](../images/accelerator-new-window.png)
 
@@ -41,7 +42,7 @@ Lets start by looking at the dependencies of our app.
 ```editor:open-file
 file: product-service/pom.xml
 ```
-In the `pom.xml` file, you will see we are using Java 17, Spring Boot 3.1.2, Spring Cloud 2022.0.4, and also including the dependencies `spring-boot-starter-web`, `spring-boot-starter-actuator`, and `spring-boot-starter-security`.
+In the `pom.xml` file, you will see we are using Java 17, Spring Boot 3.1.5, Spring Cloud 2022.0.4, and also including the dependencies `spring-boot-starter-web`, `spring-boot-starter-actuator`, and `spring-boot-starter-security`.
 
 The accelerator also generated a main `Application` class for us which we can use to run our application.
 
