@@ -8,7 +8,7 @@ spec:
     Architecture app.
   location:
     baseURL:
-      url: https://gateway-dev-space.emea.end2end.link
+      url: https://gateway-sc-architecture.main.emea.end2end.link
     path: /v3/api-docs
   owner: team-vmware-tanzu-se
   system: sc-architecture-system

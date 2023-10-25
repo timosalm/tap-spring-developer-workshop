@@ -1,6 +1,4 @@
 #@ load("@ytt:data", "data")
-#@ load("@ytt:base64", "base64")
-#@ load("@ytt:json", "json")
 ---
 apiVersion: training.educates.dev/v1beta1
 kind: Workshop
@@ -9,17 +7,22 @@ metadata:
 spec:
   title: TAP for Spring Developers
   description: A workshop that demonstrates capabilities of VMware Tanzu Application Platform for Spring developers.
-  vendor: tanzu.vmware.com
-  difficulty: beginner
-  duration: 60m
-  url: https://github.com/tsalm-vmware/tap-spring-developer-workshop
-  content:
-    image: #@ "{}".format(data.values.workshop_container_image)
-    files: #@ "github.com/{}/tap-spring-developer-workshop?ref={}".format(data.values.workshop_git.username,data.values.workshop_git.branch)
+  url: https://github.com/timosalm/tap-spring-developer-workshop
+  workshop:
+    image: ghcr.io/timosalm/tap-spring-developer-workshop@sha256:e09db93aa2e905ee19bf3749d0f57e0f5036f65180263c4e6ee01e341303945a
+    files:
+    - git:
+        url: https://github.com/timosalm/tap-spring-developer-workshop
+        ref: origin/educates
+      includePaths:
+      - /workshop/**
+      - /samples/**
   session:
     namespaces:
       budget: custom
       role: view
+      security:
+        policy: baseline
     applications:
       terminal:
         enabled: true
@@ -27,6 +30,10 @@ spec:
       editor:
         enabled: true
       git:
+        enabled: true
+      registry:
+        enabled: true
+      examiner:
         enabled: true
     env: 
     - name: TAP_INGRESS
@@ -36,8 +43,12 @@ spec:
       protocol: https
       host: 12factor.net 
       port: 443
+    - name: git-ui
+      port: 1234
+    dashboards:
+    - name: GIT UI
+      url: "$(ingress_protocol)://git-ui-$(session_name).$(ingress_domain)"
     objects:   
-    # Permissions for workshop session
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
       metadata:
@@ -138,91 +149,24 @@ spec:
         - kind: ServiceAccount
           namespace: $(workshop_namespace)
           name: $(service_account)
-    # Resources
     - apiVersion: v1
       kind: Secret
       metadata:
-        name: registry-credentials
-      type: kubernetes.io/dockerconfigjson
-      data:
-        #@ docker_creds = {"username": data.values.container_registry.username, "password": data.values.container_registry.password}
-        .dockerconfigjson: #@ base64.encode(json.encode({"auths": {data.values.container_registry.hostname: docker_creds}}))
-    - apiVersion: tekton.dev/v1beta1
-      kind: Pipeline
+        annotations:
+          tekton.dev/git-0: $(git_protocol)://$(git_host)
+        name: git-https
+      type: kubernetes.io/basic-auth
+      stringData:
+        username: $(git_username)
+        password: $(git_password)
+        basicauth.username: $(git_username)
+        basicauth.password: $(git_password)
+    - apiVersion: secretgen.carvel.dev/v1alpha1
+      kind: SecretExport
       metadata:
-        name: developer-defined-tekton-pipeline
-        labels:
-          apps.tanzu.vmware.com/pipeline: test     # (!) required
+        name: educates-registry-credentials
       spec:
-        params:
-          - name: source-url                       # (!) required
-          - name: source-revision                  # (!) required
-          - name: source-sub-path
-            default: "."
-        tasks:
-          - name: test
-            params:
-              - name: source-url
-                value: $(params.source-url)
-              - name: source-revision
-                value: $(params.source-revision)
-              - name: source-sub-path
-                value: $(params.source-sub-path)
-            taskSpec:
-              params:
-                - name: source-url
-                - name: source-revision
-                - name: source-sub-path
-              steps:
-                - name: test
-                  image: gradle
-                  script: |-
-                    cd `mktemp -d`
-
-                    wget -qO- $(params.source-url) | tar xvz -m
-                    cd $(params.source-sub-path)
-                    ./mvnw test
-    - apiVersion: scanning.apps.tanzu.vmware.com/v1beta1
-      kind: ScanPolicy
-      metadata:
-        name: scan-policy
-        labels:
-          app.kubernetes.io/part-of: enable-in-gui
-      spec:
-        regoFile: |
-          package main
-
-          # Accepted Values: "Critical", "High", "Medium", "Low", "Negligible", "UnknownSeverity"
-          notAllowedSeverities := ["UnknownSeverity"]
-          ignoreCves := []
-
-          contains(array, elem) = true {
-            array[_] = elem
-          } else = false { true }
-
-          isSafe(match) {
-            severities := { e | e := match.ratings.rating.severity } | { e | e := match.ratings.rating[_].severity }
-            some i
-            fails := contains(notAllowedSeverities, severities[i])
-            not fails
-          }
-
-          isSafe(match) {
-            ignore := contains(ignoreCves, match.id)
-            ignore
-          }
-
-          deny[msg] {
-            comps := { e | e := input.bom.components.component } | { e | e := input.bom.components.component[_] }
-            some i
-            comp := comps[i]
-            vulns := { e | e := comp.vulnerabilities.vulnerability } | { e | e := comp.vulnerabilities.vulnerability[_] }
-            some j
-            vuln := vulns[j]
-            ratings := { e | e := vuln.ratings.rating.severity } | { e | e := vuln.ratings.rating[_].severity }
-            not isSafe(vuln)
-            msg = sprintf("CVE %s %s %s", [comp.name, vuln.id, ratings])
-          }
+        toNamespace: $(session_namespace)
     - apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -300,6 +244,7 @@ spec:
       metadata:
         name: order-config-slice
       spec:
+        interval: 30s
         configurationSource: config-source
         content:
         - order-service
@@ -317,6 +262,7 @@ spec:
       metadata:
         name: shipping-config-slice
       spec:
+        interval: 30s
         configurationSource: config-source
         content:
         - shipping-service

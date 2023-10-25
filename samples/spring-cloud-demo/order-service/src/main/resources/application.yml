@@ -2,8 +2,7 @@ spring:
   application.name: order-service # for config server
   jpa.hibernate.ddl-auto: update
   config.import: "optional:configtree:${SERVICE_BINDING_ROOT}/config-server/"
-  cache.redis.time-to-live: 300000 # 5 min
-
+  cache.redis.time-to-live: 60000 # 1 min
 logging.level.org.springframework.cache: TRACE
 management:
   tracing.sampling.probability: 1.0

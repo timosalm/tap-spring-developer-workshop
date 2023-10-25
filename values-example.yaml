@@ -1,18 +1,6 @@
 #@data/values
 ---
-container_registry:
-  hostname: harbor.example.com
-  username: 
-  password:
 training_portal_password: 
-workshop_container_image: ghcr.io/timosalm/tap-spring-developer-workshop:main
-workshop_git:
-  username: timosalm
-  branch: main
 tap:
   ingress_domain: example.com
   ingress_wildcard_cert:  tanzu-system-ingress/tls-delegation-cert
-gitea:
-  base_url: https://gitea.example.com/gitea_admin
-  basic_auth_username:
-  basic_auth_password:
