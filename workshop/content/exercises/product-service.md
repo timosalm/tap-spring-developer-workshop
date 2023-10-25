@@ -218,9 +218,7 @@ file: product-service/Tiltfile
 
 We can **start the TAP's live update functionality** via the **context menu item** `Tanzu: Live Update Start` **Or**, we can click on the command below to accomplish the same thing.
 ```editor:execute-command
-command: tanzu.liveUpdateStart
-args:
-- /home/eduk8s/product-service/Tiltfile
+command: tanzu.liveUpdateStart, /home/eduk8s/product-service/Tiltfile
 ```
 
 vscode.Uri
