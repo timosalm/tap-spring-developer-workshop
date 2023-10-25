@@ -1,8 +1,12 @@
+```terminal:interrupt
+autostart: true
+hidden: true
+cascade: true
+```
 ```terminal:execute
 command: |
   (cd ~/order-service && [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" != "true" ] && git init -b main && git remote add origin $GIT_PROTOCOL://$GIT_HOST/order-service.git && git add . && git commit -m "Initial implementation" && git push -u origin main && tanzu apps workload apply -f config/workload.yaml -y)
   clear
-autostart: true
 hidden: true
 ```
 
@@ -19,23 +23,6 @@ This experience is made possible by using the **Services Toolkit** component.
 
 To demonstrate how a Spring Boot app can use backing services on TAP let's use the order-service.
 ![Order Microservice](../images/microservice-architecture-cache.png)
-
-For that, we'll first import it into our IDE's workspace.
-
-Open the Explorer view in the IDE.
-```editor:execute-command
-command: workbench.view.explorer
-```
-Copy the path to the order service to your clipboard with the following command, and execute the command below.
-```copy
-/home/eduk8s/order-service/
-```
-```editor:execute-command
-command: workbench.action.addRootFolder
-```
-In the "Add Folder To Workspace" popup, paste the path to the order service project and click OK.
-
-![](../images/add-order-service-to-workspace.png)
 
 The **order service** uses a **PostgreSQL database** to store orders.  We have both `spring-boot-starter-data-jpa` and `postgresql` on the classpath.
 {% raw %}
@@ -349,9 +336,9 @@ Since the order service cannot validate that the product with the id of `1` exis
 ```
 {
   "timestamp": "2023-08-10T14:37:47.298+00:00",
-  "status": 500,
-  "error": "Internal Server Error",
-  "message": "New order not created, there was an error",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "The product with id 1 is currently not available for orders",
   "path": "/api/v1/orders"
 }
 ```

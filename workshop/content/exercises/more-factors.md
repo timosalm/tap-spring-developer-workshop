@@ -1,3 +1,8 @@
+```terminal:interrupt
+autostart: true
+hidden: true
+cascade: true
+```
 ```dashboard:open-dashboard
 name: The Twelve Factors
 ```

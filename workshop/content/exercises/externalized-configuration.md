@@ -1,8 +1,12 @@
+```terminal:interrupt
+autostart: true
+hidden: true
+cascade: true
+```
 ```terminal:execute
 command: |
   (cd ~/samples/externalized-configuration && [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" != "true" ] && git init -b main && git remote add origin $GIT_PROTOCOL://$GIT_HOST/externalized-configuration.git && git add . && git commit -m "Initial implementation" && git push -u origin main)
   clear
-autostart: true
 hidden: true
 ```
 

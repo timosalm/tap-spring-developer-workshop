@@ -1,8 +1,12 @@
+```terminal:interrupt
+autostart: true
+hidden: true
+cascade: true
+```
 ```terminal:execute
 command: |
   kubectl apply -f ~/samples/workload-frontend-image.yaml
   clear
-autostart: true
 hidden: true
 ```
 

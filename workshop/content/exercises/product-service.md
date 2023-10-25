@@ -287,5 +287,3 @@ After the basic implementation of our product service, we will now configure a c
 
 **Click the trash can button in the terminal pane to stop the Live Update process.**
 When Live Update stops, your application continues to run on the cluster, but future changes in the editor will not be applied to it, unless you start the Live Update again.
-```terminal:interrupt
-```

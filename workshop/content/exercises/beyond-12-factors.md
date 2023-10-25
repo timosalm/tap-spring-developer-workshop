@@ -1,8 +1,12 @@
+```terminal:interrupt
+autostart: true
+hidden: true
+cascade: true
+```
 ```terminal:execute
 command: |
   (cd ~/shipping-service && [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" != "true" ] && git init -b main && git remote add origin $GIT_PROTOCOL://$GIT_HOST/shipping-service.git && git add . && git commit -m "Initial implementation" && git push -u origin main && tanzu apps workload apply -f config/workload.yaml -y)
   clear
-autostart: true
 hidden: true
 ```
 

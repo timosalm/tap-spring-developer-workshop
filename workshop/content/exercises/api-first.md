@@ -1,3 +1,8 @@
+```terminal:interrupt
+autostart: true
+hidden: true
+```
+
 The API-first approach prioritizes the design and development of the application programming interface (API) before any other aspects of the application. 
 This approach enables the consumers of an API to work more independently from its provider, and providers are able to facilitate discussions with stakeholders well before they might have coded themselves past the point of no return.
 
