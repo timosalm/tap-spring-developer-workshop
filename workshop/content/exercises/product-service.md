@@ -65,6 +65,7 @@ Click the command below to create a `Product` class.
 
 ```editor:append-lines-to-file
 file: ~/product-service/src/main/java/com/example/productservice/product/Product.java
+description: Create Product class
 text: |2
   package com.example.productservice.product;
 
@@ -106,6 +107,7 @@ Click the command below to add the `ProductApplicationService` class.
 
 ```editor:append-lines-to-file
 file: ~/product-service/src/main/java/com/example/productservice/product/ProductApplicationService.java
+description: Create ProductApplicationService class
 text: |2
   package com.example.productservice.product;
 
@@ -142,7 +144,9 @@ Let's modify `ProductResource` to use the `ProductApplicationService` to provide
 ```editor:insert-lines-before-line
 file: ~/product-service/src/main/java/com/example/productservice/product/ProductResource.java
 line: 5
+description: Inject ProductApplicationService instance into ProductResource
 text: "import java.util.List;"
+cascade: true
 ```
 
 ```editor:insert-lines-before-line
@@ -154,6 +158,7 @@ text: |2
     ProductResource(ProductApplicationService productApplicationService) {
         this.productApplicationService = productApplicationService;
     }
+hidden: true
 ```
 
 ```editor:select-matching-text
@@ -220,7 +225,12 @@ We can **start the TAP's live update functionality** via the **context menu item
 
 ![](../images/live-update.png)
 
+**Select the path to the Tilt file of the product service** (/home/eduk8s/product-service/Tiltfile). 
+
+![](../images/live-update-select-path.png)
+
 **Accept the hint** that the `Namespace must be watched by Tanzu Workloads panel to perform actions`.
+![](../images/live-update-watch-ns.png)
 
 TAP will deploy the application using the source from our local file system. 
 
