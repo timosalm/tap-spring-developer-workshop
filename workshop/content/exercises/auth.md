@@ -20,6 +20,7 @@ Execute the following commands to create the YAML files needed to deploy the App
 
 ```editor:append-lines-to-file
 file: ~/config/auth/authserver.yaml
+description: Create AuthServer resource configuration
 text: |
   apiVersion: "sso.apps.tanzu.vmware.com/v1alpha1"
   kind: AuthServer
@@ -77,6 +78,7 @@ Execute the following command to create the YAML for our `ClientRegistration`.
 
 ```editor:append-lines-to-file
 file: ~/config/auth/clientregistration.yaml
+description: Create ClientRegistration resource configuration
 text: |
   apiVersion: sso.apps.tanzu.vmware.com/v1alpha1
   kind: ClientRegistration

@@ -76,6 +76,7 @@ Now we can create a new class called `ZipkinBindingsPropertiesProcessor` which i
 
 ```editor:append-lines-to-file
 file: ~/product-service/src/main/java/com/example/productservice/ZipkinBindingsPropertiesProcessor.java
+description: Create ZipkinBindingsPropertiesProcessor
 text: |
   package com.example.productservice;
 

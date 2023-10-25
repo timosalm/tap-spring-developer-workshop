@@ -62,6 +62,7 @@ Let's create an instance of Spring Cloud Gateway for our application.
 First, we have to configure a gateway instance via the `SpringCloudGateway` Kubernetes custom resource.
 ```editor:append-lines-to-file
 file: ~/config/gateway/gateway.yaml
+description: Create SpringCloudGateway resource configuration
 text: |
   apiVersion: "tanzu.vmware.com/v1"
   kind: SpringCloudGateway
@@ -85,6 +86,7 @@ These routes are simple in that they just have a path predicate to define what p
 
 ```editor:append-lines-to-file
 file: ~/config/gateway/gateway-route-config.yaml
+description: Create SpringCloudGatewayRouteConfig resource configuration
 text: |
   apiVersion: "tanzu.vmware.com/v1"
   kind: SpringCloudGatewayRouteConfig
@@ -108,6 +110,7 @@ The last step is to link our route configuration to the gateway instance with a 
 
 ```editor:append-lines-to-file
 file: ~/config/gateway/gateway-route-mapping.yaml
+description: Create SpringCloudGatewayMapping resource configuration
 text: |
   apiVersion: "tanzu.vmware.com/v1"
   kind: SpringCloudGatewayMapping
