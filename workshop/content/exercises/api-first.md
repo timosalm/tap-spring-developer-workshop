@@ -16,9 +16,6 @@ Here is an example of the YAML file from the product service.
 name: GIT UI
 url: {{ ingress_protocol }}://git-ui-{{ session_name }}.{{ ingress_domain }}?p=product-service.git;a=blob;f=catalog/component.yaml;hb=refs/heads/main
 ```
-```dashboard:open-url
-url: {{ git_protocol }}://{{ git_host }}/product-service/src/branch/{{ session_namespace }}/catalog/component.yaml
-```
 Let's open the Software Catalog.
 
 ```dashboard:open-url
