@@ -49,14 +49,6 @@ accelerator:
       dataType: string
       defaultValue: "main"
       required: true
-    - name: namespace
-      label: Deployment namespace
-      display: true
-      description: The Kubernetes namespace the application will be deployed in
-      inputType: text
-      dataType: string
-      defaultValue: "default"
-      required: true
 engine:
   let:
   - name: springCloudVersion
@@ -123,8 +115,6 @@ engine:
     chain:
     - type: ReplaceText
       substitutions:
-      - text: NAMESPACE
-        with: "#namespace"
       - text: JAVA_VERSION
         with: "#javaVersion"
       - text: ARTIFACT_NAME
@@ -139,8 +129,6 @@ engine:
       substitutions:
       - text: ARTIFACT_NAME
         with: "#artifactId"
-      - text: NAMESPACE_NAME
-        with: "#namespace"
   - include: ["catalog/*.yaml"]
     chain:
     - type: ReplaceText

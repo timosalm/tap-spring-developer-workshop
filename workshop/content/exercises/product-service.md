@@ -18,10 +18,6 @@ product-service
 ```copy
 {{ git_protocol }}://{{ git_host}}
 ```
-- **Deployment namespace:**
-```copy
-{{ session_namespace }}
-```
 
 - Press **Next Step**
 - Press **Skip** at the *Set up Repository* step

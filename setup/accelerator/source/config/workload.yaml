@@ -2,7 +2,6 @@ apiVersion: carto.run/v1alpha1
 kind: Workload
 metadata:
   name: ARTIFACT_NAME
-  namespace: NAMESPACE
   annotations:
     autoscaling.knative.dev/min-scale: "1"
     autoscaling.knative.dev/max-scale: "3"
