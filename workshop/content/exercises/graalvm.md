@@ -23,7 +23,7 @@ TAP includes a serverless application runtime for Kubernetes, which provides **c
 url: https://knative.dev/docs/
 ```
 
-The major **subprojects of Knative** are Serving and Eventing.
+The **subprojects of Knative** are Serving, Eventing, and Functions.
 - **Serving** supports deploying upgrading, routing, and scaling of stateless applications and functions
 - **Eventing** enables developers to use an event-driven architecture with serverless applications and is **out of the scope of this workshop**
 - **Functions**: Enables developers to easily create, build, and deploy stateless, event-driven functions
