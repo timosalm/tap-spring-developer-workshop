@@ -156,7 +156,12 @@ Spring Boot includes buildpack support for native images directly for both Maven
 For the second option to build your native image, the `native-maven-plugin` was added to our pom file to be able to invoke the native image compiler from your build.
 
 Let's now see how the product service **performs as a native image on a Serverless runtime**! 
-As you learned, the compilation of native images takes much longer and consumes more resources. Therefore, it's already done for you, and the application is running in your cluster.
+As you learned, the compilation of native images takes much longer and consumes more resources. Therefore, **it's already done for you, and the application should run in your namespace.**
+
+Feel free to check the current status of the deployment via the Tanzu Developer Portal.
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespace }}/product-service-native
+```
 
 Execute both commands to check how fast the number of pods will be scaled up.
 ```terminal:interrupt-all
