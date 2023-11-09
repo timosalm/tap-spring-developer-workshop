@@ -7,5 +7,6 @@ spec:
   type: openapi
   lifecycle: production
   owner: team1@example.com
+  system: sc-architecture-system
   definition:
     $text: https://gateway-sc-architecture.main.emea.end2end.link/v3/api-docs
