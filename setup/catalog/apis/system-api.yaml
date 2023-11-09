@@ -5,7 +5,7 @@ metadata:
   description: The Spring Cloud Architecture System API
 spec:
   type: openapi
-  lifecycle: production
+  lifecycle: experimental
   owner: team-vmware-tanzu-se
   system: sc-architecture-system
   definition:
