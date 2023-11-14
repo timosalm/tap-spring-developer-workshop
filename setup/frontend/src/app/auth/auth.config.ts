@@ -6,7 +6,7 @@ export const authCodeFlowConfig: AuthConfig = {
   redirectUri: window.location.origin + environment.baseHref + 'index.html',
   clientId:  environment.authConfig.clientId,
   responseType: 'code',
-  scope: 'openid offline_access email profile roles',
+  scope: 'openid email profile roles',
   showDebugInformation: true,
   timeoutFactor: 0.01,
   logoutUrl: environment.authConfig.issuer + '/logout',
