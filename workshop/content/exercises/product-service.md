@@ -27,8 +27,6 @@ product-service
 
 - The accelerator has now generated the code.  You will see a pop-up in the bottom right-hand corner of the IDE asking if you want to open the project in a new tab. Click **YES** to open the new project in a new browser tab, and **close the tab** and continue to work on the IDE integrated into the workshop UI.
 
-![](../images/accelerator-new-window.png)
-
 Let's start building out the product service.
 
 Before adding any code, though, we'll have a look at what the accelerator created for us.
@@ -41,6 +39,7 @@ cascade: true
 ```
 ```editor:execute-command
 command: workbench.view.explorer
+hidden: true
 ```
 In the `pom.xml` file, you will see we are using Java 17, Spring Boot 3.1.5, Spring Cloud 2022.0.4, and also including the dependencies `spring-boot-starter-web`, `spring-boot-starter-actuator`, and `spring-boot-starter-security`.
 

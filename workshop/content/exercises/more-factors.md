@@ -19,9 +19,105 @@ Factor 7 states **services need to be exposed for external or inter-service acce
 
 In Kubernetes, each service can interface with another service by using its service name, which is **resolved by Kubernetes DNS support, and the benefit of the Spring Cloud's Registry interface is limited**. 
 
-**Due to even more capabilities like proper load balancing, we decided to use the Ingress Controller Contour as a solution for the factor**.
+**Due to even more capabilities like proper load balancing, it could make sense to use an Ingress Controller like in our case Contour as a solution for the factor**.
 
 ![Updated architecture with Service Registry](../images/microservice-architecture-service-discovery.png)
+
+As Spring Cloud's Registry interface still has its raison d'être for portability to other platforms like Cloud Foundry, **TAP 1.7 introduced the Service Registry for VMware Tanzu**, which provides the capability to **create Eureka servers** in your namespaces and bindy your workloads to them.
+
+An Eureka server can be easily created via the EurekaServer resource.
+```editor:append-lines-to-file
+file: ~/config/service-registry/service-registry.yaml
+description: Create Eureka server
+text: |
+  apiVersion: "service-registry.spring.apps.tanzu.vmware.com/v1alpha1"
+  kind: EurekaServer
+  metadata:
+    name: eurekaserver-1
+  spec:
+    replicas: 1
+```
+```terminal:execute
+command: kubectl apply -f ~/config/service-registry/
+clear: true
+```
+
+Let's for now only [configure the Spring Cloud service discovery](https://cloud.spring.io/spring-cloud-netflix/reference/html/#service-discovery-eureka-clients) for the order and the product service, as there is no direct connection to the shipping service.
+First, we have to add the required dependency to our `pom.xml`s.
+```editor:insert-lines-before-line
+file: ~/order-service/pom.xml
+line: 47
+text: |2
+          <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+          </dependency>
+cascade: true
+```
+```editor:insert-lines-before-line
+file: ~/product-service/pom.xml
+line: 33
+text: |2
+          <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+          </dependency>
+```
+```terminal:execute
+command: |
+  (cd order-service && git add . && git commit -m "Add service discovery" && git push)
+  (cd product-service && git add . && git commit -m "Add service discovery" && git push)
+clear: true
+```
+
+The service discovery is done based on the `spring.application.name` of a service. 
+```editor:open-file
+file: product-service/src/main/resources/application.yaml
+```
+So we have to change the current configuration of the `order.products-api-url` in the order service accordingly.
+```editor:select-matching-text
+file: ~/samples/externalized-configuration/order-service.yaml
+text: "order.products-api-url"
+before: 0
+after: 0
+```
+```editor:replace-text-selection
+file: ~/samples/externalized-configuration/order-service.yaml
+text: "order.products-api-url: http://productservice/api/v1/products"
+```
+```terminal:execute
+command: (cd samples/externalized-configuration && git add . && git commit -m "Add service discovery" && git push)
+clear: true
+```
+
+Finally, we have to claim the credentials to access the running Eureka server by configuring the **service binding**. The ResourceClaim pointed to in the service claim above was already created for you when this workshop was initialized.
+```editor:insert-value-into-yaml
+file: ~/product-service/config/workload.yaml
+path: spec.serviceClaims
+value:
+  - name: service-registry
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      name: eurekaserver-1
+cascade: true
+```
+```editor:insert-value-into-yaml
+file: ~/order-service/config/workload.yaml
+path: spec.serviceClaims
+value:
+  - name: service-registry
+    ref:
+      apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      name: eurekaserver-1
+```
+```terminal:execute
+command: |
+  kubectl apply -f ~/product-service/config/workload.yaml
+  kubectl apply -f ~/order-service/config/workload.yaml
+clear: true
+```
 
 ####  Factor 10: Dev/prod parity
 

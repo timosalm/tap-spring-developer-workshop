@@ -1,5 +1,5 @@
 LOCAL_PATH = os.getenv("LOCAL_PATH", default='.')
-NAMESPACE = os.getenv("NAMESPACE", default='workshops-w44-s003')
+NAMESPACE = os.getenv("NAMESPACE", default='default')
 OUTPUT_TO_NULL_COMMAND = os.getenv("OUTPUT_TO_NULL_COMMAND", default=' > /dev/null ')
 if os.getenv("SOURCE_IMAGE"):
   OPTIONAL_SOURCE_IMAGE_FLAG=" --source-image " + os.getenv("SOURCE_IMAGE")

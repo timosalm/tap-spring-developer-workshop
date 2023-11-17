@@ -317,3 +317,12 @@ spec:
           fqdn: #@ "authserver-1-$(session_namespace).{}".format(data.values.tap.ingress_domain)
           tls:
             secretName: #@ data.values.tap.ingress_wildcard_cert
+    - apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+      kind: ResourceClaim
+      metadata:
+        name: eurekaserver-1
+      spec:
+        ref:
+          apiVersion: service-registry.spring.apps.tanzu.vmware.com/v1alpha1
+          kind: EurekaServer
+          name: eurekaserver-1
