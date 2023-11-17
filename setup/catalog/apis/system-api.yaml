@@ -5,7 +5,8 @@ metadata:
   description: The Spring Cloud Architecture System API
 spec:
   type: openapi
-  lifecycle: production
-  owner: team1@example.com
+  lifecycle: experimental
+  owner: team-vmware-tanzu-se
+  system: sc-architecture-system
   definition:
-    $text: https://gateway-dev-space.emea.end2end.link/v3/api-docs
+    $text: https://gateway-sc-architecture.main.emea.end2end.link/v3/api-docs
