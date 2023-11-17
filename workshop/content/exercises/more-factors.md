@@ -70,6 +70,8 @@ command: |
 clear: true
 ```
 
+**TODO** @LoadBalanced import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+
 The service discovery is done based on the `spring.application.name` of a service. 
 ```editor:open-file
 file: product-service/src/main/resources/application.yaml
@@ -83,7 +85,7 @@ after: 0
 ```
 ```editor:replace-text-selection
 file: ~/samples/externalized-configuration/order-service.yaml
-text: "order.products-api-url: http://productservice/api/v1/products"
+text: "order.products-api-url: http://PRODUCTSERVICE/api/v1/products"
 ```
 ```terminal:execute
 command: (cd samples/externalized-configuration && git add . && git commit -m "Add service discovery" && git push)
