@@ -67,7 +67,7 @@ text: |2
 To instrument the `RestTemplate` instance we use to fetch the product list from the product service to use Eureka, we have to add the `@LoadBalanced` qualifier to the RestTemplate @Bean. 
 
 ```editor:insert-lines-before-line
-file: ~/product-service/pom.xml
+file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
 line: 18
 text: |2
       @LoadBalanced
@@ -75,7 +75,7 @@ cascade: true
 ```
 
 ```editor:insert-lines-before-line
-file: ~/product-service/pom.xml
+file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
 line: 13
 text: |2
   import org.springframework.cloud.client.loadbalancer.LoadBalanced;
