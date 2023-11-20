@@ -65,13 +65,15 @@ text: |2
 ```
 
 To instrument the `RestTemplate` instance we use to fetch the product list from the product service to use Eureka, we have to add the `@LoadBalanced` qualifier to the RestTemplate @Bean. 
+{% raw %}
 ```editor:insert-lines-before-line
 file: ~/product-service/pom.xml
 line: 18
 text: |2
-      @LoadBalanced 
+      @LoadBalanced
 cascade:true
 ```
+{% endraw %}
 ```editor:insert-lines-before-line
 file: ~/product-service/pom.xml
 line: 13
