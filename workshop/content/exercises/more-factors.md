@@ -23,7 +23,7 @@ In Kubernetes, each service can interface with another service by using its serv
 
 ![Updated architecture with Service Registry](../images/microservice-architecture-service-discovery.png)
 
-As Spring Cloud's Registry interface still has its raison d'être for portability to other platforms like Cloud Foundry, **TAP 1.7 introduced the Service Registry for VMware Tanzu**, which provides the capability to **create Eureka servers** in your namespaces and bindy your workloads to them.
+As Spring Cloud's Registry interface still has its raison d'être for portability to other platforms like Cloud Foundry, **TAP 1.7 introduced the Service Registry for VMware Tanzu**, which provides the capability to **create Eureka servers** in your namespaces and bind your workloads to them.
 
 An Eureka server can be easily created via the EurekaServer resource.
 ```editor:append-lines-to-file
@@ -63,14 +63,29 @@ text: |2
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
           </dependency>
 ```
+
+To instrument the `RestTemplate` instance we use to fetch the product list from the product service to use Eureka, we have to add the `@LoadBalanced` qualifier to the RestTemplate @Bean. 
+```editor:insert-lines-before-line
+file: ~/product-service/pom.xml
+line: 18
+text: |2
+      @LoadBalanced 
+cascade:true
+```
+```editor:insert-lines-before-line
+file: ~/product-service/pom.xml
+line: 13
+text: |2
+  import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+```
+
+To deploy our code changes, we have to commit them.
 ```terminal:execute
 command: |
   (cd order-service && git add . && git commit -m "Add service discovery" && git push)
   (cd product-service && git add . && git commit -m "Add service discovery" && git push)
 clear: true
 ```
-
-**TODO** @LoadBalanced import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 
 The service discovery is done based on the `spring.application.name` of a service. 
 ```editor:open-file
@@ -120,6 +135,31 @@ command: |
   kubectl apply -f ~/order-service/config/workload.yaml
 clear: true
 ```
+
+```terminal:execute
+session: 2
+command: tanzu apps workload tail order-service --since 1h --component run
+clear: true
+```
+
+{% raw %}
+```
+2023-11-20T16:02:18.705Z  INFO 1 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_ORDER-SERVICE/order-service-00005-deployment-6d4f7f898d-p98rr:order-service:8080 - registration status: 204
+2023-11-20T16:02:48.394Z  INFO 1 --- [freshExecutor-0] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+```
+{% endraw %}
+
+```terminal:execute
+command: |
+  curl -s -X POST -H "Content-Type: application/json" -d '{"productId":"1", "shippingAddress": "Stuttgart"}' https://order-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/orders | jq .
+clear: true
+```
+
+{% raw %}
+```
+2023-11-20T16:07:17.563Z  INFO 1 --- [trap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+```
+{% endraw %}
 
 ####  Factor 10: Dev/prod parity
 

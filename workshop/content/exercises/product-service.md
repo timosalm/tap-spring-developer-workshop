@@ -254,7 +254,7 @@ command: |
   curl -s https://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/api/v1/products | jq .
 ```
 
-Let's test the Live Update functionality by adding an additional product to `product-service.product-name`.
+Let's test the Live Update functionality by adding a product to `product-service.product-name`.
 
 ```editor:select-matching-text
 file: ~/product-service/src/main/resources/application.yaml

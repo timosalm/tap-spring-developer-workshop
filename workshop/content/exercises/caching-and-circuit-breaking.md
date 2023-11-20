@@ -289,7 +289,7 @@ text: |2
             circuitBreakerFactory.create("products").run(
                 () -> restTemplate.getForObject(productsApiUrl, Product[].class), 
                 t -> {
-                    log.error("Call to product service failed, using empty product list as fallback");
+                    log.error("Call to product service failed, using empty product list as fallback", t);
                     return new Product[]{};
                 }
             )
