@@ -70,7 +70,7 @@ To instrument the `RestTemplate` instance we use to fetch the product list from 
 file: ~/product-service/pom.xml
 line: 18
 text: |2
-      LoadBalanced
+      \@LoadBalanced
 cascade: true
 ```
 
