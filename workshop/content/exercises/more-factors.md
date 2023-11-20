@@ -71,6 +71,7 @@ file: ~/product-service/pom.xml
 line: 18
 text: |2
       LoadBalanced
+cascade: true
 ```
 
 ```editor:insert-lines-before-line
