@@ -8,6 +8,11 @@ command: |
   (cd ~/shipping-service && [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" != "true" ] && git init -b main && git remote add origin $GIT_PROTOCOL://$GIT_HOST/shipping-service.git && git add . && git commit -m "Initial implementation" && git push -u origin main && tanzu apps workload apply -f config/workload.yaml -y)
   clear
 hidden: true
+cascade: true
+```
+```dashboard:open-dashboard
+name: The Twelve Factors
+hidden: true
 ```
 
 Technology has advanced since the original creation of the 12-factor app, and in some situations, it is necessary to elaborate on the initial guidelines as well as add new guidelines designed to meet modern standards for application development. 

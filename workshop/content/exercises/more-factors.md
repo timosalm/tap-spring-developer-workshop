@@ -5,6 +5,7 @@ cascade: true
 ```
 ```dashboard:open-dashboard
 name: The Twelve Factors
+hidden: true
 ```
 
 #### Factor 5: Build, release, run
@@ -46,7 +47,7 @@ Let's for now only [configure the Spring Cloud service discovery](https://cloud.
 First, we have to add the required dependency to our `pom.xml`s.
 ```editor:insert-lines-before-line
 file: ~/order-service/pom.xml
-line: 47
+line: 54
 text: |2
           <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -68,7 +69,7 @@ To instrument the `RestTemplate` instance we use to fetch the product list from 
 
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
-line: 16
+line: 19
 text: |2
       @LoadBalanced
 cascade: true

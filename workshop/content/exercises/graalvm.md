@@ -8,9 +8,11 @@ command: |
   kubectl apply -f ~/samples/workload-product-service-native-image.yaml
   clear
 hidden: true
+cascade: true
 ```
 ```dashboard:open-dashboard
 name: The Twelve Factors
+hidden: true
 ```
 
 ####  Factor 8: Concurrency
@@ -221,6 +223,6 @@ If you have **classes that need binding** (mostly needed when serializing or des
 
 VMware Tanzu offers Enterprise Support for Spring Boot Native Applications compiled with the BellSoft Liberica native image Kit which is based on GraalVM Open Source.
 
-###### A future solution: JVM Checkpoint Restore
+###### A different solution: JVM Checkpoint Restore
 
-Spring Framework 6.1 M1 integrates with checkpoint/restore as implemented by [Project CRaC](https://openjdk.org/projects/crac/) to reduce the startup and warmup times of Spring-based Java applications with the JVM. The CRaC (Coordinated Restore at Checkpoint) project researches the coordination of Java programs with mechanisms to checkpoint (make an image of, snapshot) a Java instance while it is executing and restoring it.
+Spring Framework 6.1 integrates with checkpoint/restore as implemented by [Project CRaC](https://openjdk.org/projects/crac/) to reduce the startup and warmup times of Spring-based Java applications with the JVM. The CRaC (Coordinated Restore at Checkpoint) project researches the coordination of Java programs with mechanisms to checkpoint (make an image of, snapshot) a Java instance while it is executing and restoring it.

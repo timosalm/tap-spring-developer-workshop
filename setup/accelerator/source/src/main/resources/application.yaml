@@ -1,2 +1,5 @@
 spring:
   application.name: ARTIFACT_NAME # for config server
+management:
+  endpoint.env.show-values: ALWAYS
+  endpoints.web.exposure.include: "*"

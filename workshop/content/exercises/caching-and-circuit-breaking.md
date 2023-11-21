@@ -8,6 +8,11 @@ command: |
   (cd ~/order-service && [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" != "true" ] && git init -b main && git remote add origin $GIT_PROTOCOL://$GIT_HOST/order-service.git && git add . && git commit -m "Initial implementation" && git push -u origin main && tanzu apps workload apply -f config/workload.yaml -y)
   clear
 hidden: true
+cascade: true
+```
+```dashboard:open-dashboard
+name: The Twelve Factors
+hidden: true
 ```
 
 The **fourth and sixth factor** implies that any **data** that needs to be persisted must be **stored in a stateful backing service**, such as a database, because the processes are stateless and share-nothing.
@@ -239,7 +244,7 @@ This gives the product service (or the underlying infrastructure) some time to r
 First, we have to add the required dependency to our `pom.xml`.
 ```editor:insert-lines-before-line
 file: ~/order-service/pom.xml
-line: 47
+line: 54
 text: |2
           <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -385,7 +390,7 @@ value:
 Next, the required libraries have to be added to our `pom.xml`.
 ```editor:insert-lines-before-line
 file: ~/order-service/pom.xml
-line: 51
+line: 58
 text: |2
           <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -462,6 +467,7 @@ file: ~/order-service/src/main/java/com/example/orderservice/order/OrderReposito
 line: 6
 text: |
      import org.springframework.cache.annotation.CacheEvict;
+cascade: true
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/order/OrderRepository.java
@@ -510,8 +516,8 @@ In the logs generated from the above request, you will see `No cache entry for k
 
 {% raw %}
 ```
-order-service-00006-deployment-5fb6d6d645-jfwkv[workload] 2023-08-11T15:00:19.991Z TRACE 1 --- [nio-8080-exec-7] o.s.cache.interceptor.CacheInterceptor   : Computed cache key 'SimpleKey []' for operation Builder[public abstract java.util.List com.example.orderservice.order.OrderRepository.findAll()] caches=[Orders] | key='' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false'
-order-service-00006-deployment-5fb6d6d645-jfwkv[workload] 2023-08-11T15:00:20.038Z TRACE 1 --- [nio-8080-exec-7] o.s.cache.interceptor.CacheInterceptor   : No cache entry for key 'SimpleKey []' in cache(s) [Orders]
+TRACE 1 --- [nio-8080-exec-7] o.s.cache.interceptor.CacheInterceptor   : Computed cache key 'SimpleKey []' for operation Builder[public abstract java.util.List com.example.orderservice.order.OrderRepository.findAll()] caches=[Orders] | key='' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false'
+TRACE 1 --- [nio-8080-exec-7] o.s.cache.interceptor.CacheInterceptor   : No cache entry for key 'SimpleKey []' in cache(s) [Orders]
 ```
 {% endraw %}
 
@@ -525,8 +531,8 @@ clear: true
 
 {% raw %}
 ```
-order-service-00006-deployment-5fb6d6d645-jfwkv[workload] 2023-08-11T15:02:38.850Z TRACE 1 --- [nio-8080-exec-1] o.s.cache.interceptor.CacheInterceptor   : Computed cache key 'SimpleKey []' for operation Builder[public abstract java.util.List com.example.orderservice.order.OrderRepository.findAll()] caches=[Orders] | key='' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false'
-order-service-00006-deployment-5fb6d6d645-jfwkv[workload] 2023-08-11T15:02:38.854Z TRACE 1 --- [nio-8080-exec-1] o.s.cache.interceptor.CacheInterceptor   : Cache entry for key 'SimpleKey []' found in cache 'Orders'
+TRACE 1 --- [nio-8080-exec-1] o.s.cache.interceptor.CacheInterceptor   : Computed cache key 'SimpleKey []' for operation Builder[public abstract java.util.List com.example.orderservice.order.OrderRepository.findAll()] caches=[Orders] | key='' | keyGenerator='' | cacheManager='' | cacheResolver='' | condition='' | unless='' | sync='false'
+TRACE 1 --- [nio-8080-exec-1] o.s.cache.interceptor.CacheInterceptor   : Cache entry for key 'SimpleKey []' found in cache 'Orders'
 ```
 {% endraw %}
 

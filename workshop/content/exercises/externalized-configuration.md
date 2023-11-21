@@ -8,6 +8,11 @@ command: |
   (cd ~/samples/externalized-configuration && [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" != "true" ] && git init -b main && git remote add origin $GIT_PROTOCOL://$GIT_HOST/externalized-configuration.git && git add . && git commit -m "Initial implementation" && git push -u origin main)
   clear
 hidden: true
+cascade: true
+```
+```dashboard:open-dashboard
+name: The Twelve Factors
+hidden: true
 ```
 
 In cloud-native applications, it is good practice to remove the application's configuration from the code and instead manage all configuration externally.

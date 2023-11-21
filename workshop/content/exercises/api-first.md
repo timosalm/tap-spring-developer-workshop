@@ -53,7 +53,7 @@ cascade: true
 ```
 ```editor:insert-lines-before-line
 file: ~/product-service/pom.xml
-line: 33
+line: 34
 text: |2
           <dependency>
             <groupId>org.springdoc</groupId>
@@ -101,7 +101,7 @@ session: 2
 
 You should be now able to discover the newly registered API in the Tanzu Developer Portal.
 ```dashboard:open-url
-url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/component/product-service/api
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/api-docs?filters%5Bkind%5D=api&filters%5Buser%5D=all&filters%5Bowners%5D=group%3A{{ session_namespace }}%2Fteam-vmware-tanzu-se
 ```
 
 From the different components in the Software Catalog, you can also jump to the **Runtime Resources** view and have a closer look at the resources running on Kubernetes for your applications. Click the link below to see the workloads for the product service.
