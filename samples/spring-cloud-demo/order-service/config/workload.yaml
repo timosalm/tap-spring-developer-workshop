@@ -7,6 +7,7 @@ metadata:
   labels:
     app.kubernetes.io/part-of: order-service
     apps.tanzu.vmware.com/workload-type: web
+    apis.apps.tanzu.vmware.com/register-api: "true"
 spec:
   source:
     git:
@@ -24,6 +25,14 @@ spec:
     value:
       server: REGISTRY_HOST
       repository: workloads
+  - name: api_descriptor
+    value:
+      type: openapi
+      location:
+        path: "/v3/api-docs"
+      system: sc-architecture-system
+      owner: team-vmware-tanzu-se
+      description: "An API to manage orders within the Spring Cloud Architecture app."
   serviceClaims:
   - name: config-server
     ref:

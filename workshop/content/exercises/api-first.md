@@ -66,6 +66,13 @@ As this library is not managed by the [standard BOM (Bills of Materials)](https:
 After committing our code changes, we can configure the API Auto Registration in the Workload.
 ```editor:insert-value-into-yaml
 file: ~/product-service/config/workload.yaml
+path: metadata.labels
+value:
+  apis.apps.tanzu.vmware.com/register-api: "true"
+cascade: true
+```
+```editor:insert-value-into-yaml
+file: ~/product-service/config/workload.yaml
 path: spec.params
 value:
   - name: api_descriptor
@@ -76,7 +83,6 @@ value:
       system: sc-architecture-system
       owner: team-vmware-tanzu-se
       description: "An API to manage products within the Spring Cloud Architecture app."
-cascade: true
 ```
 ```terminal:execute
 command: |
