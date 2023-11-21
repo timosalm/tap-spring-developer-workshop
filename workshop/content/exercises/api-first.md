@@ -104,6 +104,7 @@ You should be now able to discover the newly registered API in the Tanzu Develop
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/api-docs?filters%5Bkind%5D=api&filters%5Buser%5D=all&filters%5Bowners%5D=group%3A{{ session_namespace }}%2Fteam-vmware-tanzu-se
 ```
 
+###### Runtime Resources and App Live View
 From the different components in the Software Catalog, you can also jump to the **Runtime Resources** view and have a closer look at the resources running on Kubernetes for your applications. Click the link below to see the workloads for the product service.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/component/product-service/workloads
@@ -135,6 +136,8 @@ text: |
     name: api-gateway-1
   spec:
     api:
+      version: "1.0"
+      groupId: sc-architecture-system
       serverUrl: https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
     observability:
       tracing:

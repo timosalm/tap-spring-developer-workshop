@@ -138,7 +138,7 @@ spec:
         verbs: ["get", "watch", "list"] 
       - apiGroups: [apis.apps.tanzu.vmware.com]
         resources: [apidescriptors,curatedapidescriptors]
-        verbs: ["get", "watch", "list"] 
+        verbs: ["*"] 
       - apiGroups: [service-registry.spring.apps.tanzu.vmware.com]
         resources: [eurekaservers]
         verbs: ["*"]          
