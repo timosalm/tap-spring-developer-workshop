@@ -10,4 +10,4 @@ metadata:
     apps.tanzu.vmware.com/no-scan: "true"
     networking.knative.dev/visibility: cluster-local
 spec:
-  image: harbor.emea.end2end.link/tap-workshop/frontend
+  image: harbor.main.emea.end2end.link/tap-workshops/frontend

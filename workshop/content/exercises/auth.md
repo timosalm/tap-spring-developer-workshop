@@ -49,15 +49,14 @@ text: |
           users:
             - username: "developer"
               password: "123456"
-              email: "developer@example.com"
-              emailVerified: true
               roles:
                 - "user"
     tokenSignature:
       signAndVerifyKeyRef:
         name: "authserver-signing-key"
     cors:
-      allowAllOrigins: true
+      allowOrigins:
+      - "https://*.{{ ENV_TAP_INGRESS }}"
   ---
   apiVersion: secretgen.k14s.io/v1alpha1
   kind: RSAKey
@@ -100,10 +99,8 @@ text: |
     authorizationGrantTypes:
       - "client_credentials"
       - "authorization_code"
-      - "refresh_token"
     scopes:
     - name: openid
-    - name: offline_access
     - name: email
     - name: profile
     - name: roles
@@ -126,7 +123,7 @@ clear: true
 To **secure the product service with OAuth**, we first have to add the related dependency. As already mentioned, for our setup, the services are acting as an OAuth resource server but there is also a library for OAuth clients available.
  ```editor:insert-lines-before-line
 file: ~/product-service/pom.xml
-line: 33
+line: 34
 text: |2
       <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -140,12 +137,14 @@ file: ~/product-service/src/main/java/com/example/productservice/WebSecurityConf
 line: 14
 text: |2
               .requestMatchers("/api/**").authenticated()
+cascade: true
 ```
 ```editor:insert-lines-before-line
 file: ~/product-service/src/main/java/com/example/productservice/WebSecurityConfiguration.java
 line: 17
 text: |2
           .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
+cascade: true
 ```
 ```editor:insert-lines-before-line
 file: ~/product-service/src/main/java/com/example/productservice/WebSecurityConfiguration.java
@@ -170,6 +169,7 @@ text: |2
 
     @MockBean
     private JwtDecoder jwtDecoder;
+cascade: true
 ```
 ```editor:insert-lines-before-line
 file: ~/product-service/src/test/java/com/example/productservice/ApplicationTests.java
@@ -231,14 +231,36 @@ In most cases, configuration of single-page applications for different environme
 As we are not able to provide configuration for the OAuth flow for all possible workshop sessions and the related auth server urls at build time, there are [placeholders in the frontend source code](https://github.com/timosalm/tap-spring-developer-workshop/blob/main/setup/frontend/src/environments/environment.prod.ts) that will be replaced by the Gateway with the `RewriteResponseBody` filter. 
 ```editor:append-lines-to-file
 file: ~/config/gateway/gateway-route-config.yaml
-text: |2
+description: Create SpringCloudGatewayRouteConfig resource configuration
+text: |
+  apiVersion: "tanzu.vmware.com/v1"
+  kind: SpringCloudGatewayRouteConfig
+  metadata:
+    name: frontend-route-config
+  spec:
+    routes:
     - uri: http://frontend.{{ session_namespace }}
       predicates:
       - Path=/frontend/**
       filters: 
       - 'StripPrefix=1'
       - RewriteResponseBody=ISSUER_SCHEME:https,ISSUER_HOST:authserver-1-{{ session_namespace }}.{{ ENV_TAP_INGRESS }},CLIENT_ID_VALUE:{{ session_namespace }}_client-registration
-``` 
+```
+We also have to link our route configuration to the gateway instance.
+```editor:append-lines-to-file
+file: ~/config/gateway/gateway-route-mapping.yaml
+description: Create SpringCloudGatewayMapping resource configuration
+text: |
+  apiVersion: "tanzu.vmware.com/v1"
+  kind: SpringCloudGatewayMapping
+  metadata:
+    name: frontend-route
+  spec:
+    gatewayRef:
+      name: api-gateway-1
+    routeConfigRef:
+      name: frontend-route-config
+```
 ```terminal:execute
 command: kubectl apply -f config/gateway/
 clear: true
@@ -246,7 +268,7 @@ clear: true
 
 Run the following command to see when the OAuth-enabled version of the product service is deployed based on the HTTP response status code change from 200 to 401 due to the missing, now required, Authentication header, including a valid token.
 ```terminal:execute
-command: watch -n 1 'curl -I https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/services/product-service/api/v1/products'
+command: watch -n 1 'curl -s -o /dev/null -w "%{http_code}" https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/services/product-service/api/v1/products'
 clear: true
 ```
 ```terminal:interrupt
@@ -259,5 +281,3 @@ url: https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/frontend/
 ```
 
 ![Updated architecture with Authorization Server](../images/microservice-architecture-auth.png)
-
-

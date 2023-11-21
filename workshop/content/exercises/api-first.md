@@ -159,6 +159,13 @@ text: |
       version: "1.0"
       groupId: sc-architecture-system
       serverUrl: https://gateway-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}
+      cors:
+        allowedOrigins:
+        - "https://*.{{ ENV_TAP_INGRESS }}"
+        allowedMethods:
+        - '*'
+        allowedHeaders:
+        - '*'
     observability:
       tracing:
         zipkin:
@@ -167,54 +174,93 @@ text: |
     java-opts: "-Dmanagement.tracing.propagation.type=w3c -Dmanagement.tracing.sampling.probability=1.0 -Dspring.codec.max-in-memory-size=-1" # Required for a later applied response body filter
 ```
 
-In the commercial version of Spring Cloud Gateway we define routes in a Kubernetes resource called `SpringCloudGatewayRouteConfig`.  
-Let's define routes for both the product and order services.
+In the commercial version of Spring Cloud Gateway we define routes in a Kubernetes resource called `SpringCloudGatewayRouteConfig`. 
 
-These routes are simple in that they just have a path predicate to define what path to the gateway will route the requests to the services and then uses a filter to strip those paths from the request before it's routed to the downstream services.
+Those route configurations have to be linked to a gateway instance with a custom resource named `SpringCloudGatewayMapping` to be able to share them between different gateway instances.
 
+In TAP 1.7 `API Curation` was introduced as a new feature to curate one or more Workload OpenAPI specifications into a single aggregated API.
+
+Via a `CuratedAPIDescriptor` resource, you can reference a list of `APIDescriptors` and define how path-based routing aggregates them.
+
+If you have a Spring Cloud Gateway instance, the API Auto Registration controller is even able to automatically create a `SpringCloudGatewayRouteConfig` and `SpringCloudGatewayMapping` for you.
+
+Let's configure the `CuratedAPIDescriptor` for the services that expose a REST API. 
 ```editor:append-lines-to-file
-file: ~/config/gateway/gateway-route-config.yaml
-description: Create SpringCloudGatewayRouteConfig resource configuration
+file: ~/config/gateway/curated-api-descriptor.yaml
+description: Create CuratedAPIDescriptor resource configuration
 text: |
-  apiVersion: "tanzu.vmware.com/v1"
-  kind: SpringCloudGatewayRouteConfig
+  apiVersion: apis.apps.tanzu.vmware.com/v1alpha1
+  kind: CuratedAPIDescriptor
   metadata:
-    name: supply-chain-app-route-config
+    name: gateway
+    annotations:
+      "apis.apps.tanzu.vmware.com/route-provider": "spring-cloud-gateway"
   spec:
-    routes:
-    - uri: http://product-service.{{ session_namespace }}
-      predicates:
-      - Path=/services/product-service/**
-      filters:
-      - StripPrefix=2
-    - uri: http://order-service.{{ session_namespace }}
-      predicates:
-      - Path=/services/order-service/**
-      filters:
-      - StripPrefix=2
+    type: openapi
+    title: Spring Cloud Architecture API
+    description: A set of API endpoints to manage the resources within the Spring Cloud Architecture app.
+    groupId: sc-architecture-system
+    version: "1.0"
+    system: sc-architecture-system
+    owner: team-vmware-tanzu-se
+    apiDescriptors:
+      - name: order-service
+        namespace: {{ session_namespace }}
+        pathPrefix: /services/order-service
+      - name: product-service
+        namespace: {{ session_namespace }}
+        pathPrefix: /services/product-service
 ```
+The `groupId` and `version` have to match the values of your Spring Cloud Gateway instance.
 
-The last step is to link our route configuration to the gateway instance with a custom resource named `SpringCloudGatewayMapping`. 
-
-```editor:append-lines-to-file
-file: ~/config/gateway/gateway-route-mapping.yaml
-description: Create SpringCloudGatewayMapping resource configuration
-text: |
-  apiVersion: "tanzu.vmware.com/v1"
-  kind: SpringCloudGatewayMapping
-  metadata:
-    name: supply-chain-app-routes
-  spec:
-    gatewayRef:
-      name: api-gateway-1
-    routeConfigRef:
-      name: supply-chain-app-route-config
-```
-
-Let's apply everything to the cluster to create the gateway, route configuration, and then connect the two with the mapping.
+We can now apply the two resources to the cluster to create the gateway, and API curation.
 ```terminal:execute
 command: kubectl apply -f ~/config/gateway/
 clear: true
+```
+
+Let's first have closer look at the auto-created `SpringCloudGatewayRouteConfig` and `SpringCloudGatewayMapping` resources.
+```terminal:execute
+command: kubectl eksporter SpringCloudGatewayRouteConfig
+clear: true
+```
+```terminal:execute
+command: kubectl eksporter SpringCloudGatewayMapping
+clear: true
+```
+
+If we have a look at the status of the `CuratedAPIDescriptor`, we can see the URL, where the curated OpenAPI spec of our services is available.
+```terminal:execute
+command: kubectl get CuratedAPIDescriptor
+clear: true
+```
+
+As this OpenAPI spec is not auto-registered in Tanzu Developer Portal, let's do this now, and view it afterward.
+```editor:append-lines-to-file
+file: ~/config/gateway/curated-api-descriptor.yaml
+description: Create APIDescriptor resource configuration for curated API spec
+text: |
+  apiVersion: apis.apps.tanzu.vmware.com/v1alpha1
+  kind: APIDescriptor
+  metadata:
+    name: gateway
+  spec:
+    description: A set of API endpoints to manage the resources within the Spring Cloud Architecture app.
+    location:
+      apiSpec:
+        url: https://api-auto-registration.{{ ENV_TAP_INGRESS }}
+        path: /openapi/{{ session_namespace }}/gateway
+      server:
+        ref:
+          apiVersion: projectcontour.io/v1
+          kind: HTTPProxy
+          name: api-gateway
+    owner: team-vmware-tanzu-se
+    system: sc-architecture-system
+    type: openapi
+```
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/api-docs?filters%5Bkind%5D=api&filters%5Buser%5D=all&filters%5Bowners%5D=group%3A{{ session_namespace }}%2Fteam-vmware-tanzu-se
 ```
 
 With the gateway as the single entry point to our application, we shouldn't need to expose the order and product service directly anymore. This can be done by setting the `networking.knative.dev/visibility: cluster-local` label on your Workloads. 
