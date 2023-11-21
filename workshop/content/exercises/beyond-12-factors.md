@@ -43,14 +43,14 @@ For our example, let's use **OpenTelemetry with Zikin**.
 file: ~/product-service/pom.xml
 line: 33
 text: |2
-          <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-bridge-otel</artifactId>
-          </dependency>
-          <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-exporter-zipkin</artifactId>
-          </dependency>
+      <dependency>
+        <groupId>io.micrometer</groupId>
+        <artifactId>micrometer-tracing-bridge-otel</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-exporter-zipkin</artifactId>
+      </dependency>
 ```
 
 To automatically propagate traces over the network, use the auto-configured `RestTemplateBuilder` or `WebClient.Builder` to construct the client.
@@ -74,11 +74,11 @@ First, we must add the `spring-cloud-bindings` dependency to our classpath.
 file: ~/product-service/pom.xml
 line: 33
 text: |2
-          <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-bindings</artifactId>
-            <version>2.0.1</version>
-          </dependency>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-bindings</artifactId>
+        <version>2.0.1</version>
+      </dependency>
 ```
 
 Now we can create a new class called `ZipkinBindingsPropertiesProcessor` which implements `BindingsPropertiesProcessor`.

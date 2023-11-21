@@ -49,20 +49,20 @@ First, we have to add the required dependency to our `pom.xml`s.
 file: ~/order-service/pom.xml
 line: 54
 text: |2
-          <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-          </dependency>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+      </dependency>
 cascade: true
 ```
 ```editor:insert-lines-before-line
 file: ~/product-service/pom.xml
 line: 33
 text: |2
-          <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-          </dependency>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+      </dependency>
 ```
 
 To instrument the `RestTemplate` instance we use to fetch the product list from the product service to use Eureka, we have to add the `@LoadBalanced` qualifier to the RestTemplate @Bean. 

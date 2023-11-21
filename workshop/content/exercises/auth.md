@@ -128,10 +128,10 @@ To **secure the product service with OAuth**, we first have to add the related d
 file: ~/product-service/pom.xml
 line: 33
 text: |2
-          <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-          </dependency> 
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+      </dependency> 
 ```
 
 Next, we will configure the service as a resource server and protect all our endpoints with business-related functionality.

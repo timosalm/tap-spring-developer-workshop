@@ -246,10 +246,10 @@ First, we have to add the required dependency to our `pom.xml`.
 file: ~/order-service/pom.xml
 line: 54
 text: |2
-          <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
-          </dependency>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+      </dependency>
 ```
 
 To create a circuit breaker in your code, you can use a CircuitBreakerFactory.
@@ -392,14 +392,14 @@ Next, the required libraries have to be added to our `pom.xml`.
 file: ~/order-service/pom.xml
 line: 58
 text: |2
-          <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-          </dependency>
-          <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-          </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-cache</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+      </dependency>
 ```
 
 We need to enable Spring Framework's caching abstraction by adding the `@EnableCaching` annotation on a @Configuration class, in this case, the `OrderServiceApplication`.
