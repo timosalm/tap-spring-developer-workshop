@@ -84,12 +84,32 @@ value:
       owner: team-vmware-tanzu-se
       description: "An API to manage products within the Spring Cloud Architecture app."
 ```
+
+Let's commit the updated source code and wait until our changes are deployed, and the new endpoint with the OAS is available.
+```terminal:execute
+command: |
+  (cd product-service && git add . && git commit -m "Add OAuth support" && git push)
+clear: true
+cascade: true
+```
+```terminal:execute
+command: watch -n 1 'curl -s https://product-service-{{ session_namespace }}.{{ ENV_TAP_INGRESS }}/v3/api-docs | jq .'
+clear: true
+session: 2
+```
+
+After that, it's time to apply the Workload and wait until the `APIDescriptor` is created, and in status `Ready`.
 ```terminal:execute
 command: |
   kubectl apply -f ~/product-service/config/workload.yaml
 clear: true
+cascade: true
 ```
-Let's wait until our changes are deployed, the new endpoint with the OAS is available, and the created `APIDescriptor` is in status `Ready`.
+```terminal:interrupt
+session: 2
+hidden: true
+cascade: true
+```
 ```terminal:execute
 command: watch kubectl get APIDescriptor product-service
 clear: true
