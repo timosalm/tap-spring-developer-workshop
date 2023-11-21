@@ -34,7 +34,7 @@ In addition to a link to jump to the related source code, there is also one to a
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/docs/default/System/sc-architecture-system
 ```
 
-APIs provided by the components can be discovered via the **API documentation plug-in**. Navigate back to the system view by clicking on the action, and **click on the only item's name in the APIs section**. If you **then switch from the Overview to the Definition tab**, you get a swagger-like experience to discover APIs like in the picture below.
+APIs provided by the components can be  v. Navigate back to the system view by clicking on the action, and **click on the only item's name in the APIs section**. If you **then switch from the Overview to the Definition tab**, you get a swagger-like experience to discover APIs like in the picture below.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/system/sc-architecture-system
 ```
@@ -88,6 +88,20 @@ value:
 command: |
   kubectl apply -f ~/product-service/config/workload.yaml
 clear: true
+```
+Let's wait until our changes are deployed, the new endpoint with the OAS is available, and the created `APIDescriptor` is in status `Ready`.
+```terminal:execute
+command: watch kubectl get APIDescriptor product-service
+clear: true
+session: 2
+```
+```terminal:interrupt
+session: 2
+```
+
+You should be now able to discover the newly registered API in the Tanzu Developer Portal.
+```dashboard:open-url
+url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/component/product-service/api
 ```
 
 From the different components in the Software Catalog, you can also jump to the **Runtime Resources** view and have a closer look at the resources running on Kubernetes for your applications. Click the link below to see the workloads for the product service.
