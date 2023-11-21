@@ -58,7 +58,7 @@ text: |2
           <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
-            <version>{springdoc.version}</version>
+            <version>${springdoc.version}</version>
           </dependency>
 ```
 As this library is not managed by the [standard BOM (Bills of Materials)](https://github.com/spring-projects/spring-boot/blob/main/spring-boot-project/spring-boot-dependencies/build.gradle) included in the `spring-boot-starter-parent` project, we have to specify a version.

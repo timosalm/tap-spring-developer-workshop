@@ -56,11 +56,11 @@ text: |2
 To automatically propagate traces over the network, use the auto-configured `RestTemplateBuilder` or `WebClient.Builder` to construct the client.
 
 By default, Spring Boot samples only 10% of requests to prevent overwhelming the tracing backend. Let's set it to 100% for our demo so that every request is sent to the tracing backend.
-```editor:append-lines-to-file
+```editor:insert-value-into-yaml
 file: ~/product-service/src/main/resources/application.yaml
-text: |
-  management:
-    tracing.sampling.probability: 1.0
+path: management
+value:
+  tracing.sampling.probability: 1.0 
 ```
 
 To configure reporting to Zipkin we can use the `management.zipkin.tracing.*` configuration properties.
