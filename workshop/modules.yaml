@@ -24,7 +24,7 @@ modules:
         name: A Closer Look At The Other Factors (optional)
         exit_sign: Maximize Robustness
     exercises/graalvm:
-        name: Maximize Robustness And Save Costs
+        name: Maximize Robustness And Save Costs (optional)
         exit_sign: Three More Factors
     exercises/beyond-12-factors:
         name: Beyond the Twelve-Factor App
