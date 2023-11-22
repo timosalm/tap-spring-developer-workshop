@@ -211,6 +211,10 @@ text: |
       - name: product-service
         namespace: {{ session_namespace }}
         pathPrefix: /services/product-service
+        routeConfig:
+          ssoEnabled: false
+          tokenRelay: false
+          filters: []
 ```
 The `groupId` and `version` have to match the values of your Spring Cloud Gateway instance.
 
