@@ -165,7 +165,7 @@ clear: true
 ```
 {% endraw %}
 
-####  Factor 10: Dev/prod parity
+####  Factor 10: Dev/prod parity (optional)
 
 The tenth factor emphasizes the **importance of keeping all of our environments as similar as possible** to minimize potential discrepancies that could lead to unexpected behavior in production.
 **Containers play a crucial role in achieving this** by encapsulating the application and its dependencies, including the operating system, ensuring that it runs consistently across different environments. 
