@@ -201,7 +201,7 @@ url: https://tap-gui.{{ ENV_TAP_INGRESS }}/supply-chain/host/{{ session_namespac
 ![](../images/build-reasons.png)
 
 
-####  Factor 11: Logs
+####  Factor 11: Logs (optional)
 
 Factor eleven states that **Logs should be treated as event streams**.
 The key point with logs in a cloud-native application is that it writes all of its log entries to stdout and stderr, and the aggregation, processing, and storage of logs is a nonfunctional requirement that is satisfied by your platform or cloud provider.

@@ -13,7 +13,7 @@ metadata:
 spec:
   source:
     git:
-      url: SOURCE_GIT_URL/product-service.git
+      url: SOURCE_GIT_URL
       ref:
         branch: main
   build:
