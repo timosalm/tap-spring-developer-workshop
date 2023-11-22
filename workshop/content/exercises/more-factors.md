@@ -69,7 +69,7 @@ To instrument the `RestTemplate` instance we use to fetch the product list from 
 
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
-line: 19
+line: 21
 text: |2
       @LoadBalanced
 cascade: true
@@ -77,7 +77,7 @@ cascade: true
 
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
-line: 12
+line: 14
 text: |2
   import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 ```

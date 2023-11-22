@@ -48,7 +48,7 @@ We only have to add the library to our project's `pom.xml`, and no additional co
 file: ~/product-service/pom.xml
 line: 19
 text: |2
-          <springdoc.version>2.2.0</springdoc.version>
+      <springdoc.version>2.2.0</springdoc.version>
 cascade: true
 ```
 ```editor:insert-lines-before-line
@@ -237,7 +237,7 @@ clear: true
 
 As this OpenAPI spec is not auto-registered in Tanzu Developer Portal, let's do this now, and view it afterward.
 ```editor:append-lines-to-file
-file: ~/config/gateway/curated-api-descriptor.yaml
+file: ~/config/gateway/api-descriptor.yaml
 description: Create APIDescriptor resource configuration for curated API spec
 text: |
   apiVersion: apis.apps.tanzu.vmware.com/v1alpha1
@@ -258,6 +258,10 @@ text: |
     owner: team-vmware-tanzu-se
     system: sc-architecture-system
     type: openapi
+```
+```terminal:execute
+command: kubectl apply -f ~/config/gateway/
+clear: true
 ```
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/api-docs?filters%5Bkind%5D=api&filters%5Buser%5D=all&filters%5Bowners%5D=group%3A{{ session_namespace }}%2Fteam-vmware-tanzu-se

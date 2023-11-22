@@ -406,14 +406,14 @@ We need to enable Spring Framework's caching abstraction by adding the `@EnableC
 
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
-line: 10
+line: 13
 text: |
     import org.springframework.cache.annotation.EnableCaching;
 cascade: true
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
-line: 15
+line: 18
 text: |
     @EnableCaching
 ```
