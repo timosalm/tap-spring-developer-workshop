@@ -57,7 +57,6 @@ text: |2
       <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-loadbalancer</artifactId>
-        <optional>true</optional>
       </dependency>   
 cascade: true
 ```
