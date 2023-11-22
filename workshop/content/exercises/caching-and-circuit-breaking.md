@@ -28,7 +28,7 @@ TAP makes it easy as possible to discover, curate, consume, and manage backing s
 This experience is made possible by using the **Services Toolkit** component. 
 
 To demonstrate how a Spring Boot app can use backing services on TAP let's use the order-service.
-![Order Microservice](../images/microservice-architecture-cache.png)
+![Order Microservice](../images/microservice-architecture-config.png)
 
 The **order service** uses a **PostgreSQL database** to store orders.  We have both `spring-boot-starter-data-jpa` and `postgresql` on the classpath.
 {% raw %}
