@@ -69,7 +69,7 @@ To instrument the `RestTemplate` instance we use to fetch the product list from 
 
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
-line: 21
+line: 19
 text: |2
       @LoadBalanced
 cascade: true

@@ -413,7 +413,7 @@ cascade: true
 ```
 ```editor:insert-lines-before-line
 file: ~/order-service/src/main/java/com/example/orderservice/OrderServiceApplication.java
-line: 18
+line: 15
 text: |
     @EnableCaching
 ```
