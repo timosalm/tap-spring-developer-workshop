@@ -1,3 +1,5 @@
+**TAP components:** Cartographer, Tanzu Developer Portal, OOTB supply chains
+
 Let's first have a look at the Continuous integration (CI) part of the supply chain, which automates the process of building and testing the application we like to deploy.
 
 The first step in the path to production **watches** the **repository with the source code** configured in the Workload for new commits and makes the source code available as an archive via HTTP. 

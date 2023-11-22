@@ -1,3 +1,5 @@
+**TAP components:** Application Accelerators, Live Update
+
 Before we have a closer look at the challenges of our typical microservice application, let's **implement** one of the services from scratch - in this case, the **product service**.
 
 The easiest way to get started you're probably familiar with, is visiting [start.spring.io](https://start.spring.io), and selecting your Spring Boot version and the dependencies you want to use.

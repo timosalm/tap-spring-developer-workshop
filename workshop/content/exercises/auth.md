@@ -9,6 +9,7 @@ command: |
   clear
 hidden: true
 ```
+**TAP components:** Application Single Sign-On, VMware Spring Cloud Gateway for Kubernetes
 
 Security is a vital part of any application and cloud environment!
 **OAuth 2 is an authorization framework** granting clients access to protected resources via an authorization server.

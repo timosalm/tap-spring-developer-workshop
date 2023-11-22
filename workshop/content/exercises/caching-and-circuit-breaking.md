@@ -14,6 +14,7 @@ cascade: true
 name: The Twelve Factors
 hidden: true
 ```
+**TAP components:** Services Toolkit
 
 The **fourth and sixth factor** implies that any **data** that needs to be persisted must be **stored in a stateful backing service**, such as a database, because the processes are stateless and share-nothing.
 A backing service is any service that your application needs for its functionality. Examples of the different types of backing services are data stores, messaging systems, and also services that provide business functionality.

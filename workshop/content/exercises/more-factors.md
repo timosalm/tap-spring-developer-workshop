@@ -7,6 +7,7 @@ cascade: true
 name: The Twelve Factors
 hidden: true
 ```
+**TAP components:** Service Registry, Tanzu Build Service
 
 #### Factor 5: Build, release, run
 The **fifth factor** calls for the **strict separation between the build, release, and run stages**. 

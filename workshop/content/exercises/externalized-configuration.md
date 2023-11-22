@@ -14,6 +14,7 @@ cascade: true
 name: The Twelve Factors
 hidden: true
 ```
+**TAP components:** Application Configuration Service
 
 In cloud-native applications, it is good practice to remove the application's configuration from the code and instead manage all configuration externally.
 
