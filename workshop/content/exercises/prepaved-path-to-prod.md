@@ -6,7 +6,7 @@ cascade: true
 ```terminal:execute
 command: |
   [ ! -d "product-service" ] && cp -r samples/spring-cloud-demo/product-service .
-clear: true
+  clear
 hidden: true
 ```
 

@@ -1,3 +1,16 @@
+```terminal:interrupt
+autostart: true
+hidden: true
+cascade: true
+```
+```terminal:execute
+command: |
+  [ ! -d "product-service/.git" ] && (cd product-service && git init -b main && git remote add origin {{ git_protocol }}://{{ git_host}}/product-service.git && git add . && git commit -m "Initial implementation" && git push -u origin main)
+  tanzu apps workload apply -f product-service/config/workload.yaml -y
+  clear
+clear: true
+hidden: true
+```
 **TAP components:** Cartographer, Tanzu Developer Portal, OOTB supply chains
 
 Let's first have a look at the Continuous integration (CI) part of the supply chain, which automates the process of building and testing the application we like to deploy.
