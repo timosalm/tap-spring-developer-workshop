@@ -35,6 +35,8 @@ spec:
         enabled: true
       examiner:
         enabled: true
+      files:
+        enabled: true
     env: 
     - name: TAP_INGRESS
       value: #@ data.values.tap.ingress_domain

@@ -1,7 +1,15 @@
 ```terminal:interrupt
 autostart: true
 hidden: true
+cascade: true
 ```
+```terminal:execute
+command: |
+  [ -d "product-service" ] && cp -r samples/spring-cloud-demo/product-service .
+clear: true
+hidden: true
+```
+
 **TAP components:** Cartographer, Tanzu Developer Portal
 
 To handle the more complex deployment and operations of modern applications, there is a need for a culture change towards **DevSecOps**, a buzzword for improved collaboration between developers, security, and operations teams.

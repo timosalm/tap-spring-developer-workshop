@@ -1,0 +1,6 @@
+spring:
+  application.name: productservice # for config server
+management:
+  endpoint.env.show-values: ALWAYS
+  endpoints.web.exposure.include: "*"
+product-service.product-names: VMware Tanzu Application Platform, VMware Spring Runtime

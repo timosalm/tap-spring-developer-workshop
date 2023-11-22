@@ -1,0 +1,29 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: product-service
+  annotations:
+    autoscaling.knative.dev/min-scale: "1"
+    autoscaling.knative.dev/max-scale: "3"
+    autoscaling.knative.dev/target: "50"
+  labels:
+    app.kubernetes.io/part-of: product-service
+    apps.tanzu.vmware.com/workload-type: web
+    apps.tanzu.vmware.com/has-tests: "true"
+spec:
+  source:
+    git:
+      url: SOURCE_GIT_URL/product-service.git
+      ref:
+        branch: main
+  build:
+    env:
+    - name: BP_JVM_VERSION
+      value: "17"
+  params:
+  - name: gitops_ssh_secret
+    value: git-https
+  - name: registry
+    value:
+      server: REGISTRY_HOST
+      repository: workloads

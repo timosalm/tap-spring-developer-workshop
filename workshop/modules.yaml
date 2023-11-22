@@ -3,13 +3,13 @@ modules:
         name: Workshop Overview
         exit_sign: Start
     exercises/product-service:    
-        name: Implementing the Product Service
+        name: Implementing the Product Service (optional)
         exit_sign: Path to Production
     exercises/prepaved-path-to-prod:
-        name: Pre-paved Path to Production
+        name: Pre-paved Path to Production (optional)
         exit_sign: CI/CD
     exercises/path-to-prod-cicd:
-        name: Continuous Integration and Delivery in the Path to Production
+        name: Continuous Integration and Delivery in the Path to Production (optional)
         exit_sign: Mitigating Challenges
     exercises/12-factors:
         name: The Twelve Factors
