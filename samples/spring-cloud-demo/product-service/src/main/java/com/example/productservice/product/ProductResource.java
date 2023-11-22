@@ -8,17 +8,16 @@ import java.util.List;
 @RequestMapping(ProductResource.BASE_URI)
 public class ProductResource {
   
-  public ResponseEntity<List<Product>> fetchProducts() {
-      return ResponseEntity.ok(productApplicationService.fetchProducts());
+  static final String BASE_URI = "/api/v1/products";
+
   private final ProductApplicationService productApplicationService;
 
   ProductResource(ProductApplicationService productApplicationService) {
       this.productApplicationService = productApplicationService;
   }
-  static final String BASE_URI = "/api/v1/products";
 
   @GetMapping
-  public ResponseEntity<String> fetchProducts() {
-      return ResponseEntity.ok("Hello World");
+  public ResponseEntity<List<Product>> fetchProducts() {
+    return ResponseEntity.ok(productApplicationService.fetchProducts());
   }
 }
