@@ -125,7 +125,7 @@ You should be now able to discover the newly registered API in the Tanzu Develop
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/api-docs?filters%5Bkind%5D=api&filters%5Buser%5D=all&filters%5Bowners%5D=group%3A{{ session_namespace }}%2Fteam-vmware-tanzu-se
 ```
 
-###### Runtime Resources and App Live View
+###### Runtime Resources and App Live View (optional)
 From the different components in the Software Catalog, you can also jump to the **Runtime Resources** view and have a closer look at the resources running on Kubernetes for your applications. Click the link below to see the workloads for the product service.
 ```dashboard:open-url
 url: https://tap-gui.{{ ENV_TAP_INGRESS }}/catalog/default/component/product-service/workloads
@@ -181,9 +181,9 @@ Those route configurations have to be linked to a gateway instance with a custom
 
 In TAP 1.7 `API Curation` was introduced as a new feature to curate one or more Workload OpenAPI specifications into a single aggregated API.
 
-Via a `CuratedAPIDescriptor` resource, you can reference a list of `APIDescriptors` and define how path-based routing aggregates them.
+Via a `CuratedAPIDescriptor` resource, you can reference a list of `APIDescriptors` and define how path-based routing aggregates them. 
 
-If you have a Spring Cloud Gateway instance, the API Auto Registration controller is even able to automatically create a `SpringCloudGatewayRouteConfig` and `SpringCloudGatewayMapping` for you.
+If you have a Spring Cloud Gateway instance, the API Auto Registration controller is even able to automatically create a `SpringCloudGatewayRouteConfig` and `SpringCloudGatewayMapping` for you. Like in a `SpringCloudGatewayRouteConfig` it's therefore also possible to define e.g. filters.
 
 Let's configure the `CuratedAPIDescriptor` for the services that expose a REST API. 
 ```editor:append-lines-to-file
