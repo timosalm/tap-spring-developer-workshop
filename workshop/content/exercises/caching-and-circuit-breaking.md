@@ -198,7 +198,7 @@ Let's interrupt the `watch` and `tail` commands.
 ```terminal:interrupt-all
 ```
 
-##### Application Live View
+##### Application Live View (optional)
 
 You can also leverage TAP's powerful Application Live View, to view the information provided by the actuator endpoints. 
 App Live View is currently available for pods running Spring Boot or .NET Steeltoe applications under the "Runtime Resources" tab. It **doesn't store any of that data** for further analysis or historical views. 
