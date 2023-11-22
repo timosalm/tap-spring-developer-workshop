@@ -21,7 +21,7 @@ modules:
         name: "Factors 4 & 6: Backing Services And Processes"
         exit_sign: More Factors
     exercises/more-factors:
-        name: A Closer Look At The Other Factors
+        name: A Closer Look At The Other Factors (optional)
         exit_sign: Maximize Robustness
     exercises/graalvm:
         name: Maximize Robustness And Save Costs
