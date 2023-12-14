@@ -25,7 +25,7 @@ import {OrderComponent} from "./order/order.component";
     OAuthModule.forRoot({
       resourceServer: {
         allowedUrls: [environment.endpoints.orders, environment.endpoints.products],
-        sendAccessToken: true
+        sendAccessToken: environment.authConfig.enabled
       }
     }),
     HttpClientModule,

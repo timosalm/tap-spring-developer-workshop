@@ -2,14 +2,13 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import {AuthConfig} from "angular-oauth2-oidc";
-
 export const environment = {
   production: false,
   baseHref: '/',
   authConfig: {
     issuer: '',
-    clientId: ''
+    clientId: '',
+    enabled: false
   },
   endpoints: {
     orders: '',

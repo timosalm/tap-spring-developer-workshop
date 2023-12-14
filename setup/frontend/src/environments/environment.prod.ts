@@ -2,6 +2,7 @@ export const environment = {
   production: true,
   baseHref: '/frontend/',
   authConfig: {
+    enabled: 'AUTH_ENABLED' === 'AUTH_ENABLED',
     issuer: 'ISSUER_SCHEME://ISSUER_HOST',
     clientId: 'CLIENT_ID_VALUE'
   },
